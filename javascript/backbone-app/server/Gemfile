@@ -1,0 +1,13 @@
+source 'http://rubygems.org'
+
+gem 'sinatra'
+gem 'activerecord'
+gem 'sinatra-activerecord'
+gem 'sqlite3'
+gem 'json'
+
+group :development do
+	gem 'shotgun'
+	gem 'tux'
+end
+
