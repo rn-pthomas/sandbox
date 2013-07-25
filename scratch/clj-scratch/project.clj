@@ -6,4 +6,5 @@
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/core.async "0.1.0-SNAPSHOT"]
-                 [org.clojure/data.json "0.2.2"]])
+                 [org.clojure/data.json "0.2.2"]
+                 [org.clojure/core.match "0.2.0-rc5"]])
