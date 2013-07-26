@@ -16,4 +16,16 @@
 
 (comment
 
+  (if* (= 3 3)
+       :then
+       (println "you")
+       (println "should")
+       (println "see")
+       (println "this")
+       :else
+       (println "you")
+       (println "won't")
+       (println "see")
+       (println "this"))
+
   )
