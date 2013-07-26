@@ -7,15 +7,11 @@
 
 (defmacro if*
   [pred & body]
-  (when (= (count (filter (fn [x#] (or (= x# :then) (= x# :else))) body)) 2)
-    (let [else-cases (rest (drop-while (fn [case] (not= case :else)) body))
-          if-cases   (take-while (fn [case]
-                                   (not= case :else))
-                                 (rest
-                                  (drop-while (fn [case] (not= case :then)) body)))]
-      `(if ~pred
-         (do ~@if-cases)
-         (do ~@else-cases)))))
+  (let [body (if (= :then (first body)) (rest body) body)
+        [if-clauses _ else-clauses] (partition-by #(= :else %) body)]
+    `(if ~pred
+       (do ~@if-clauses)
+       (do ~@else-clauses))))
 
 
 (comment
