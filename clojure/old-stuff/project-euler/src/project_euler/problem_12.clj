@@ -6,7 +6,7 @@
 ;; Let us list the factors of the first seven triangle numbers.
 ;; 1:  1
 ;; 3:  1,3
-;; 6:  1,2,3
+;; 6:  1,2,3,6
 ;; 10: 1,2,5,10
 ;; 15: 1,3,5,15
 ;; 21: 1,3,7,21
@@ -14,17 +14,20 @@
 ;; We can see that 28 is the first triangle number ot have over five divisors.
 ;; What is the value of the first triangle number to have over five hundred divisors?
 
-(defn nth-triangle-number
-  [n]
+(defn triangle-number [n]
   (reduce + (range 1 (inc n))))
 
-(defn factors
-  [n]
-  (filter (fn [x] (= (mod n x) 0)) (range 1 (inc n))))
+(defn factors-of [n]
+  (reduce
+   (fn [factors number]
+     (if (= (rem n number) 0)
+       (conj factors number)
+       factors))
+   []
+   (range 1 (inc n))))
 
-(loop [x 1]
-  (if (= (count (factors (nth-triangle-number x))) 501)
-    (nth-triangle-number x)
-    (recur (inc x))))
-
-(apply)
+(loop [i 1]
+  (let [target (triangle-number i)]
+    (if (>= (count (factors-of target)) 200)
+      target
+      (recur (inc i)))))
