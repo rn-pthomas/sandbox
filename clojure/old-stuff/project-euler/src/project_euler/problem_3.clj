@@ -1,21 +1,13 @@
 (ns project-euler.project-3)
 
-(defn prime? [num]
-  (loop [i 3]
-    (if (= (mod num i) 0)
-      false
-      (if (= i (- num 2))
-        true
-        (recur (+ i 2))))))
+(defn prime? [n]
+  (.isProbablePrime (BigInteger/valueOf n) 5))
 
-(defn largest-factor [num]
-  (loop [i (dec num)]
-    (if (= (mod num i) 0)
-      i
-      (recur (dec i)))))
+(defn factor? [x y]
+  (= 0 (rem x y)))
 
-(defn largest-prime-factor [num]
-  (loop [i (largest-factor num)]
-    (if (and (prime? i) (= #(mod num i) 0))
-      i
-      (recur (dec i)))))
+(defn largest-prime-factor [n]
+  (loop [x (long (Math/ceil (Math/sqrt n)))]
+    (if (or (= x 1) (and (prime? x) (factor? n x)))
+      x
+      (recur (dec x)))))
