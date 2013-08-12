@@ -14,8 +14,6 @@
         (recur next-number (conj accum next-number))))))
 
 
-
-
 (comment
   (def counter (apply max (map count (map collatz-sequence (range 1 1000000 2)))))
 
