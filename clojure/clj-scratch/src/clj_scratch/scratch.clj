@@ -3,8 +3,14 @@
 
 ;;scratch...
 (defn non-side-effecty-function [n]
-  (if (= n 0)
+  (cond
+   (neg? n)
+   (* n -1)
+
+   (= n 0)
     1
+
+    :else
     (* n 1.5)))
 
 (defn side-effecty-function [n]
@@ -19,5 +25,5 @@
 
 
 (comment
-  (loop-state-until-done side-effecty-function 80 -20 exit-pred)
+  (loop-state-until-done side-effecty-function 50 -0.5 exit-pred)
   )
