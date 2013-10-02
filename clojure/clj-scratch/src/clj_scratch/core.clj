@@ -8,6 +8,7 @@
          counter 0]
     (if-not (exit-pred i)
       (do (Thread/sleep wait)
-          (recur (fn-name i) (inc counter)))
+          (recur (fn-name i)
+                 (inc counter)))
       {:result  i
        :counter counter})))
