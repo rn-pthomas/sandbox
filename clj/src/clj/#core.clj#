@@ -1,0 +1,8 @@
+(ns clj.core
+)
+(ann x Long)
+(ann y Number)
+(ann z Long)
+(def y 10)
+(def z 10)
+(def z "10")
