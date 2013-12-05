@@ -1,0 +1,7 @@
+namespace "build" do
+  desc "Continuously build sass files into CSS files"
+  task :sass do
+    puts "Building sass files..."
+    system "sass --watch sass:css"
+  end
+end
