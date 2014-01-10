@@ -8,3 +8,9 @@
           (println "Read" v "from" ch))))
   (go (>! c1 "hi"))
   (go (>! c2 "there")))
+
+(clojure.core/reduce (fn [attr acc]
+          (conj acc attr (name attr)))
+        {}
+        [:foo :bar :baz])
+

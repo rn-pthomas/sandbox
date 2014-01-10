@@ -1,0 +1,7 @@
+{"version":3,
+ "file":
+ "/Users/pthomas/projects/personal/sandbox/cljs-sandbox/out/cljs_sandbox/lib/models.js",
+ "sources":["models.cljs"],
+ "lineCount":7,
+ "mappings":";AAAA;;AAGA,YAAA,ZAAMA;AAEN,8BAAA,9BAAuBC",
+ "names":["js/console", "cljs-sandbox.lib.models/foo"]}
