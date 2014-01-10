@@ -17,12 +17,27 @@
     (for [other-node other-nodes]
       [root-node other-node])))
 
+(defn continue-traversal
+  ^{:doc "Given two vectors, with the first one containing a node and a connected node, and the second containing vectors of similar traversals, will return any possible traversal that can continue."}
+  [lead-traversal node-groups]
+  (let [[root-node dest-node] lead-traversal]
+    (reduce (fn [acc node-group]
+              (let [[ng-root-node ng-dest-node] node-group]
+                (if (= dest-node ng-root-node)
+                  (->> ng-dest-node
+                       (conj lead-traversal)
+                       (conj acc))
+                  acc)))
+            []
+            node-groups)))
+
 (defn graph-traversals [& node-groups]
-  (map local-traversal node-groups))
+  (let [local-traversals (map local-traversal node-groups)]))
 
 (comment
-  (graph-traversals
-   [:a [:b :c]]
-   [:b [:c :d]]
-   [:c [:d :a]])
+  (let [lead-traversal        [:a :b]
+        node-groups           [[:b :c]
+                               [:b :d]
+                               [:c :d]]]
+    (continue-traversal lead-traversal node-groups))
   )
