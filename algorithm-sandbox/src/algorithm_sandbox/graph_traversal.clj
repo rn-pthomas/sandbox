@@ -1,13 +1,13 @@
 (ns algorithm-sandbox.graph-traversal)
 
 (defn drop-from-coll
-  ^{:doc "Given an index idx and a list l, drop the element at idx."}
+  "Given an index idx and a list l, drop the element at idx."
   [idx l]
   (let [[start finish] (split-at idx l)]
     (concat start (drop 1 finish))))
 
 (defn move-to-head
-  ^{:doc "Given an index idx and a list l, move the element at idx to the front of l."}
+  "Given an index idx and a list l, move the element at idx to the front of l."
   [idx l]
   (cons (nth l idx)
         (drop-from-coll idx l)))
@@ -18,7 +18,7 @@
       [root-node other-node])))
 
 (defn continue-traversal
-  ^{:doc "Given two vectors, with the first one containing a node and a connected node, and the second containing vectors of similar traversals, will return any possible traversal that can continue."}
+  "Given two vectors, with the first one containing a node and a connected node, and the second containing vectors of similar traversals, will return any possible traversal that can continue."
   [lead-traversal node-groups]
   (let [[root-node dest-node] lead-traversal]
     (reduce (fn [acc node-group]
