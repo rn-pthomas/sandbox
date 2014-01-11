@@ -1,18 +1,17 @@
 (ns ws-sandbox.server
-  (:require [compojure.handler  :refer [site]]
+  (:require [compojure.handler  :refer [api]]
             [compojure.core     :refer [defroutes GET POST PUT DELETE]]
-            [org.httpkit.server :refer [run-server]]))
-
-(defn do-something []
-  (println "looks like we did something"))
+            [org.httpkit.server :refer [run-server]]
+            [ws-sandbox.socket  :as socket]))
 
 (defroutes api-routes
-  (GET "/" do-something))
+  (GET "/"      [] socket/handler)
+  (GET "/ping/" [] "pong"))
 
 (defonce server (atom nil))
 
 (defn server-handler [port]
-  (run-server (site #'api-routes {:port port})))
+  (run-server (api #'api-routes) {:port port}))
 
 (defn stop-server []
   (when-not (nil? @server)
