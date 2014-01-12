@@ -10,4 +10,5 @@
                           (let [parsed-data (json/read-str data
                                                            :key-fn keyword)
                                 resp (overtone-handlers/synth-handler parsed-data)]
+                            (def resp resp)
                             (send! channel resp))))))
