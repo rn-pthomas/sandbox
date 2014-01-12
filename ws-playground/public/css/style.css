@@ -29,13 +29,13 @@ body {
   height:        41px;
   width:         41px;
   border:        2px solid grey;
-  border-radius: 10px;
+  border-radius: 16px;
 }
 
 .drum-btn:hover {
-  background-color: #999;
+  background-color: #eee;
 }
 
 .drum-btn.colored {
-  background-color: #222;
+  background-color: #444;
 }
