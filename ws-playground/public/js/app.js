@@ -1,5 +1,5 @@
 var App = (function () {
-  var self = {};
+  var self    = {};
   self.socket = new WebSocket("ws://localhost:8080/");
 
   self.openSocket = function () {
@@ -23,11 +23,21 @@ var App = (function () {
     }
   }
 
+  self.buttonHandler = function (e) {
+    e.preventDefault();
+    var dataMap = {pitch: $(e.currentTarget).attr("data-pitch")};
+    self.socket.send(JSON.stringify(dataMap));
+  };
+
+  self.initializeButtonHandler = function () {
+    $(".drum-btn").click(function (e) {
+      self.buttonHandler(e);
+    });
+  };
+
   self.initialize = function () {
     self.openSocket();
-    this.$el = $("#container");
-    var drumView = new DrumView();
-    this.$el.append(drumView.render());
+    self.initializeButtonHandler();
   };
 
   return self;
