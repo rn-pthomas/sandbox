@@ -12,9 +12,7 @@
   [data]
   (let [pitch-idx     (:pitchIdx data)
         octave-offset (:octave data)
-        note          (nth notes pitch-idx)
-        note          (offset-by-octave note octave-offset)
-        note          (midi->hz note)]
+        note          (midi->hz (offset-by-octave (nth notes pitch-idx) octave-offset))]
     (def note note)
     (do (sounds/basic-sin note)
         "success!")))
