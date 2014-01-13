@@ -32,11 +32,11 @@ var App = (function () {
 
   self.getOctaveOffset = function (e) {
     var drumBtnIndex = $(e.currentTarget).parent().index(),
-      optionsRow     = $("#options-container .options-row")[drumBtnIndex],
-      optionsButtons = $(optionsRow).children(),
-      selectedButton = _.find(optionsButtons, function (btn) {
-        return $(btn).hasClass("active");
-      }, this);
+    optionsRow     = $("#options-container .options-row")[drumBtnIndex],
+    optionsButtons = $(optionsRow).children(),
+    selectedButton = _.find(optionsButtons, function (btn) {
+      return $(btn).hasClass("active");
+    }, this);
     if (selectedButton === undefined) {
       return 0;
     }
@@ -44,14 +44,13 @@ var App = (function () {
   };
 
   self.drumButtonHandler = function (e) {
-    var target = $(e.currentTarget),
-      pitchIdx = target.index(),
-      octaveOffset = self.getOctaveOffset(e),
-      dataMap  = {pitchIdx: pitchIdx, octave: octaveOffset};
+    var target     = $(e.currentTarget),
+    pitchIdx     = target.index(),
+    octaveOffset = self.getOctaveOffset(e),
+    dataMap      = {pitchIdx: pitchIdx, octave: octaveOffset};
     _.each(target.siblings(), function (el) {
       $(el).removeClass("colored");
     }, this);
-    $(e.currentTarget).toggleClass("colored");
     self.socket.send(JSON.stringify(dataMap));
   };
 
