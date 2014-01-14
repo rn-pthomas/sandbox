@@ -1,6 +1,6 @@
-(ns ws-sandbox.overtone.handlers
-  (:require [ws-sandbox.overtone.sounds :as sounds]
-            [overtone.live              :refer [midi->hz]]))
+(ns ws-playground.overtone.handlers
+  (:require [ws-playground.overtone.sounds :as sounds]
+            [overtone.live                 :refer [midi->hz]]))
 
 (def notes [48 50 51 53 55 56 58 60])
 

@@ -1,8 +1,8 @@
-(ns ws-sandbox.server
-  (:require [compojure.handler  :refer [api]]
-            [compojure.core     :refer [defroutes GET POST PUT DELETE]]
-            [org.httpkit.server :refer [run-server]]
-            [ws-sandbox.socket  :as socket]))
+(ns ws-playground.server
+  (:require [compojure.handler     :refer [api]]
+            [compojure.core        :refer [defroutes GET POST PUT DELETE]]
+            [org.httpkit.server    :refer [run-server]]
+            [ws-playground.socket  :as socket]))
 
 (defroutes api-routes
   (GET "/"      [] socket/handler)

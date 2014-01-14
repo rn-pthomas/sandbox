@@ -1,4 +1,4 @@
-(ns ws-sandbox.overtone.sounds
+(ns ws-playground.overtone.sounds
   (:require [overtone.live :refer :all]))
 
 (definst basic-sin

@@ -1,7 +1,7 @@
-(ns ws-sandbox.socket
-  (:require [org.httpkit.server           :as http :refer [with-channel on-close on-receive send!]]
-            [clojure.data.json            :as json]
-            [ws-sandbox.overtone.handlers :as overtone-handlers]))
+(ns ws-playground.socket
+  (:require [org.httpkit.server              :as http :refer [with-channel on-close on-receive send!]]
+            [clojure.data.json               :as json]
+            [ws-playground.overtone.handlers :as overtone-handlers]))
 
 (defn handler [request]
   (with-channel request channel
