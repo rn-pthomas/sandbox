@@ -7,8 +7,6 @@
   (with-channel request channel
     (on-close   channel (fn [status] (println "channel closed:" status)))
     (on-receive channel (fn [data] ;; echo it back
-                          (let [parsed-data (json/read-str data
-                                                           :key-fn keyword)
-                                resp (overtone-handlers/synth-handler parsed-data)]
-                            (def resp resp)
+                          (let [parsed-data (json/read-str data :key-fn keyword)
+                                resp        (overtone-handlers/synth-handler parsed-data)]
                             (send! channel resp))))))
