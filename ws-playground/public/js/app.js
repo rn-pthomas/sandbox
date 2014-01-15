@@ -1,7 +1,8 @@
 var App = (function () {
   var self    = {};
-  self.socket = new WebSocket("ws://localhost:8080/");
 
+  /* Web socket connectivity --> */
+  self.socket = new WebSocket("ws://localhost:8080/");
   self.openSocket = function () {
     try {
       self.socket.onopen = function () {
@@ -29,12 +30,15 @@ var App = (function () {
       handler(e);
     });
   }
+  /* <-- Web socket connectivity */
 
+
+  /* DOM accessors --> */
   self.getOctaveOffset = function (e) {
     var drumBtnIndex = $(e.currentTarget).parent().index(),
-    optionsRow     = $("#options-container .options-row")[drumBtnIndex],
-    optionsButtons = $(optionsRow).children(),
-    selectedButton = _.find(optionsButtons, function (btn) {
+    optionsRow       = $("#options-container .options-row")[drumBtnIndex],
+    optionsButtons   = $(optionsRow).children(),
+    selectedButton   = _.find(optionsButtons, function (btn) {
       return $(btn).hasClass("active");
     }, this);
     if (selectedButton === undefined) {
@@ -42,7 +46,10 @@ var App = (function () {
     }
     return $(selectedButton).index();
   };
+  /* <-- DOM accessors */
 
+
+  /* Click handlers --> */
   self.drumButtonHandler = function (e) {
     var target     = $(e.currentTarget),
     pitchIdx     = target.index(),
@@ -64,11 +71,20 @@ var App = (function () {
     btn.toggleClass("active");
   };
 
+  self.playPauseButtonHandler = function (e) {
+    console.log("this doesn't do anything yet");
+  };
+  /* <-- Click handlers */
+
+
+  /* App initializer --> */
   self.initialize = function () {
     self.openSocket();
-    self.makeClickHandler(".drum-btn",   self.drumButtonHandler);
-    self.makeClickHandler(".option-btn", self.optionButtonHandler);
+    self.makeClickHandler(".drum-btn",       self.drumButtonHandler);
+    self.makeClickHandler(".option-btn",     self.optionButtonHandler);
+    self.makeClickHandler("#play-pause-btn", self.playPauseButtonHandler);
   };
+  /* <-- App initializer */
 
   return self;
 })();
