@@ -3,7 +3,7 @@ body {
 }
 
 #container {
-  border:  5px solid grey;
+  border:  5px solid #eee;
   width:   800px;
   height:  510px;
   margin:  0 auto;
@@ -11,45 +11,45 @@ body {
 }
 
 #drum-grid {
-  float:   left;
-  border:  4px solid grey;
-  width:   500px;
-  height:  500px;
+  float:  left;
+  border: 4px solid #ddd;
+  width:  500px;
+  height: 500px;
 }
 
 .drum-row {
   width:   454px;
   height:  62px;
-  border:  3px solid grey;
+  border:  3px solid #ddd;
   padding: 10px;
   margin:  10px;
 }
 
 .drum-btn {
-  float:         left;
-  margin:        5px;
-  height:        41px;
-  width:         41px;
-  border:        2px solid grey;
-  border-radius: 16px;
+  float:            left;
+  margin:           5px;
+  height:           41px;
+  width:            41px;
+  background-color: #f3f3f3;
+  border:           2px solid #f3f3f3;
+  border-radius:    16px;
 }
 
 .playback-drum-row {
   width:   454px;
   height:  62px;
-  /*border:  3px solid grey;*/
   padding: 10px;
   margin:  10px;
 }
 
 .playback-drum-btn {
-  float:         left;
-  margin:        5px;
-  height:        41px;
-  width:         41px;
+  float:            left;
+  margin:           5px;
+  height:           41px;
+  width:            41px;
   background-color: #f3f3f3;
-  border:        2px solid #f3f3f3;
-  border-radius: 20px;
+  border:           2px solid #f3f3f3;
+  border-radius:    20px;
 }
 
 .drum-btn:hover {
@@ -58,12 +58,13 @@ body {
 }
 
 .colored {
-  background-color: #444;
+  background-color: #ccc;
+  border:           2px solid #ccc;
 }
 
 #options-container {
   float:  right;
-  border: 4px solid grey;
+  border: 4px solid #ddd;
   width:  275px;
   height: 500px;
 }
@@ -71,7 +72,7 @@ body {
 .options-row {
   width:   230px;
   height:  62px;
-  border:  3px solid grey;
+  border:  3px solid #ddd;
   padding: 10px;
   margin:  10px;
 }
@@ -81,7 +82,7 @@ body {
   margin:        5px;
   height:        41px;
   width:         41px;
-  border:        2px solid grey;
+  border:        2px solid #ccc;
   border-radius: 16px;
 }
 
@@ -98,6 +99,7 @@ button#play-pause-btn {
 }
 
 .active {
-  background-color: #ccc;
-  border:           2px solid #ccc;
+  background-color:   #ccc;
+  border:             2px solid #ccc;
+  -webkit-transition: background-color 500ms linear;
 }
