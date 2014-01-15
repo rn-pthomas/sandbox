@@ -1,5 +1,5 @@
 var App = (function () {
-  var self    = {};
+  var self = {};
 
   /* Web socket connectivity --> */
   self.socket = new WebSocket("ws://localhost:8080/");
@@ -23,13 +23,6 @@ var App = (function () {
       console.log("socket status: " + self.socket);
     }
   }
-
-  self.makeClickHandler = function (selector, handler) {
-    $(selector).click(function (e) {
-      e.preventDefault();
-      handler(e);
-    });
-  }
   /* <-- Web socket connectivity */
 
 
@@ -50,6 +43,13 @@ var App = (function () {
 
 
   /* Click handlers --> */
+  self.makeClickHandler = function (selector, handler) {
+    $(selector).click(function (e) {
+      e.preventDefault();
+      handler(e);
+    });
+  };
+
   self.drumButtonHandler = function (e) {
     var target     = $(e.currentTarget),
     pitchIdx     = target.index(),
