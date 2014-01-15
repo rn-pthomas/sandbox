@@ -2,7 +2,8 @@
   (:require [compojure.handler     :refer [api]]
             [compojure.core        :refer [defroutes GET POST PUT DELETE]]
             [org.httpkit.server    :refer [run-server]]
-            [ws-playground.socket  :as socket]))
+            [ws-playground.socket  :as socket]
+            [ws-playground.dev     :as dev]))
 
 (defroutes api-routes
   (GET "/"      [] socket/handler)
@@ -31,7 +32,10 @@
   (do
     (println "Starting service...")
     (start-server)
-    (println "...service started.")))
+    (println "...service started.")
+    (println "Starting nrepl server...")
+    dev/repl-server
+    (println "...nrepl server open on port 4000.")))
 
 (comment
   (start-server)
