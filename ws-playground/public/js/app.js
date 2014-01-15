@@ -57,10 +57,9 @@ var App = (function () {
   };
 
   self.initializePlaybackLoop = function () {
-    //setTimeout(function () {
-    //  console.log("this doesn't do anything yet");
-    //  self.initializePlaybackLoop();
-    //}, 1000);
+    setInterval(function () {
+      console.log("running playback loop :/");
+    }, 1000);
   };
   /* <-- DOM accessors */
 
