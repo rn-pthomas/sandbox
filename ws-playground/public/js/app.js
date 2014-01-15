@@ -44,7 +44,7 @@ var App = (function () {
     return $('div.playback-drum-row div.playback-drum-btn.active');
   };
 
-  self.highightNextPlaybackBox = function () {
+  self.highlightNextPlaybackBox = function () {
     var numOfPlaybackBoxes = 8,
       activePlaybackBox    = self.getActivePlaybackBox(),
       currentIdx           = activePlaybackBox.index(),
@@ -58,7 +58,7 @@ var App = (function () {
 
   self.initializePlaybackLoop = function () {
     setInterval(function () {
-      console.log("running playback loop :/");
+      self.highlightNextPlaybackBox();
     }, 1000);
   };
   /* <-- DOM accessors */
