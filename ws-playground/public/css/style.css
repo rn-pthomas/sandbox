@@ -34,6 +34,24 @@ body {
   border-radius: 16px;
 }
 
+.playback-drum-row {
+  width:   454px;
+  height:  62px;
+  /*border:  3px solid grey;*/
+  padding: 10px;
+  margin:  10px;
+}
+
+.playback-drum-btn {
+  float:         left;
+  margin:        5px;
+  height:        41px;
+  width:         41px;
+  background-color: #f3f3f3;
+  border:        2px solid #f3f3f3;
+  border-radius: 20px;
+}
+
 .drum-btn:hover {
   background-color: #ddd;
   cursor: pointer;
@@ -77,4 +95,9 @@ button#play-pause-btn {
   padding:  12px;
   position: relative;
   float:    right;
+}
+
+.active {
+  background-color: #ccc;
+  border:           2px solid #ccc;
 }

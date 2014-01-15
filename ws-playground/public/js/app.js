@@ -39,6 +39,29 @@ var App = (function () {
     }
     return $(selectedButton).index();
   };
+
+  self.getActivePlaybackBox = function () {
+    return $('div.playback-drum-row div.playback-drum-btn.active');
+  };
+
+  self.highightNextPlaybackBox = function () {
+    var numOfPlaybackBoxes = 8,
+      activePlaybackBox    = self.getActivePlaybackBox(),
+      currentIdx           = activePlaybackBox.index(),
+      targetIdx            = currentIdx + 1;
+      if (currentIdx >= numOfPlaybackBoxes-1) {
+        targetIdx = 0;
+      }
+      $($("div.playback-drum-row div.playback-drum-btn")[currentIdx]).toggleClass("active");
+      $($("div.playback-drum-row div.playback-drum-btn")[targetIdx]).toggleClass("active");
+  };
+
+  self.initializePlaybackLoop = function () {
+    //setTimeout(function () {
+    //  console.log("this doesn't do anything yet");
+    //  self.initializePlaybackLoop();
+    //}, 1000);
+  };
   /* <-- DOM accessors */
 
 
@@ -51,13 +74,11 @@ var App = (function () {
   };
 
   self.drumButtonHandler = function (e) {
-    var target     = $(e.currentTarget),
+    var target   = $(e.currentTarget),
     pitchIdx     = target.index(),
     octaveOffset = self.getOctaveOffset(e),
     dataMap      = {pitchIdx: pitchIdx, octave: octaveOffset};
-    _.each(target.siblings(), function (el) {
-      $(el).removeClass("colored");
-    }, this);
+    target.toggleClass("colored");
     self.socket.send(JSON.stringify(dataMap));
   };
 
@@ -80,9 +101,11 @@ var App = (function () {
   /* App initializer --> */
   self.initialize = function () {
     self.openSocket();
+    $($("div.playback-drum-row div.playback-drum-btn")[0]).toggleClass("active");
     self.makeClickHandler(".drum-btn",       self.drumButtonHandler);
     self.makeClickHandler(".option-btn",     self.optionButtonHandler);
     self.makeClickHandler("#play-pause-btn", self.playPauseButtonHandler);
+    self.initializePlaybackLoop();
   };
   /* <-- App initializer */
 
