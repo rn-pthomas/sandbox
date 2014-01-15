@@ -25,6 +25,14 @@
   (do (stop-server)
       (start-server)))
 
+(defn -main
+  "Entry point for 'lein run'"
+  []
+  (do
+    (println "Starting service...")
+    (start-server)
+    (println "...service started.")))
+
 (comment
   (start-server)
   (restart-server)
