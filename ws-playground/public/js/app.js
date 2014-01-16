@@ -40,6 +40,16 @@ var App = (function () {
     return $(selectedButton).index();
   };
 
+  self.getOctaveOffsetForRow = function (rowIdx) {
+    return $($("div.options-row")[0]).find(".active").index()
+
+  };
+
+  self.getSynthNoteData = function () {
+    var noteIdx = $($("div.playback-drum-row div.playback-drum-btn.active")).index();
+    return {noteIdx: noteIdx};
+  };
+
   self.getActivePlaybackBox = function () {
     return $('div.playback-drum-row div.playback-drum-btn.active');
   };
@@ -59,6 +69,7 @@ var App = (function () {
   self.initializePlaybackLoop = function () {
     setInterval(function () {
       self.highlightNextPlaybackBox();
+      //console.log(self.getSynthNoteData());
     }, 1000);
   };
   /* <-- DOM accessors */
