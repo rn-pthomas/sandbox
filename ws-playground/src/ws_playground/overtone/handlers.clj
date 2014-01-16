@@ -12,6 +12,8 @@
   [data]
   (let [pitch-idx     (:pitchIdx data)
         octave-offset (:octave data)
-        note          (midi->hz (offset-by-octave (nth notes pitch-idx) octave-offset))]
-    (do (sounds/basic-sin note)
-        "success!")))
+        note          (when pitch-idx (midi->hz (offset-by-octave (nth notes pitch-idx) octave-offset)))]
+    (if note
+      (do (sounds/basic-sin note)
+          "success!")
+      "no pitch found")))

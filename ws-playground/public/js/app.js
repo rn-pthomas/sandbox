@@ -8,6 +8,7 @@ var App = (function () {
       self.socket.onopen = function () {
         console.log("successfully opened web socket");
         console.log("socket status: " + self.socket.readyState);
+        self.initializePlaybackLoop();
       };
     } catch (exception) {
       console.error("exception loading web socket");
@@ -46,8 +47,14 @@ var App = (function () {
   };
 
   self.getSynthNoteData = function () {
-    var noteIdx = $($("div.playback-drum-row div.playback-drum-btn.active")).index();
-    return {noteIdx: noteIdx};
+    var loopIdx = $($("div.playback-drum-row div.playback-drum-btn.active")).index(),
+    currDrumRow = $($("div#drum-grid div.drum-row")[2]).children(),
+    drumBtnActive = $(currDrumRow[loopIdx]).hasClass("colored"),
+    dataMap       = {octave: 2};
+    if (drumBtnActive) {
+      dataMap.pitchIdx = loopIdx;
+    }
+    return dataMap;
   };
 
   self.getActivePlaybackBox = function () {
@@ -66,11 +73,17 @@ var App = (function () {
       $($("div.playback-drum-row div.playback-drum-btn")[targetIdx]).toggleClass("active");
   };
 
+  self.sendNoteOverSocket = function () {
+    self.highlightNextPlaybackBox();
+    var dataMap = self.getSynthNoteData();
+    self.socket.send(JSON.stringify(dataMap));
+  };
+
   self.initializePlaybackLoop = function () {
+    self.sendNoteOverSocket();
     setInterval(function () {
-      self.highlightNextPlaybackBox();
-      //console.log(self.getSynthNoteData());
-    }, 1000);
+      self.sendNoteOverSocket();
+    }, 600);
   };
   /* <-- DOM accessors */
 
@@ -89,7 +102,7 @@ var App = (function () {
     octaveOffset = self.getOctaveOffset(e),
     dataMap      = {pitchIdx: pitchIdx, octave: octaveOffset};
     target.toggleClass("colored");
-    self.socket.send(JSON.stringify(dataMap));
+    //self.socket.send(JSON.stringify(dataMap));
   };
 
   self.optionButtonHandler = function (e) {
@@ -115,7 +128,6 @@ var App = (function () {
     self.makeClickHandler(".drum-btn",       self.drumButtonHandler);
     self.makeClickHandler(".option-btn",     self.optionButtonHandler);
     self.makeClickHandler("#play-pause-btn", self.playPauseButtonHandler);
-    self.initializePlaybackLoop();
   };
   /* <-- App initializer */
 
