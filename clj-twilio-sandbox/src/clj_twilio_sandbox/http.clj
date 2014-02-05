@@ -6,7 +6,8 @@
 (defonce twilio-number "14843834607")
 
 (defn twilio-post [url twiml]
-  (let [options {:body twiml}
+  (let [options {:body       twiml
+                 :basic-auth [account-sid auth-token]}
         {:keys [status error body opts]} @(http-kit/post url options)]
     (if error
       error
