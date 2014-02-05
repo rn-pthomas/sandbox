@@ -1,6 +1,5 @@
-(ns clj-twilio-sandbox.core)
+(ns clj-twilio-sandbox.core
+  (:require [clj-twilio-sandbox.twiml :as twiml]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defonce account-sid "AC7e07e77adddbfbfb1442489211da87c2")
+(defonce auth-token "ed491c052e6476b3f1f8935979e34e10")
