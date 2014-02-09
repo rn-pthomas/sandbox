@@ -7,4 +7,5 @@
   :dependencies [[org.clojure/clojure  "1.5.1"]
                  [http-kit             "2.1.16"]
                  [org.clojure/data.xml "0.0.7"]
+                 [ring                 "1.2.1"]
                  [compojure            "1.1.6"]])
