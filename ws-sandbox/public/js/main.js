@@ -27661,8 +27661,20 @@ goog.require("cljs.core");
 ws_sandbox.app.util.log = function log(msg) {
   return console.log(msg);
 };
+goog.provide("ws_sandbox.app.state");
+goog.require("cljs.core");
+ws_sandbox.app.state.dispatch_table = new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "update-text", "update-text", 4689245987), ws_sandbox.app.state.update_text], null);
+ws_sandbox.app.state.handle_socket_msg = function handle_socket_msg(data) {
+  return(new cljs.core.Keyword(null, "handler", "handler", 1706707644)).cljs$core$IFn$_invoke$arity$1(data).call(null, cljs.core.dissoc.call(null, data, new cljs.core.Keyword(null, "handler", "handler", 1706707644)));
+};
+ws_sandbox.app.state.update_text = function update_text(text) {
+  return cljs.core.swap_BANG_.call(null, ws_sandbox.app.state.app_state, cljs.core.assoc, new cljs.core.Keyword(null, "text", "text", 1017460895), text);
+};
+ws_sandbox.app.state.app_state = cljs.core.atom.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "text", "text", 1017460895), "Hello world!"], null));
 goog.provide("ws_sandbox.app.view");
 goog.require("cljs.core");
+goog.require("ws_sandbox.app.state");
+goog.require("ws_sandbox.app.state");
 goog.require("ws_sandbox.app.util");
 goog.require("ws_sandbox.app.util");
 goog.require("om.dom");
@@ -27670,49 +27682,71 @@ goog.require("om.dom");
 goog.require("om.core");
 goog.require("om.core");
 ws_sandbox.app.view.widget = function widget(data, owner) {
-  if (typeof ws_sandbox.app.view.t5750 !== "undefined") {
+  if (typeof ws_sandbox.app.view.t5762 !== "undefined") {
   } else {
-    ws_sandbox.app.view.t5750 = function(owner, data, widget, meta5751) {
+    ws_sandbox.app.view.t5762 = function(owner, data, widget, meta5763) {
       this.owner = owner;
       this.data = data;
       this.widget = widget;
-      this.meta5751 = meta5751;
+      this.meta5763 = meta5763;
       this.cljs$lang$protocol_mask$partition1$ = 0;
       this.cljs$lang$protocol_mask$partition0$ = 393216;
     };
-    ws_sandbox.app.view.t5750.cljs$lang$type = true;
-    ws_sandbox.app.view.t5750.cljs$lang$ctorStr = "ws-sandbox.app.view/t5750";
-    ws_sandbox.app.view.t5750.cljs$lang$ctorPrWriter = function(this__3970__auto__, writer__3971__auto__, opt__3972__auto__) {
-      return cljs.core._write.call(null, writer__3971__auto__, "ws-sandbox.app.view/t5750");
+    ws_sandbox.app.view.t5762.cljs$lang$type = true;
+    ws_sandbox.app.view.t5762.cljs$lang$ctorStr = "ws-sandbox.app.view/t5762";
+    ws_sandbox.app.view.t5762.cljs$lang$ctorPrWriter = function(this__3970__auto__, writer__3971__auto__, opt__3972__auto__) {
+      return cljs.core._write.call(null, writer__3971__auto__, "ws-sandbox.app.view/t5762");
     };
-    ws_sandbox.app.view.t5750.prototype.om$core$IRender$ = true;
-    ws_sandbox.app.view.t5750.prototype.om$core$IRender$render$arity$1 = function(this$) {
+    ws_sandbox.app.view.t5762.prototype.om$core$IRender$ = true;
+    ws_sandbox.app.view.t5762.prototype.om$core$IRender$render$arity$1 = function(this$) {
       var self__ = this;
       var this$__$1 = this;
       return React.DOM.h1(null, (new cljs.core.Keyword(null, "text", "text", 1017460895)).cljs$core$IFn$_invoke$arity$1(self__.data));
     };
-    ws_sandbox.app.view.t5750.prototype.cljs$core$IMeta$_meta$arity$1 = function(_5752) {
+    ws_sandbox.app.view.t5762.prototype.cljs$core$IMeta$_meta$arity$1 = function(_5764) {
       var self__ = this;
-      var _5752__$1 = this;
-      return self__.meta5751;
+      var _5764__$1 = this;
+      return self__.meta5763;
     };
-    ws_sandbox.app.view.t5750.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(_5752, meta5751__$1) {
+    ws_sandbox.app.view.t5762.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(_5764, meta5763__$1) {
       var self__ = this;
-      var _5752__$1 = this;
-      return new ws_sandbox.app.view.t5750(self__.owner, self__.data, self__.widget, meta5751__$1);
+      var _5764__$1 = this;
+      return new ws_sandbox.app.view.t5762(self__.owner, self__.data, self__.widget, meta5763__$1);
     };
-    ws_sandbox.app.view.__GT_t5750 = function __GT_t5750(owner__$1, data__$1, widget__$1, meta5751) {
-      return new ws_sandbox.app.view.t5750(owner__$1, data__$1, widget__$1, meta5751);
+    ws_sandbox.app.view.__GT_t5762 = function __GT_t5762(owner__$1, data__$1, widget__$1, meta5763) {
+      return new ws_sandbox.app.view.t5762(owner__$1, data__$1, widget__$1, meta5763);
     };
   }
-  return new ws_sandbox.app.view.t5750(owner, data, widget, null);
+  return new ws_sandbox.app.view.t5762(owner, data, widget, null);
 };
 ws_sandbox.app.view.initialize_view = function initialize_view() {
   ws_sandbox.app.util.log.call(null, "initialize-view");
-  return om.core.root.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "text", "text", 1017460895), "Hello world!"], null), ws_sandbox.app.view.widget, document.getElementById("my-app"));
+  return om.core.root.call(null, cljs.core.deref.call(null, ws_sandbox.app.state.app_state), ws_sandbox.app.view.widget, document.getElementById("my-app"));
 };
 goog.provide("ws_sandbox.app.core");
 goog.require("cljs.core");
+goog.require("ws_sandbox.app.util");
+goog.require("ws_sandbox.app.util");
+goog.require("ws_sandbox.app.state");
+goog.require("ws_sandbox.app.state");
 goog.require("ws_sandbox.app.view");
 goog.require("ws_sandbox.app.view");
+ws_sandbox.app.core.websocket = cljs.core.atom.call(null, null);
+ws_sandbox.app.core.send_to_websocket = function send_to_websocket(msg) {
+  return cljs.core.deref.call(null, ws_sandbox.app.core.websocket).send(msg);
+};
+ws_sandbox.app.core.establish_websocket = function establish_websocket() {
+  cljs.core.reset_BANG_.call(null, ws_sandbox.app.core.websocket, new WebSocket("ws://localhost:8081/websocket"));
+  return cljs.core.doall.call(null, cljs.core.map.call(null, function(p1__5777_SHARP_) {
+    return cljs.core.deref.call(null, ws_sandbox.app.core.websocket)[cljs.core.first.call(null, p1__5777_SHARP_)] = cljs.core.second.call(null, p1__5777_SHARP_);
+  }, new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onopen", function() {
+    return ws_sandbox.app.util.log.call(null, "OPEN");
+  }], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onclose", function() {
+    return ws_sandbox.app.util.log.call(null, "CLOSE");
+  }], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onerror", function(e) {
+    return ws_sandbox.app.util.log.call(null, [cljs.core.str("ERROR:"), cljs.core.str(e)].join(""));
+  }], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onmessage", function(msg) {
+    return ws_sandbox.app.state.handle_socket_msg.call(null, msg.data);
+  }], null)], null)));
+};
 ws_sandbox.app.view.initialize_view.call(null);

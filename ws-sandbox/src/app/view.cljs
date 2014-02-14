@@ -1,7 +1,8 @@
 (ns ws-sandbox.app.view
-  (:require [om.core             :as om  :include-macros true]
-            [om.dom              :as dom :include-macros true]
-            [ws-sandbox.app.util :as util]))
+  (:require [om.core              :as om  :include-macros true]
+            [om.dom               :as dom :include-macros true]
+            [ws-sandbox.app.util  :as util]
+            [ws-sandbox.app.state :as state]))
 
 (defn widget [data owner]
   (reify om/IRender
@@ -10,5 +11,5 @@
 
 (defn initialize-view []
   (util/log "initialize-view")
-  (om/root {:text "Hello world!"} widget (. js/document (getElementById "my-app"))))
+  (om/root @state/app-state widget (. js/document (getElementById "my-app"))))
 
