@@ -27656,48 +27656,63 @@ om.core.graft = function graft(value, cursor) {
     return x5590;
   }
 };
-goog.provide("ws_sandbox.app.core");
+goog.provide("ws_sandbox.app.util");
 goog.require("cljs.core");
+ws_sandbox.app.util.log = function log(msg) {
+  return console.log(msg);
+};
+goog.provide("ws_sandbox.app.view");
+goog.require("cljs.core");
+goog.require("ws_sandbox.app.util");
+goog.require("ws_sandbox.app.util");
 goog.require("om.dom");
 goog.require("om.dom");
 goog.require("om.core");
 goog.require("om.core");
-ws_sandbox.app.core.widget = function widget(data, owner) {
-  if (typeof ws_sandbox.app.core.t5714 !== "undefined") {
+ws_sandbox.app.view.widget = function widget(data, owner) {
+  if (typeof ws_sandbox.app.view.t5750 !== "undefined") {
   } else {
-    ws_sandbox.app.core.t5714 = function(owner, data, widget, meta5715) {
+    ws_sandbox.app.view.t5750 = function(owner, data, widget, meta5751) {
       this.owner = owner;
       this.data = data;
       this.widget = widget;
-      this.meta5715 = meta5715;
+      this.meta5751 = meta5751;
       this.cljs$lang$protocol_mask$partition1$ = 0;
       this.cljs$lang$protocol_mask$partition0$ = 393216;
     };
-    ws_sandbox.app.core.t5714.cljs$lang$type = true;
-    ws_sandbox.app.core.t5714.cljs$lang$ctorStr = "ws-sandbox.app.core/t5714";
-    ws_sandbox.app.core.t5714.cljs$lang$ctorPrWriter = function(this__3970__auto__, writer__3971__auto__, opt__3972__auto__) {
-      return cljs.core._write.call(null, writer__3971__auto__, "ws-sandbox.app.core/t5714");
+    ws_sandbox.app.view.t5750.cljs$lang$type = true;
+    ws_sandbox.app.view.t5750.cljs$lang$ctorStr = "ws-sandbox.app.view/t5750";
+    ws_sandbox.app.view.t5750.cljs$lang$ctorPrWriter = function(this__3970__auto__, writer__3971__auto__, opt__3972__auto__) {
+      return cljs.core._write.call(null, writer__3971__auto__, "ws-sandbox.app.view/t5750");
     };
-    ws_sandbox.app.core.t5714.prototype.om$core$IRender$ = true;
-    ws_sandbox.app.core.t5714.prototype.om$core$IRender$render$arity$1 = function(this$) {
+    ws_sandbox.app.view.t5750.prototype.om$core$IRender$ = true;
+    ws_sandbox.app.view.t5750.prototype.om$core$IRender$render$arity$1 = function(this$) {
       var self__ = this;
       var this$__$1 = this;
       return React.DOM.h1(null, (new cljs.core.Keyword(null, "text", "text", 1017460895)).cljs$core$IFn$_invoke$arity$1(self__.data));
     };
-    ws_sandbox.app.core.t5714.prototype.cljs$core$IMeta$_meta$arity$1 = function(_5716) {
+    ws_sandbox.app.view.t5750.prototype.cljs$core$IMeta$_meta$arity$1 = function(_5752) {
       var self__ = this;
-      var _5716__$1 = this;
-      return self__.meta5715;
+      var _5752__$1 = this;
+      return self__.meta5751;
     };
-    ws_sandbox.app.core.t5714.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(_5716, meta5715__$1) {
+    ws_sandbox.app.view.t5750.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(_5752, meta5751__$1) {
       var self__ = this;
-      var _5716__$1 = this;
-      return new ws_sandbox.app.core.t5714(self__.owner, self__.data, self__.widget, meta5715__$1);
+      var _5752__$1 = this;
+      return new ws_sandbox.app.view.t5750(self__.owner, self__.data, self__.widget, meta5751__$1);
     };
-    ws_sandbox.app.core.__GT_t5714 = function __GT_t5714(owner__$1, data__$1, widget__$1, meta5715) {
-      return new ws_sandbox.app.core.t5714(owner__$1, data__$1, widget__$1, meta5715);
+    ws_sandbox.app.view.__GT_t5750 = function __GT_t5750(owner__$1, data__$1, widget__$1, meta5751) {
+      return new ws_sandbox.app.view.t5750(owner__$1, data__$1, widget__$1, meta5751);
     };
   }
-  return new ws_sandbox.app.core.t5714(owner, data, widget, null);
+  return new ws_sandbox.app.view.t5750(owner, data, widget, null);
 };
-om.core.root.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "text", "text", 1017460895), "Hello world!"], null), ws_sandbox.app.core.widget, document.getElementById("my-app"));
+ws_sandbox.app.view.initialize_view = function initialize_view() {
+  ws_sandbox.app.util.log.call(null, "initialize-view");
+  return om.core.root.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "text", "text", 1017460895), "Hello world!"], null), ws_sandbox.app.view.widget, document.getElementById("my-app"));
+};
+goog.provide("ws_sandbox.app.core");
+goog.require("cljs.core");
+goog.require("ws_sandbox.app.view");
+goog.require("ws_sandbox.app.view");
+ws_sandbox.app.view.initialize_view.call(null);
