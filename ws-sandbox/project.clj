@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :plugins [[lein-cljsbuild "1.0.2"]]
   :cljsbuild {:builds [{:source-paths ["src/app"]
-                        :compiler {:output-to    "public/js/main.js"
+                        :compiler {:output-to     "public/js/main.js"
                                    :optimizations :whitespace
                                    :pretty-print  true}}]}
   :dependencies [[org.clojure/clojure       "1.5.1"]

@@ -9,4 +9,6 @@
 (defn update-text [text]
   (swap! app-state assoc :text text))
 
-(def app-state (atom {:text "Hello world!"}))
+(def app-state (atom {:text "Hello world!"}
+                     :synth {:sin {}
+                             :saw}))
