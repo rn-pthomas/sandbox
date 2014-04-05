@@ -27682,46 +27682,46 @@ goog.require("om.dom");
 goog.require("om.core");
 goog.require("om.core");
 ws_sandbox.app.view.widget = function widget(data, owner) {
-  if (typeof ws_sandbox.app.view.t5762 !== "undefined") {
+  if (typeof ws_sandbox.app.view.t5781 !== "undefined") {
   } else {
-    ws_sandbox.app.view.t5762 = function(owner, data, widget, meta5763) {
+    ws_sandbox.app.view.t5781 = function(owner, data, widget, meta5782) {
       this.owner = owner;
       this.data = data;
       this.widget = widget;
-      this.meta5763 = meta5763;
+      this.meta5782 = meta5782;
       this.cljs$lang$protocol_mask$partition1$ = 0;
       this.cljs$lang$protocol_mask$partition0$ = 393216;
     };
-    ws_sandbox.app.view.t5762.cljs$lang$type = true;
-    ws_sandbox.app.view.t5762.cljs$lang$ctorStr = "ws-sandbox.app.view/t5762";
-    ws_sandbox.app.view.t5762.cljs$lang$ctorPrWriter = function(this__3970__auto__, writer__3971__auto__, opt__3972__auto__) {
-      return cljs.core._write.call(null, writer__3971__auto__, "ws-sandbox.app.view/t5762");
+    ws_sandbox.app.view.t5781.cljs$lang$type = true;
+    ws_sandbox.app.view.t5781.cljs$lang$ctorStr = "ws-sandbox.app.view/t5781";
+    ws_sandbox.app.view.t5781.cljs$lang$ctorPrWriter = function(this__3970__auto__, writer__3971__auto__, opt__3972__auto__) {
+      return cljs.core._write.call(null, writer__3971__auto__, "ws-sandbox.app.view/t5781");
     };
-    ws_sandbox.app.view.t5762.prototype.om$core$IRender$ = true;
-    ws_sandbox.app.view.t5762.prototype.om$core$IRender$render$arity$1 = function(this$) {
+    ws_sandbox.app.view.t5781.prototype.om$core$IRender$ = true;
+    ws_sandbox.app.view.t5781.prototype.om$core$IRender$render$arity$1 = function(this$) {
       var self__ = this;
       var this$__$1 = this;
       return React.DOM.h1(null, (new cljs.core.Keyword(null, "text", "text", 1017460895)).cljs$core$IFn$_invoke$arity$1(self__.data));
     };
-    ws_sandbox.app.view.t5762.prototype.cljs$core$IMeta$_meta$arity$1 = function(_5764) {
+    ws_sandbox.app.view.t5781.prototype.cljs$core$IMeta$_meta$arity$1 = function(_5783) {
       var self__ = this;
-      var _5764__$1 = this;
-      return self__.meta5763;
+      var _5783__$1 = this;
+      return self__.meta5782;
     };
-    ws_sandbox.app.view.t5762.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(_5764, meta5763__$1) {
+    ws_sandbox.app.view.t5781.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(_5783, meta5782__$1) {
       var self__ = this;
-      var _5764__$1 = this;
-      return new ws_sandbox.app.view.t5762(self__.owner, self__.data, self__.widget, meta5763__$1);
+      var _5783__$1 = this;
+      return new ws_sandbox.app.view.t5781(self__.owner, self__.data, self__.widget, meta5782__$1);
     };
-    ws_sandbox.app.view.__GT_t5762 = function __GT_t5762(owner__$1, data__$1, widget__$1, meta5763) {
-      return new ws_sandbox.app.view.t5762(owner__$1, data__$1, widget__$1, meta5763);
+    ws_sandbox.app.view.__GT_t5781 = function __GT_t5781(owner__$1, data__$1, widget__$1, meta5782) {
+      return new ws_sandbox.app.view.t5781(owner__$1, data__$1, widget__$1, meta5782);
     };
   }
-  return new ws_sandbox.app.view.t5762(owner, data, widget, null);
+  return new ws_sandbox.app.view.t5781(owner, data, widget, null);
 };
 ws_sandbox.app.view.initialize_view = function initialize_view() {
   ws_sandbox.app.util.log.call(null, "initialize-view");
-  return om.core.root.call(null, cljs.core.deref.call(null, ws_sandbox.app.state.app_state), ws_sandbox.app.view.widget, document.getElementById("my-app"));
+  return om.core.root.call(null, cljs.core.deref.call(null, ws_sandbox.app.state.app_state), ws_sandbox.app.view.widget, document.getElementById("app-text"));
 };
 goog.provide("ws_sandbox.app.core");
 goog.require("cljs.core");
