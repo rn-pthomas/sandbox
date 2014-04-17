@@ -11,5 +11,5 @@
 
 (defn initialize-view []
   (util/log "initialize-view")
-  (om/root @state/app-state widget (. js/document (getElementById "my-app"))))
+  (om/root @state/app-state widget (. js/document (getElementById "app-text"))))
 

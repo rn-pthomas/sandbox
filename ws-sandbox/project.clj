@@ -12,4 +12,5 @@
                  [org.clojure/clojurescript "0.0-2156"]
                  [om                        "0.3.6"]
                  [http-kit                  "2.1.16"] 
-                 [org.clojure/tools.nrepl   "0.2.3"]])
+                 [org.clojure/tools.nrepl   "0.2.3"]]
+  :main ws-sandbox.server.server)
