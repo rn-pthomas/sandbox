@@ -41,5 +41,5 @@
          (reduce (fn [acc [en ev es]]
                    (update-in acc [[en ev]] conj es))
                  {})))
-
+  
   )
