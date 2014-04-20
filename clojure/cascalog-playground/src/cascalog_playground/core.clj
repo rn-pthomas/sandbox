@@ -6,7 +6,7 @@
 
 (defn analyze-event
   [line accum]
-  (let [[event-type event-version event-schema] (map read-string (split-on-tab line))
+  (let [[event-type event-version event-schema] (map read-string (file-utils/split-on-tab line))
         event-type (keyword event-type)]
     (assoc accum [event-type event-version] (conj (event-type accum) event-schema))))
 
