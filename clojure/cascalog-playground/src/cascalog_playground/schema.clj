@@ -20,3 +20,17 @@
                 (conj acc schema-col)))
             (vec base-schema)
             (vec event-schema))))
+
+(defn matching-events
+  [target-event-type target-event-version analyzed-event-file]
+  (-> (filter (fn [evt]
+                (let [[[evt-type evt-version] evt-schema] evt]
+                  (and (= evt-type target-event-type)
+                       (= evt-version target-event-version))))
+              analyzed-event-file)
+      first
+      second))
+
+(defn normalize-schema-definitions
+  [target-event-type target-event-versions analyzed-event-file]
+  )
