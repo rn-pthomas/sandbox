@@ -38,3 +38,25 @@
       (if-not (empty? schemas)
         (recur (add-new-schema-types accum schema) schemas)
         accum))))
+
+(defn normalize-all-schema-definitions
+  "Given an analyzed event file and a map of base schema definitions,
+   produces a map of [evt-type evt-version] to [normalized-schema-definition]
+   according to the map of base schema definitions"
+  [analyzed-event-file base-schema-definition-map]
+  (def analyzed-event-file analyzed-event-file)
+  (def base-schema-definition-map base-schema-definition-map)
+  (let [target-events (keys base-schema-definition-map)]
+    (reduce (fn [acc evt]
+              (let [[[evt-type evt-version] evt-schema] evt
+                    k [evt-type evt-version]]
+                (if (contains? analyzed-event-file k)
+                  (assoc acc k :yup) ;; actually implement this part...
+                  acc)))
+            {}
+            base-schema-definition-map)))
+
+(comment
+  thing
+  (contains? {[:foo :boo] :something} [:foo :boo])
+  )

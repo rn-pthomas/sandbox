@@ -29,5 +29,12 @@
         target-event-type    :boom.api.card-activation.received
         target-event-version 1]
     (schema/normalize-schema-definitions target-event-type target-event-version analyzed-event-file base-schema))
+
+
+  (let [filename (nth (file-utils/all-sample-files) 3)]
+   (schema/normalize-all-schema-definitions (core/analyze-event-file filename) {[:pods.engagement 4] []
+                                                                                [:wire.twoway.chat.entered 1] []}))
+  
+{[:wire.twoway.chat.entered 1] :yup, [:pods.engagement 4] :yup}
   
   )

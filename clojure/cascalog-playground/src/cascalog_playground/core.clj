@@ -28,3 +28,32 @@
        (reduce (fn [acc [en ev es]]
                  (update-in acc [[en ev]] #(inc (or % 0))))
                {})))
+
+(defn normalize-all-schema-definitions-for-file
+  [filename]
+  (->> filename
+       analyze-event-file
+       schema/normalize-all-schema-definitions))
+
+(defn analyze-event-files
+  "Given a list of filenames, will produce normalized schema
+   definitions for all events in the files"
+  [filenames]
+  (let [analyzed-files (map analyze-event-file filenames)]))
+
+(comment
+  
+  ;;analyze-event-files
+  (let [filenames (file-utils/all-sample-files)]
+    (let [analyzed-files (map analyze-event-file filenames)]
+      (map keys analyzed-files)))
+  
+    )
+
+
+
+
+
+
+
+
