@@ -1,7 +1,13 @@
-(ns cascalog-playground.core-test
-  (:require [clojure.test :refer :all]
-            [cascalog-playground.core :refer :all]))
+(ns cascalog-playground.test.core-test
+  (:require [cascalog-playground.core          :as core]
+            [cascalog-playground.schema        :as schema]
+            [cascalog-playground.test.fixtures :as fixtures]
+            [clojure.test                      :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest test-add-new-schema-types
+  (testing "Function works.")
+  (= 1 1))
+
+(comment
+  (run-tests)
+  )
