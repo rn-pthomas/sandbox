@@ -1,0 +1,14 @@
+{"version":3,
+ "file":
+ "/Users/pthomas/projects/personal/sandbox/clojure/om-playground/out/om_playground/core.js",
+ "sources":["core.cljs"],
+ "lineCount":44,
+ "mappings":
+ ";AAAA;;;;;;AAIA,AAAKA,+BAAU,yBAAA,2CAAA,qDAAA,zHAACC;AAEhB,4BAAA,6BAAA,zDAAMC,6CACHE,KAAKC,OACN,AAAA,GAAA,OAAAC;CAAA;CAAA,AAAA,AAAA;;;;;;;;;;;;AAAA,AAAA,AAAAA,0CAAA;AAAA,AAAA,AAAAA,6CAAA;AAAA,AAAA,AAAAA,kDAAA,WAAAC,mBAAAC,qBAAAC,mBAAA,AAAA,OAAAC,2BAAAF,qBAAA;;AAAA,AAAA,AAAA,AAAA,AAAAF,sDAAA;AAAA,AAAA,AAAA,AAAAA,oEAAA,WAEWQ;AAFX,AAAA,gBAAA,KAAA,jBAEWA,iBACP,OAAAC,aAAA,KAAY,AAAA,mFAAOX;;AAHvB,AAAA,AAAA,AAAAE,mEAAA,WAAAK;AAAA,AAAA,IAAAA,YAAA,KAAA,AAAAC;;AAAA,AAAA,AAAA,AAAAN,4EAAA,WAAAK,MAAAC;mFAFIT,ZACHC,bAAKC,1DACN,AAAA,IAAAM,YAAA,KAAA,AAAA,YAAAL,gEAAAM;;wEAFIT,6EAAAA,tFACHC,6EAAAA,vFAAKC,6EAAAA,lIACN,AAAAQ,gCAAA,mDAAAD,UAAA,AAAA,YAAAN,uDAAAM;;AAAAN;gDAFIH,LACHC,NAAKC,rCACN,YAAAC,2CAAA;;AAKF,iDAAA,AAAAU,wDAAA,2CAAA,pJAACC,uBAAQf,oDAAQF,kIACC,wBAAA,xBAAGkB",
+ "names":
+ ["om-playground.core/app-state", "cljs.core/atom",
+  "om-playground.core/widget", "widget", "data", "owner",
+  "om-playground.core/t5527", "this__3970__auto__",
+  "writer__3971__auto__", "opt__3972__auto__", "cljs.core/-write",
+  "_5529", "meta5528", "om-playground.core/->t5527", "this",
+  "js/React.DOM.h1", "cljs.core/deref", "om.core/root", "js/document"]}
