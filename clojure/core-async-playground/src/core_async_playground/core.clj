@@ -1,16 +1,19 @@
 (ns core-async-playground.core
-  (:require [clojure.core.async :as async :refer :all]))
+  (:require [clojure.core.async :as async :refer [go chan <! >!]]))
 
-(let [c1 (chan)
-      c2 (chan)]
+(def test-chan (chan))
+
+(defn respond-to-event
+  [evt]
+  (println {:evt evt}))
+
+(defn do-stuff
+  []
   (go (while true
-        (let [[v ch] (alts! [c1 c2])]
-          (println "Read" v "from" ch))))
-  (go (>! c1 "hi"))
-  (go (>! c2 "there")))
+        (respond-to-event (<! test-chan)))))
 
-(clojure.core/reduce (fn [attr acc]
-          (conj acc attr (name attr)))
-        {}
-        [:foo :bar :baz])
-
+(comment
+  (do-stuff)
+  (async/put! test-chan 10)
+  (async/put! test-chan 12)
+  )
