@@ -1,0 +1,12 @@
+{
+  "foo": {
+    "bar": {
+      "baz": [
+        "crab",
+        "chicken",
+        "taco"
+      ]
+    },
+    "cats": "meow"
+  }
+}
