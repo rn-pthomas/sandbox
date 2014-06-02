@@ -3,17 +3,12 @@
 
 (defmulti parse-item
   (fn [form ctx]
-    (cond (seq? form)
-          :seq
-
-          (integer? form)
-          :int
-
-          (symbol? form)
-          :symbol
-
-          (nil? form)
-          :nil)))
+    (cond (seq? form)                 :seq
+          (integer? form)             :int
+          (and (number? form)
+               (not (integer? form))) :double
+          (symbol? form)              :symbol
+          (nil? form)                 :nil)))
 
 (defmulti parse-sexpr
   (fn [[sym & rest] ctx]
@@ -37,7 +32,7 @@
   [[f & body] ctx]
   {:type :call
    :fn   (parse-item f ctx)
-   :args (doall
+   :args (vec
           (map #(parse-item % ctx)
                body))})
 
@@ -56,6 +51,10 @@
   [form ctx]
   (make-simple-parsed :int form))
 
+(defmethod parse-item :double
+  [form ctx]
+  (make-simple-parsed :double form))
+
 (defmethod parse-item :symbol
   [form ctx]
   (make-simple-parsed :symbol form))
@@ -69,9 +68,5 @@
   (parse-item form {}))
 
 (comment
-  (to-ast (if true
-            (println "foof")
-            (println "barf")))
-  (to-ast (- 1 2))
-  (to-ast (println "ok"))
+  (to-ast (+ (- 1 2) (* 3 (/ 7 2.3))))
   )
