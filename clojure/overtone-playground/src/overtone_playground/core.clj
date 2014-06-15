@@ -10,9 +10,11 @@
   (http/websocket-client {:url ws-url}))
 
 (defn echo
-  [message]
-  (let [channel (lamina/wait-for-result (ws-client))]
-    (lamina/enqueue channel message)
-    (let [echo (lamina/wait-for-result (lamina/read-channel channel))]
-      (lamina/close channel)
-      echo)))
+  ([message]
+     (let [channel (lamina/wait-for-result (ws-client))]
+       (lamina/enqueue channel message)
+       (let [echo (lamina/wait-for-result (lamina/read-channel channel))]
+         (lamina/close channel)
+         (json/read-json echo))))
+  ([]
+     (echo "not sure that this argument matters")))
