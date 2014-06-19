@@ -29,7 +29,7 @@
   (->> (for [w ["He" "She" "It"]
              x ["is" "was"]
              y ["a" "the"]
-             z (map #(str % ".") ["girl" "boy" "cat" "crab"])]
+             z (map #(str % ".") ["girl" "boy" "cat" "crab" "twizzler"])]
          (apply str (interpose " " [w x y z])))
        (reduce (fn [acc word]
                  (str acc word " "))
