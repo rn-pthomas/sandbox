@@ -1,7 +1,5 @@
-(ns markov-chains.core)
-
-;; the following code was shamelessly ripped from:
-;; http://diegobasch.com/fun-with-markov-chains-and-clojure
+(ns markov-chains.core
+  (:import [javax.sound.midi MidiEvent MidiSystem Sequence Sequencer]))
 
 (defn markov-data
   [text]
@@ -26,14 +24,16 @@
         (recur nws nacc)))))
 
 (comment
-  (->> (for [w ["He" "She" "It"]
-             x ["is" "was"]
-             y ["a" "the"]
-             z (map #(str % ".") ["girl" "boy" "cat" "crab" "twizzler"])]
-         (apply str (interpose " " [w x y z])))
-       (reduce (fn [acc word]
-                 (str acc word " "))
-               "")
-       markov-data
-       sentence)
-  )
+
+  (let [text "He is a boy. She is a girl. He is young. She is younger."]
+    (let [maps (for [line (clojure.string/split text #"\.")
+                     m    (let [l     (str line ".") 
+                                words (cons :start (clojure.string/split l #"\s+"))]
+                            (for [p (partition 2 1 (remove #(= "" %) words))]
+                              {(first p) [(second p)]}))]
+                 m)]
+      (apply merge-with concat maps)
+      maps))
+  
+  ;; http://diegobasch.com/fun-with-markov-chains-and-clojure
+)
