@@ -7,8 +7,8 @@
 (def environment (atom nil))
 
 (defmacro register-environment!
-  "Takes a function that, when evaluated, should return the name
-   of the current environment."
+  "Takes a function that, when evaluated, should return the name of the current
+   environment. Resets the 'environment' atom to the return value of that function."
   [form]
   `(reset! environment ~form))
 
