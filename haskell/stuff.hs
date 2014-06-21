@@ -11,11 +11,7 @@ f :: (Num a) => a -> a -> a
 f x y = x + y
 
 -----------------------------------------------------
-lazyByThrees :: Integer -> [Integer]
-lazyByThrees x = x:lazyByThrees(x+3)
+circumference :: Float -> Float
+circumference r = 2 * pi * r
 
-lazyByFives :: Integer -> [Integer]
-lazyByFives x = x:lazyByFives(x+5)
-
-lazyByEights :: Integer -> [Integer]
-lazyByEights x = [(y,z) | y <- lazyByThrees(x), z <- lazyByFives(x)]
+data List a = Empty | Cons a (List a) deriving (Show, Read, Eq, Ord)
