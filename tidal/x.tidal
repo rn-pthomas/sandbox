@@ -1,4 +1,9 @@
 bps (120/60)
+
+--- define custom sounds
+
+
+
 d1 $ sound "[bd bd] [bd [sn [sn sn] sn]]"
 d1 $ sound "[bd:3 bd:3 bd:3, sn [cp cp cp] [sn sn sn sn sn] [cp cp]]"
 d1 $ sound "{bd [ht ht] lt, sn cp}"
@@ -49,6 +54,14 @@ d1 $ slow 32 $ jux (rev) $ striate' 32 (1/16) $ sound "bev"
 
 d1 $ slow 32 $ jux ((|+| speed "0.5") . rev) $ striate' 32 (1/16) $ sound "bev"
 
-d1 $ every 5 (vowel "a") $ sound "bd"
+d1 $ sound "bd"
+
+d1 $ trunc 0.25 $ slow 16 $ rev $ striate' 32 0.3 $ sound "{[bloops:2 bloops:6 bloops:3], [bloops:2 bloops:6 bloops:2 bloops:6 bloops:6]}"
+d1 $ trunc 0.25 $ slow 16 $ rev $ striate' 32 0.3 $ sound "{[bloops:2 bloops:6 bloops:3], [bloops:2 bloops:6 bloops:2 bloops:6 bloops:6]}"
+d1 $ sound "{[bloops:2 bloops:6 bloops:3], [bloops:2 bloops:6 bloops:2 bloops:6 bloops:6]}"
+
+--------
+d1 $ slow 2 $ striate 8 $ sound "bloops:2*4"     
+d2 $ sound "[~ ~ bloops:6]*4"
 
 hush
