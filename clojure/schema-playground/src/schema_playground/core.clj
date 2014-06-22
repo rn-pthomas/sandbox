@@ -2,8 +2,6 @@
   (:require [clojure.data.json :as json]
             [schema.core       :as schema]))
 
-(def env-config (json/read-str (slurp "/etc/config.json") :key-fn keyword))
-
 (def environment (atom nil))
 
 (defmacro register-environment!
