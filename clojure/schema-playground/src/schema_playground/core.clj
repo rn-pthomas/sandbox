@@ -4,11 +4,11 @@
 
 (def environment (atom nil))
 
-(defmacro register-environment!
+(defn register-environment!
   "Takes a function that, when evaluated, should return the name of the current
    environment. Resets the 'environment' atom to the return value of that function."
-  [form]
-  `(reset! environment ~form))
+  [env]
+  (reset! environment env))
 
 (def validation-environments (atom #{}))
 
@@ -31,6 +31,7 @@
   (do (register-environment! (-> "/etc/config.json"
                                  slurp
                                  (json/read-str :key-fn keyword)
+                                 :environment
                                  :name))
       
       (register-validation-environments! "development" "staging")
