@@ -24,7 +24,8 @@
 
 (comment
   (spotify-req {:req-types      [:artists :albums]
-                :resource-types [:artists]})
+                :resource-types [:artists]
+                :search-types   [:albums]})
 
   )
 
@@ -42,7 +43,7 @@
                    {}
                    body#))))))
 
-(defreq arist-search :artist)
+(defreq artist-search :artist)
 
 (defreq search :search)
 
