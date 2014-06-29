@@ -25,27 +25,3 @@
     `(schema/validate
       ~validation-schema
       ~value)))
-
-(comment
-  
-  (do (register-environment! (-> "/etc/config.json"
-                                 slurp
-                                 (json/read-str :key-fn keyword)
-                                 :environment
-                                 :name))
-      
-      (register-validation-environments! "development" "staging")
-      
-      (let [Data {:a {:b schema/Str
-                      :c schema/Int}
-                  :d [{:e schema/Keyword
-                       :f [schema/Num]}]}]
-        (validate-per-env
-         Data
-         {:a {:b "abc"
-              :c 123}
-          :d [{:e :bc
-               :f [12.2 13 100]}
-              {:e :bc
-               :f [-1]}]})))
-)
