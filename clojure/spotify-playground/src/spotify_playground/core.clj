@@ -31,7 +31,6 @@
 
 (defmacro defreq
   [req-name req-type]
-  
   (let [base-req (str (spotify-req req-type) "%s")]
     `(defn ~req-name
        [term#]
