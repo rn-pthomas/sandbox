@@ -6,18 +6,12 @@
                  [org.clojure/clojurescript "0.0-2173"]
                  [org.clojure/core.async    "0.1.267.0-0d7780-alpha"]
                  [om                        "0.6.5"]
-                 [om-sync                   "0.1.1"]
-                 [sablono                   "0.2.18"]]
-
+                 [om-sync                   "0.1.1"]]
   :plugins [[lein-cljsbuild "1.0.2"]]
-
   :source-paths ["src"]
-
-  :cljsbuild { 
-    :builds [{:id "om-playground"
+  :cljsbuild {:builds       [{:id "om-playground"
               :source-paths ["src"]
-              :compiler {
-                :output-to "om_playground.js"
-                :output-dir "out"
-                :optimizations :none
-                :source-map true}}]})
+              :compiler     {:output-to     "om_playground.js"
+                             :output-dir    "out"
+                             :optimizations :none
+                             :source-map    true}}]})

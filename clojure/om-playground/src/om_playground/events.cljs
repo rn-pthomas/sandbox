@@ -1,6 +1,6 @@
 (ns om-playground.events
   (:require [om-playground.state :as state]
-            [om-playground.util  :refer [log]]))
+            [om-playground.util  :as util]))
 
 (defn on-key-down
   [target]
@@ -8,5 +8,5 @@
 
 (defn on-change
   [target]
-  (log ":on-change")
+  (util/log ":on-change")
   (swap! state/app-state update-in [:info :key-presses :num] inc))
