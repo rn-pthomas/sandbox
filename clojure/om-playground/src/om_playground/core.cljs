@@ -21,13 +21,13 @@
   [target]
   (swap! app-state update-in [:info :key-presses :log] conj "foof")
   )
-
-(om/root
- (fn [state owner]
-   ;;(dom/h1 )
-   (reify
+(defn render-root
+  [state owner]
+  (reify
      om.core/IRender
      (render [_]
        (dom/h1 nil (get-in state [:info :key-presses :num])))))
-  app-state
-  {:target js/document.body})
+
+(om/root render-root
+         app-state
+         {:target js/document.body})
