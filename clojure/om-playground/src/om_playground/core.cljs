@@ -3,6 +3,8 @@
   (:require [om-playground.state :as state]
             [om.core             :as om   :include-macros true]
             [om.dom              :as dom  :include-macros true]
+            [clojure.data        :as data]
+            [clojure.string      :as string]
             [cljs.core.async     :as async]))
 
 (enable-console-print!)
