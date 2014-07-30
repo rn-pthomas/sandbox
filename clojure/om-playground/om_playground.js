@@ -14,5 +14,5 @@ goog.addDependency("../cljs/core/async/impl/dispatch.js", ['cljs.core.async.impl
 goog.addDependency("../cljs/core/async/impl/channels.js", ['cljs.core.async.impl.channels'], ['cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.timers'], ['cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.timers']);
-goog.addDependency("../om_playground/core.js", ['om_playground.core'], ['clojure.data', 'cljs.core', 'om_playground.state', 'om.core', 'clojure.string', 'om.dom', 'cljs.core.async']);
+goog.addDependency("../om_playground/core.js", ['om_playground.core'], ['clojure.data', 'cljs.core', 'om_playground.state', 'om.core', 'clojure.string', 'om_playground.util', 'om.dom', 'cljs.core.async']);
 goog.addDependency("../om_playground/events.js", ['om_playground.events'], ['cljs.core', 'om_playground.state', 'om_playground.util']);
