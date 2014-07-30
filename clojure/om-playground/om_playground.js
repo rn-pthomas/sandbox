@@ -6,6 +6,7 @@ goog.addDependency("../clojure/data.js", ['clojure.data'], ['cljs.core', 'clojur
 goog.addDependency("../om_playground/state.js", ['om_playground.state'], ['cljs.core']);
 goog.addDependency("../om/dom.js", ['om.dom'], ['cljs.core']);
 goog.addDependency("../om/core.js", ['om.core'], ['cljs.core', 'om.dom']);
+goog.addDependency("../om_playground/extensions.js", ['om_playground.extensions'], ['cljs.core']);
 goog.addDependency("../clojure/string.js", ['clojure.string'], ['cljs.core', 'goog.string', 'goog.string.StringBuffer']);
 goog.addDependency("../cljs/core/async/impl/protocols.js", ['cljs.core.async.impl.protocols'], ['cljs.core']);
 goog.addDependency("../cljs/core/async/impl/ioc_helpers.js", ['cljs.core.async.impl.ioc_helpers'], ['cljs.core', 'cljs.core.async.impl.protocols']);
@@ -14,5 +15,5 @@ goog.addDependency("../cljs/core/async/impl/dispatch.js", ['cljs.core.async.impl
 goog.addDependency("../cljs/core/async/impl/channels.js", ['cljs.core.async.impl.channels'], ['cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.timers'], ['cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.timers']);
-goog.addDependency("../om_playground/core.js", ['om_playground.core'], ['clojure.data', 'cljs.core', 'om_playground.state', 'om.core', 'clojure.string', 'om_playground.util', 'om.dom', 'cljs.core.async']);
+goog.addDependency("../om_playground/core.js", ['om_playground.core'], ['clojure.data', 'cljs.core', 'om_playground.state', 'om.core', 'om_playground.extensions', 'clojure.string', 'om_playground.util', 'om.dom', 'cljs.core.async']);
 goog.addDependency("../om_playground/events.js", ['om_playground.events'], ['cljs.core', 'om_playground.state', 'om_playground.util']);
