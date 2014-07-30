@@ -1,13 +1,13 @@
 (ns om-playground.core
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [om-playground.state :as state]
-            [om-playground.util  :as util]
+  (:require [om-playground.state      :as state]
+            [om-playground.util       :as util]
             [om-playground.extensions :as extensions]
-            [om.core             :as om   :include-macros true]
-            [om.dom              :as dom  :include-macros true]
-            [clojure.data        :as data]
-            [clojure.string      :as string]
-            [cljs.core.async     :as async]))
+            [om.core                  :as om   :include-macros true]
+            [om.dom                   :as dom  :include-macros true]
+            [clojure.data             :as data]
+            [clojure.string           :as string]
+            [cljs.core.async          :as async]))
 
 (enable-console-print!)
 
