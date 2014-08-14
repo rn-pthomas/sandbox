@@ -1,0 +1,10 @@
+{"version":3,
+ "file":
+ "/Users/pat/projects/sandbox/clojure/canvas-cljs/resources/public/js/compiled/out/canvas_cljs/core.js",
+ "sources":["core.cljs"],
+ "lineCount":12,
+ "mappings":
+ ";AAAA;;AAEA,AAACA;AAED;;;uBAAA,iBAAA,xCAAMC,qCAEHC,GACD,qCAAA,9BAACC,4BAAQD;;AAEX,4BAAA,5BAACC",
+ "names":
+ ["cljs.core/enable-console-print!", "canvas-cljs.core/foo", "x",
+  "cljs.core/println"]}
