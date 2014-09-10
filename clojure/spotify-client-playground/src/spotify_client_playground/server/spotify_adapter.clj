@@ -1,4 +1,4 @@
-(ns spotify-client-playground.spotify-adapter
+(ns spotify-client-playground.server.spotify-adapter
   (:require [org.httpkit.client :as http]
             [clojure.data.json  :as json]))
 

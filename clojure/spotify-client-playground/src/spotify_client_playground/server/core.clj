@@ -1,8 +1,8 @@
-(ns spotify-client-playground.core
+(ns spotify-client-playground.server.core
   (:require [compojure.core                            :as compojure]
             [compojure.route                           :as route]
             [org.httpkit.server                        :as http-kit]
-            [spotify-client-playground.spotify-adapter :as adapter]
+            [spotify-client-playground.server.spotify-adapter :as adapter]
             [clojure.tools.nrepl.server                :as nrepl]
             [cider.nrepl                               :as cider]
             [clojure.data.json                         :as json]))
