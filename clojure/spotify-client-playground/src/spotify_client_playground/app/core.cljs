@@ -46,7 +46,7 @@
                                              (spotify-search-xhr search-term-val)))}
                            "Search")
                (when-let [search-results (get-in app [:search :results])]
-                 (dom/ul nil
+                 (dom/ul #js {:id "result-list"}
                          (mapv (fn [res]
                                  (dom/li #js {:onClick   (fn [e]
                                                            (println "clicked!"))
