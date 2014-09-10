@@ -1,14 +1,25 @@
 (ns spotify-client-playground.server.spotify-adapter
-  (:require [org.httpkit.client :as http]
-            [clojure.data.json  :as json]))
+  (:require [org.httpkit.client                           :as http]
+            [spotify-client-playground.server.web-helpers :as web-helpers]))
 
-(defn ->query-string
-  [search-term]
-  (->> (clojure.string/split search-term #" ")
-       (interpose "+")
-       (apply str)))
+(def base-search-format-str "https://api.spotify.com/v1/search?query=%s&type=%s")
 
-(defn search
-  [search-term]
-  (let [resp @(http/get (format "https://api.spotify.com/v1/search?query=%s&type=artist" (->query-string search-term)))]
-    (-> resp :body (json/read-str :key-fn keyword))))
+(defn base-search
+  [search-term search-type]
+  (let [resp @(http/get (format base-search-format-str (web-helpers/->query-string search-term) search-type))]
+    (web-helpers/read-json-resp resp)))
+
+(defmacro defsearch
+  [search-type]
+  (let [fn-name (symbol (str (str search-type) "-search"))]
+    `(defn ~fn-name
+       [search-term#]
+       (base-search search-term# ~(str search-type)))))
+
+(defsearch artist)
+(defsearch track)
+(defsearch album)
+
+(comment
+  (track-search "this is how we do it")
+)
