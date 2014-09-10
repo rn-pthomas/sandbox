@@ -30,6 +30,16 @@
                                   (def aa artist-names)
                                   (swap! app-state assoc-in [:search :results] artist-names)))})))
 
+(defn search-results-list
+  [search-results]
+  (dom/ul #js {:id "result-list"}
+          (mapv (fn [res]
+                  (dom/li #js {:onClick   (fn [e]
+                                            (println "clicked!"))
+                               :className "result-list-item"}
+                          res))
+                search-results)))
+
 (defn main-app
   [app owner opts]
   (reify
@@ -46,13 +56,7 @@
                                              (spotify-search-xhr search-term-val)))}
                            "Search")
                (when-let [search-results (get-in app [:search :results])]
-                 (dom/ul #js {:id "result-list"}
-                         (mapv (fn [res]
-                                 (dom/li #js {:onClick   (fn [e]
-                                                           (println "clicked!"))
-                                              :className "result-list-item"}
-                                         res))
-                               (get-in app [:search :results]))))))))
+                 (search-results-list search-results))))))
 
 (let [target (gdom/getElement "app-container")]
   (om/root main-app
