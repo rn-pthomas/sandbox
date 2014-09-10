@@ -1,11 +1,12 @@
 (ns spotify-client-playground.server.core
-  (:require [compojure.core                            :as compojure]
-            [compojure.route                           :as route]
-            [org.httpkit.server                        :as http-kit]
+  (:require [compojure.core                                   :as compojure]
+            [compojure.route                                  :as route]
+            [org.httpkit.server                               :as http-kit]
             [spotify-client-playground.server.spotify-adapter :as adapter]
-            [clojure.tools.nrepl.server                :as nrepl]
-            [cider.nrepl                               :as cider]
-            [clojure.data.json                         :as json]))
+            [spotify-client-playground.server.web-helpers     :as web-helpers]
+            [clojure.tools.nrepl.server                       :as nrepl]
+            [cider.nrepl                                      :as cider]
+            [clojure.data.json                                :as json]))
 
 (def nrepl-server (atom nil))
 
@@ -15,17 +16,9 @@
   (println (format "nrepl server listening on port %s" port))
   :nrepl-server-started)
 
-(defn parse-query-string
-  [query-string]
-  (let [split-params (partition 2 (clojure.string/split query-string #"="))]
-    (reduce (fn [acc [k v]]
-              (assoc acc (keyword k) v))
-            {}
-            split-params)))
-
 (defn handle-search
   [req]
-  (let [search-term (-> req :query-string parse-query-string :term)
+  (let [search-term (-> req web-helpers/parse-query-string :term)
         result-set  (adapter/search search-term)]
     (json/write-str {:search-term search-term
                      :result-set  result-set})))
