@@ -27,18 +27,18 @@
                                                         (mapv (fn [item]
                                                                 (get item "name")))
                                                         sort)]
-                                  (def aa artist-names)
                                   (swap! app-state assoc-in [:search :results] artist-names)))})))
 
 (defn search-results-list
   [search-results]
-  (dom/ul #js {:id "result-list"}
-          (mapv (fn [res]
-                  (dom/li #js {:onClick   (fn [e]
-                                            (println "clicked!"))
-                               :className "result-list-item"}
-                          res))
-                search-results)))
+  (apply dom/ul
+         #js {:id "result-list"}
+         (mapv (fn [res]
+                 (dom/li #js {:onClick   (fn [e]
+                                           (println "clicked!"))
+                              :className "result-list-item"}
+                         res))
+               search-results)))
 
 (defn main-app
   [app owner opts]
