@@ -49,17 +49,6 @@
                :className "result-list-item"}
           search-result))
 
-(defn some-component
-  [data owner opts]
-  (reify
-    om/IWillMount
-    (will-mount [_]
-      (println "mounted"))
-    
-    om/IRenderState
-    (render-state [_ opts]
-      (dom/div nil "hey there"))))
-
 (defn search-results-list
   [data owner opts]
   (reify
