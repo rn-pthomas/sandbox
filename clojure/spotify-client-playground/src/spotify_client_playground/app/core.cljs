@@ -27,9 +27,7 @@
                                                         (mapv (fn [item]
                                                                 (get item "name")))
                                                         sort)]
-                                  (swap! app-state assoc-in [:search :results] (get parsed-resp "result-set"))
-                                  ;;(swap! app-state assoc-in [:search :results] artist-names)
-                                  ))})))
+                                  (swap! app-state assoc-in [:search :results] (get parsed-resp "result-set"))))})))
 
 (defn search-results-list
   [search-results path key-from-item]
