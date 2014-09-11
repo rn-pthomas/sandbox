@@ -19,7 +19,9 @@
 (defn handle-search
   [req]
   (let [search-term (-> req web-helpers/parse-query-string :term)
-        result-set  (adapter/artist-search search-term)]
+        result-set  {:artists (adapter/artist-search search-term)
+                     :tracks  (adapter/track-search search-term)
+                     :albums  (adapter/album-search search-term)}]
     (json/write-str {:search-term search-term
                      :result-set  result-set})))
 

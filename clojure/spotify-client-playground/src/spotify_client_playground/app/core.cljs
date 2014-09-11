@@ -1,5 +1,6 @@
 (ns spotify-client-playground.app.core
   (:require [spotify-client-playground.app.xhr :as xhr]
+            [spotify-client-playground.app.web-helpers :refer [parse-json-resp]]
             [cognitect.transit                 :as transit]
             [goog.dom                          :as gdom]
             [om.core                           :as om  :include-macros true]
@@ -9,33 +10,24 @@
 
 (def app-state (atom {}))
 
-(def r (transit/reader :json))
-
-(defn parse-json-resp
-  [resp]
-  (transit/read r resp))
-
 (defn spotify-search-xhr
   [search-term]
   (let [search-url (str "search?term=" search-term)]
     (xhr/do-xhr {:method      :get
                  :url         search-url
                  :on-complete (fn [resp]
-                                (let [parsed-resp  (parse-json-resp resp)
-                                      items        (get-in parsed-resp ["result-set" "artists" "items"])
-                                      artist-names (->> items
-                                                        (mapv (fn [item]
-                                                                (get item "name")))
-                                                        sort)]
+                                (let [parsed-resp (parse-json-resp resp)]
                                   (swap! app-state assoc-in [:search :results] (get parsed-resp "result-set"))))})))
 
 (defn search-results-list
-  [search-results path key-from-item]
-  (let [list-to-render (if key-from-item
-                         (mapv (fn [item]
-                                 (get item key-from-item))
-                               (get-in search-results path))
-                         (get-in search-results path))]
+  [search-results search-type key-from-item]
+  (let [correct-path      [search-type search-type "items"]
+        results-to-render (get-in search-results correct-path)
+        list-to-render    (if key-from-item
+                            (mapv (fn [item]
+                                    (get item key-from-item))
+                                  results-to-render)
+                            results-to-render)]
     (apply dom/ul
           #js {:id "result-list"}
           (mapv (fn [res]
@@ -61,7 +53,7 @@
                                              (spotify-search-xhr search-term-val)))}
                            "Search")
                (when-let [search-results (get-in app [:search :results])]
-                 (search-results-list search-results ["artists" "items"] "name"))))))
+                 (search-results-list search-results "artists" "name"))))))
 
 (let [target (gdom/getElement "app-container")]
   (om/root main-app
