@@ -1,6 +1,5 @@
 (ns spotify-client-playground.app.core
-  (:require [spotify-client-playground.app.xhr :as xhr]
-            [spotify-client-playground.app.web-helpers :refer [parse-json-resp]]
+  (:require [spotify-client-playground.app.api :as api]
             [cognitect.transit                 :as transit]
             [goog.dom                          :as gdom]
             [om.core                           :as om  :include-macros true]
@@ -9,15 +8,6 @@
 (enable-console-print!)
 
 (def app-state (atom {:search {:type "artists"}}))
-
-(defn spotify-search-xhr
-  [search-term]
-  (let [search-url (str "search?term=" search-term)]
-    (xhr/do-xhr {:method      :get
-                 :url         search-url
-                 :on-complete (fn [resp]
-                                (let [parsed-resp (parse-json-resp resp)]
-                                  (swap! app-state assoc-in [:search :results] (get parsed-resp "result-set"))))})))
 
 (defn handle-change
   [e data edit-key owner]
@@ -77,11 +67,7 @@
 
     om/IWillMount
     (will-mount [_]
-      (xhr/do-xhr {:method      :get
-                   :url         "ping"
-                   :on-complete (fn [resp]
-                                  (when (= resp "ping")
-                                    (println "server is up and running")))}))
+      (api/ping-server-health))
 
     om/IRender
     (render [this]
@@ -89,7 +75,9 @@
                (dom/input #js {:id "search-input"} nil)
                (dom/button #js {:onClick (fn [e]
                                            (let [search-term-val (.-value (.getElementById js/document "search-input"))]
-                                             (spotify-search-xhr search-term-val)))}
+                                             (api/spotify-search-xhr search-term-val
+                                                                     (fn [resp]
+                                                                       (swap! app-state assoc-in [:search :results] (get resp "result-set"))))))}
                            "Search")
                (when (get-in app [:search :results])
                  (om/build search-results-list (:search app)))))))
