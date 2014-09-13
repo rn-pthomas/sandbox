@@ -36,22 +36,26 @@
   (let [js-options #js {:onClick   (fn [e]
                                      (println "clicked!"))
                         :className "result-list-item"}]
-    (dom/li js-options
-            (case search-type
-              "artists"
-              (get search-result "name")
+    (dom/div
+     nil
+     (dom/li js-options
+             (case search-type
+               "artists"
+               (get search-result "name")
 
-              "albums"
-              (get search-result "name")
+               "albums"
+               (get search-result "name")
 
-              "tracks"
-              (let [track-name  (get search-result "name")
-                    album-name  (get-in search-result ["album" "name"])
-                    artist-name (-> search-result (get "artists") first (get "name"))]
-                (str artist-name " - " track-name " (" album-name ")"))
+               "tracks"
+               (let [track-name  (get search-result "name")
+                     album-name  (get-in search-result ["album" "name"])
+                     artist-name (-> search-result (get "artists") first (get "name"))]
+                 (str artist-name " - " track-name " (" album-name ")"))
 
-              ;;default
-              "n/a"))))
+               ;;default
+               "n/a"))
+     (dom/button #js {:onClick (fn [e] (println "clicked detail button!"))}
+                 "Detail"))))
 
 (defn search-results-list
   [data owner opts]
