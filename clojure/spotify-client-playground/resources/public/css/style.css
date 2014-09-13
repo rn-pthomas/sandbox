@@ -8,3 +8,8 @@ li:hover {
   background-color: #ddd;
   cursor:           pointer;
 }
+
+.result-list-item {
+		float: left;
+		margin-right: 10px;
+}
