@@ -27,18 +27,9 @@
                (dom/option nil "tracks")
                (dom/option nil "albums"))))
 
-(defn search-results-list-item-component
-  [data owner opts])
-
-(defn search-results-list-item
-  [search-result search-type]
-  (let [js-options #js {:onClick   (fn [e]
-                                     (println "clicked!"))
-                        :className "result-list-item"}]
-    (dom/div
-     nil
-     (dom/li js-options
-             (case search-type
+(defn- make-friendly-search-result-string
+  [search-type search-result]
+  (case search-type
                "artists"
                (get search-result "name")
 
@@ -53,22 +44,29 @@
 
                ;;default
                "n/a"))
-     (dom/button #js {:onClick (fn [e] (println "clicked detail button!"))}
-                 "Detail"))))
+
+(defcomponent search-results-list-item
+  (display-name (or (:react-name opts) "Search Results List Item Component")) ;; NB> Can display-name impl be automatically generated in defcomponent macro?
+  (render
+   (dom/div nil
+            (dom/li #js {:className "result-list-item"}
+                    (make-friendly-search-result-string (:type data) (:search-result data)))
+            (dom/button #js {:onClick (fn [e]
+                                        (println "clicked detail button!"))}
+                        "Detail"))))
 
 (defcomponent search-results-list
   (display-name
    (or (:react-name opts) "Search Results List"))
   (render-state
-   (let [search-results                 (:results data)
-         search-type                    (:type data)
-         list-to-render                 (get-in search-results [search-type "items"])
-         build-search-results-list-item (fn [item]
-                                          (search-results-list-item item search-type))]
+   (let [search-type (:type data)]
      (dom/div nil
               (apply dom/ul
                      #js {:id "result-list"}
-                     (mapv build-search-results-list-item list-to-render))
+                     (mapv (fn [search-result]
+                             (om/build search-results-list-item {:search-result search-result
+                                                                 :type          search-type}))
+                           (get-in data [:results search-type "items"])))
               (om/build search-filter-dropdown data)))))
 
 (defcomponent main-app
