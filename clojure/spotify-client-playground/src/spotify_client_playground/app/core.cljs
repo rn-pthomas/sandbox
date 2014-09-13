@@ -75,29 +75,25 @@
                      (mapv build-search-results-list-item list-to-render))
               (om/build search-filter-dropdown data)))))
 
-(defn main-app
-  [app owner opts]
-  (reify
-    om/IDisplayName
-    (display-name [_]
-      (or (:react-name opts) "App"))
-
-    om/IWillMount
-    (will-mount [_]
-      (api/ping-server-health))
-
-    om/IRender
-    (render [this]
-      (dom/div nil
-               (dom/input #js {:id "search-input"} nil)
-               (dom/button #js {:onClick (fn [e]
-                                           (let [search-term-val (.-value (.getElementById js/document "search-input"))]
-                                             (api/spotify-search-xhr search-term-val
-                                                                     (fn [resp]
-                                                                       (swap! app-state assoc-in [:search :results] (get resp "result-set"))))))}
-                           "Search")
-               (when (get-in app [:search :results])
-                 (om/build search-results-list (:search app)))))))
+(defcomponent main-app
+  (display-name
+   [_]
+   (or (:react-name opts) "App"))
+  (will-mount
+   [_]
+   (api/ping-server-health))
+  (render
+   [this]
+   (dom/div nil
+            (dom/input #js {:id "search-input"} nil)
+            (dom/button #js {:onClick (fn [e]
+                                        (let [search-term-val (.-value (.getElementById js/document "search-input"))]
+                                          (api/spotify-search-xhr search-term-val
+                                                                  (fn [resp]
+                                                                    (swap! app-state assoc-in [:search :results] (get resp "result-set"))))))}
+                        "Search")
+            (when (get-in data [:search :results])
+              (om/build search-results-list (:search data))))))
 
 (defn initialize-app!
   []
