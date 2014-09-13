@@ -1,6 +1,5 @@
 (ns spotify-client-playground.app.core
   (:require [spotify-client-playground.app.api :as api]
-            [cognitect.transit                 :as transit]
             [goog.dom                          :as gdom]
             [om.core                           :as om  :include-macros true]
             [om.dom                            :as dom :include-macros true]))
