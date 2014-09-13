@@ -51,7 +51,7 @@
       (let [search-results (:results data)
             search-type    (:type data)
             list-to-render (mapv #(get % "name")
-                                 (get-in search-results [search-type search-type "items"]))]
+                                 (get-in search-results [search-type "items"]))]
         (dom/div nil
                  (apply dom/ul
                         #js {:id "result-list"}

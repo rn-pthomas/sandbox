@@ -20,6 +20,11 @@
 (defsearch track)
 (defsearch album)
 
+(def search-all
+  (fn [search-term]
+    (base-search search-term "artist,album,track")))
+
 (comment
+  (search-all "tom petty")
   (track-search "this is how we do it")
 )
