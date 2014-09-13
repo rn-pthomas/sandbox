@@ -39,13 +39,16 @@
     (dom/li js-options
             (case search-type
               "artists"
-              search-result
+              (get search-result "name")
 
               "albums"
-              search-result
+              (get search-result "name")
 
               "tracks"
-              search-result
+              (let [track-name  (get search-result "name")
+                    album-name  (get-in search-result ["album" "name"])
+                    artist-name (-> search-result (get "artists") first (get "name"))]
+                (str artist-name " - " track-name " (" album-name ")"))
 
               ;;default
               "n/a"))))
@@ -61,8 +64,7 @@
     (render-state [_ opts]
       (let [search-results                 (:results data)
             search-type                    (:type data)
-            list-to-render                 (mapv #(get % "name")
-                                                 (get-in search-results [search-type "items"]))
+            list-to-render                 (get-in search-results [search-type "items"])
             build-search-results-list-item (fn [item]
                                              (search-results-list-item item search-type))]
         (dom/div nil
