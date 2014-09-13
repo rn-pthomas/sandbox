@@ -32,11 +32,24 @@
                   (dom/option nil "albums")))))
 
 (defn search-results-list-item
-  [search-result]
-  (dom/li #js {:onClick   (fn [e]
-                            (println "clicked!"))
-               :className "result-list-item"}
-          search-result))
+  [search-result search-type]
+  (println "search-type =>" search-type)
+  (let [js-options #js {:onClick   (fn [e]
+                                     (println "clicked!"))
+                        :className "result-list-item"}]
+    (dom/li js-options
+            (case search-type
+              "artists"
+              search-result
+
+              "albums"
+              search-result
+
+              "tracks"
+              search-result
+
+              ;;default
+              "n/a"))))
 
 (defn search-results-list
   [data owner opts]
@@ -47,14 +60,16 @@
     
     om/IRenderState
     (render-state [_ opts]
-      (let [search-results (:results data)
-            search-type    (:type data)
-            list-to-render (mapv #(get % "name")
-                                 (get-in search-results [search-type "items"]))]
+      (let [search-results                 (:results data)
+            search-type                    (:type data)
+            list-to-render                 (mapv #(get % "name")
+                                                 (get-in search-results [search-type "items"]))
+            build-search-results-list-item (fn [item]
+                                             (search-results-list-item item search-type))]
         (dom/div nil
                  (apply dom/ul
                         #js {:id "result-list"}
-                        (mapv search-results-list-item list-to-render))
+                        (mapv build-search-results-list-item list-to-render))
                  (om/build search-filter-dropdown data))))))
 
 (defn main-app
