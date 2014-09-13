@@ -16,10 +16,8 @@
 
 (defcomponent search-filter-dropdown
   (display-name
-   [_]
    (or (:react-name opts) "Search Filter Dropdown"))
   (render-state
-   [_ opts]
    (dom/h1 "Select search type")
    (dom/select #js {:id          "search-filter-dropdown"
                     :placeholder "artists"
@@ -60,10 +58,8 @@
 
 (defcomponent search-results-list
   (display-name
-   [_]
    (or (:react-name opts) "Search Results List"))
   (render-state
-   [_ opts]
    (let [search-results                 (:results data)
          search-type                    (:type data)
          list-to-render                 (get-in search-results [search-type "items"])
@@ -77,13 +73,10 @@
 
 (defcomponent main-app
   (display-name
-   [_]
    (or (:react-name opts) "App"))
   (will-mount
-   [_]
    (api/ping-server-health))
   (render
-   [this]
    (dom/div nil
             (dom/input #js {:id "search-input"} nil)
             (dom/button #js {:onClick (fn [e]
