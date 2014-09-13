@@ -1,17 +1,17 @@
 (ns spotify-client-playground.app.macros)
 
 (def lookup-table
-  {did-mount          'om.core/IDidMount
-   did-update         'om.core/IDidUpdate
-   display-name       'om.core/IDisplayName
-   init-state         'om.core/IInitState
-   render             'om.core/IRender
-   render-state       'om.core/IRenderState
-   should-update      'om.core/IShouldUpdate
-   will-mount         'om.core/IWillMount
-   will-receive-props 'om.core/IWillReceiveProps
-   will-unmount       'om.core/IWillUnmount
-   will-update        'om.core/IWillUpdate})
+  {'did-mount          'om.core/IDidMount
+   'did-update         'om.core/IDidUpdate
+   'display-name       'om.core/IDisplayName
+   'init-state         'om.core/IInitState
+   'render             'om.core/IRender
+   'render-state       'om.core/IRenderState
+   'should-update      'om.core/IShouldUpdate
+   'will-mount         'om.core/IWillMount
+   'will-receive-props 'om.core/IWillReceiveProps
+   'will-unmount       'om.core/IWillUnmount
+   'will-update        'om.core/IWillUpdate})
 
 (defn body->valid-reify-expr
   [body]
