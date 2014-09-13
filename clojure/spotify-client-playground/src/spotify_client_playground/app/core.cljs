@@ -15,8 +15,6 @@
                                 (.. e -target -value))))
 
 (defcomponent search-filter-dropdown
-  (display-name
-   (or (:react-name opts) "Search Filter Dropdown"))
   (render-state
    (dom/h1 "Select search type")
    (dom/select #js {:id          "search-filter-dropdown"
@@ -46,7 +44,6 @@
                "n/a"))
 
 (defcomponent search-results-list-item
-  (display-name (or (:react-name opts) "Search Results List Item Component")) ;; NB> Can display-name impl be automatically generated in defcomponent macro?
   (render
    (dom/div nil
             (dom/li #js {:className "result-list-item"}
@@ -56,8 +53,6 @@
                         "Detail"))))
 
 (defcomponent search-results-list
-  (display-name
-   (or (:react-name opts) "Search Results List"))
   (render-state
    (let [search-type (:type data)]
      (dom/div nil
@@ -70,8 +65,6 @@
               (om/build search-filter-dropdown data)))))
 
 (defcomponent main-app
-  (display-name
-   (or (:react-name opts) "App"))
   (will-mount
    (api/ping-server-health))
   (render
