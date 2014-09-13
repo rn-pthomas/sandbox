@@ -2,7 +2,8 @@
   (:require [spotify-client-playground.app.api :as api]
             [goog.dom                          :as gdom]
             [om.core                           :as om  :include-macros true]
-            [om.dom                            :as dom :include-macros true]))
+            [om.dom                            :as dom :include-macros true])
+  (:require-macros [spotify-client-playground.app.macros :refer [defcomponent]]))
 
 (enable-console-print!)
 
@@ -13,23 +14,23 @@
   (om/transact! data edit-key (fn [_]
                                 (.. e -target -value))))
 
-(defn search-filter-dropdown
-  [data owner opts]
-  (reify
-    om/IDisplayName
-    (display-name [_]
-      (or (:react-name opts) "Search Filter Dropdown"))
-    
-    om/IRenderState
-    (render-state [_ opts]
-      (dom/h1 "Select search type")
-      (dom/select #js {:id          "search-filter-dropdown"
-                       :placeholder "artists"
-                       :onChange    (fn [e]
-                                      (handle-change e data :type owner))}
-                  (dom/option nil "artists")
-                  (dom/option nil "tracks")
-                  (dom/option nil "albums")))))
+(defcomponent search-filter-dropdown
+  (display-name
+   [_]
+   (or (:react-name opts) "Search Filter Dropdown"))
+  (render-state
+   [_ opts]
+   (dom/h1 "Select search type")
+   (dom/select #js {:id          "search-filter-dropdown"
+                    :placeholder "artists"
+                    :onChange    (fn [e]
+                                   (handle-change e data :type owner))}
+               (dom/option nil "artists")
+               (dom/option nil "tracks")
+               (dom/option nil "albums"))))
+
+(defn search-results-list-item-component
+  [data owner opts])
 
 (defn search-results-list-item
   [search-result search-type]
@@ -57,25 +58,22 @@
      (dom/button #js {:onClick (fn [e] (println "clicked detail button!"))}
                  "Detail"))))
 
-(defn search-results-list
-  [data owner opts]
-  (reify
-    om/IDisplayName
-    (display-name [_]
-      (or (:react-name opts) "Search Results List"))
-    
-    om/IRenderState
-    (render-state [_ opts]
-      (let [search-results                 (:results data)
-            search-type                    (:type data)
-            list-to-render                 (get-in search-results [search-type "items"])
-            build-search-results-list-item (fn [item]
-                                             (search-results-list-item item search-type))]
-        (dom/div nil
-                 (apply dom/ul
-                        #js {:id "result-list"}
-                        (mapv build-search-results-list-item list-to-render))
-                 (om/build search-filter-dropdown data))))))
+(defcomponent search-results-list
+  (display-name
+   [_]
+   (or (:react-name opts) "Search Results List"))
+  (render-state
+   [_ opts]
+   (let [search-results                 (:results data)
+         search-type                    (:type data)
+         list-to-render                 (get-in search-results [search-type "items"])
+         build-search-results-list-item (fn [item]
+                                          (search-results-list-item item search-type))]
+     (dom/div nil
+              (apply dom/ul
+                     #js {:id "result-list"}
+                     (mapv build-search-results-list-item list-to-render))
+              (om/build search-filter-dropdown data)))))
 
 (defn main-app
   [app owner opts]
