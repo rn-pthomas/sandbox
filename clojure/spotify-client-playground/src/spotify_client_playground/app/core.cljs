@@ -33,7 +33,6 @@
 
 (defn search-results-list-item
   [search-result search-type]
-  (println "search-type =>" search-type)
   (let [js-options #js {:onClick   (fn [e]
                                      (println "clicked!"))
                         :className "result-list-item"}]
