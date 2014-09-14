@@ -15,4 +15,9 @@
     (dom/input #js {:id          "password"
                     :placeholder "Password"
                     :type        "password"})
-    (dom/button nil "Login"))))
+    (dom/button #js {:onClick (fn [e]
+                                (api/login-user {:username "foo"
+                                                 :password "bar"
+                                                 :on-complete (fn [resp]
+                                                                (println resp))}))}
+                "Login"))))

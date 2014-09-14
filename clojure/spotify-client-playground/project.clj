@@ -9,10 +9,10 @@
                  [com.relaynetwork/kinematic "1.3.8"]
                  [http-kit                   "2.1.16"]
                  [org.clojure/tools.nrepl    "0.2.3"]
-                 [com.cognitect/transit-cljs "0.8.188"]
-
+                 
                  [org.clojure/clojurescript  "0.0-2311"]
                  [org.clojure/core.async     "0.1.267.0-0d7780-alpha"]
+                 [com.cognitect/transit-cljs "0.8.188"]
                  [om                         "0.7.3"]
                  [om-sync                    "0.1.1"]
                  [secretary                  "1.2.0"]]
