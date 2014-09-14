@@ -60,3 +60,15 @@
                            (get-in data [:results search-type "items"])))
               (om/build search-filter-dropdown data)))))
 
+(defcomponent search-input-box
+  (render
+   (dom/div nil
+            (dom/input #js {:id "search-input"} nil)
+            (dom/button #js {:onClick (fn [e]
+                                        (let [search-term-val (.-value (.getElementById js/document "search-input"))]
+                                          (api/spotify-search-xhr search-term-val
+                                                                  (fn [resp]
+                                                                    (om/update! data [:search :results] (get resp "result-set"))))))}
+                        "Search")
+            (when (get-in data [:search :results])
+              (om/build search-results-list (:search data))))))

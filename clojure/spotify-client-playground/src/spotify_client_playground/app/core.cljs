@@ -14,16 +14,7 @@
   (will-mount
    (api/ping-server-health))
   (render
-   (dom/div nil
-            (dom/input #js {:id "search-input"} nil)
-            (dom/button #js {:onClick (fn [e]
-                                        (let [search-term-val (.-value (.getElementById js/document "search-input"))]
-                                          (api/spotify-search-xhr search-term-val
-                                                                  (fn [resp]
-                                                                    (swap! app-state assoc-in [:search :results] (get resp "result-set"))))))}
-                        "Search")
-            (when (get-in data [:search :results])
-              (om/build search/search-results-list (:search data))))))
+   (om/build search/search-input-box data)))
 
 (defn initialize-app!
   []
