@@ -24,8 +24,9 @@
                      :result-set  result-set})))
 
 (compojure/defroutes app
-  (compojure/GET  "/ping"   [] "ping")
-  (compojure/GET  "/search" [] handle-search))
+  (compojure/GET "/ping"   [] (json/json-str {:status "OK"
+                                              :msg    "pong"}))
+  (compojure/GET "/search" [] handle-search))
 
 (defn run-server [port]
   (do (println (format "web server listening on port %s" port))

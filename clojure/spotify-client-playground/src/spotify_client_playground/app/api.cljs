@@ -1,14 +1,17 @@
 (ns spotify-client-playground.app.api
   (:require [spotify-client-playground.app.xhr         :as xhr]
-            [spotify-client-playground.app.web-helpers :as web-helpers]))
+            [spotify-client-playground.app.web-helpers :as web-helpers])
+  (:require-macros [spotify-client-playground.app.macros :refer [defxhr]]))
 
-(defn ping-server-health
+(defxhr ping-server-health :get "ping"
   []
-  (xhr/do-xhr {:method      :get
-               :url         "ping"
-               :on-complete (fn [resp]
-                              (when (= resp "ping")
-                                (println "server is up and running")))}))
+  {"OK" #(println "server is up and running")
+   "*"  #(println "something went wrong")})
+
+(defxhr session-get :get "session"
+  []
+  {"OK" (println "session was ok")
+   "*"  (println "session was bad")})
 
 (defn spotify-search-xhr
   [search-term on-complete]

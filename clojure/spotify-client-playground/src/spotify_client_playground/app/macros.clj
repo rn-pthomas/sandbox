@@ -63,3 +63,18 @@
   `(defn ~component-name
      [~'data ~'owner ~'opts]
      ~(body->valid-reify-expr component-name body)))
+
+(defmacro defxhr
+  [xhr-fn-name method url args-list status-handlers-map]
+  `(defn ~xhr-fn-name
+     ~args-list
+     (spotify-client-playground.app.xhr/do-xhr
+      {:method      ~method
+       :url         ~url
+       :on-complete (fn [resp-json#]
+                      (let [resp#   (spotify-client-playground.app.web-helpers/parse-json-resp resp-json#)
+                            status# (get resp# "status")]
+                        (if-let [status-handler# (or (get ~status-handlers-map status#)
+                                                     (get ~status-handlers-map "*"))]
+                          (status-handler# resp#)
+                          (println "Error: no handler found for status" status#))))})))
