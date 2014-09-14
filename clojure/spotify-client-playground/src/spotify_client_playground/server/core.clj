@@ -26,6 +26,8 @@
 (compojure/defroutes app
   (compojure/GET "/ping"   [] (json/json-str {:status "OK"
                                               :msg    "pong"}))
+  (compojure/GET "/session" [] (json/json-str {:status "OK"
+                                               :msg    "implement session handler"}))
   (compojure/GET "/search" [] handle-search))
 
 (defn run-server [port]

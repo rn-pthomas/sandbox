@@ -1,6 +1,7 @@
 (ns spotify-client-playground.app.core
   (:require [spotify-client-playground.app.api               :as api]
             [spotify-client-playground.app.components.search :as search]
+            [spotify-client-playground.app.components.login  :as login]
             [goog.dom                                        :as gdom]
             [om.core                                         :as om  :include-macros true]
             [om.dom                                          :as dom :include-macros true])
@@ -14,7 +15,12 @@
   (will-mount
    (api/ping-server-health))
   (render
-   (om/build search/search-input-box data)))
+   (let [build-component (fn [component]
+                           (om/build component data))]
+     (dom/div
+      nil
+      (build-component login/login-form)
+      (build-component search/search-input-box)))))
 
 (defn initialize-app!
   []

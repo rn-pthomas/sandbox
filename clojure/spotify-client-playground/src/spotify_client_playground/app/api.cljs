@@ -10,8 +10,8 @@
 
 (defxhr session-get :get "session"
   []
-  {"OK" (println "session was ok")
-   "*"  (println "session was bad")})
+  {"OK" #(println "session was ok")
+   "*"  #(println "session was bad")})
 
 (defn spotify-search-xhr
   [search-term on-complete]
