@@ -5,7 +5,7 @@
                  :url "http://www.eclipse.org/legal/epl-v10.html"}
   :main         spotify-client-playground.server.core/run-app
   :dependencies [[org.clojure/clojure        "1.6.0"]
-                 [compojure                  "1.1.8"]
+                 [ring/ring-core             "1.3.1"]
                  [com.relaynetwork/kinematic "1.3.8"]
                  [http-kit                   "2.1.16"]
                  [org.clojure/tools.nrepl    "0.2.3"]
