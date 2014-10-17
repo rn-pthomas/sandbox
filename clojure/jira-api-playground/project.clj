@@ -8,6 +8,6 @@
                  [org.clojure/clojurescript "0.0-2371"]]
   :cljsbuild {:builds [{:source-paths ["src"]
                         :compiler     {:output-to     "target/js/main.js"
-                                       :optimizations :whitespace
+                                       :optimizations :simple
                                        :target        :nodejs
                                        :pretty-print  true}}]})
