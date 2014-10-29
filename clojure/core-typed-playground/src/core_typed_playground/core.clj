@@ -1,13 +1,21 @@
 (ns core-typed-playground.core
-  (:require [clojure.core.typed :refer [ann check-ns]]))
+  (:refer-clojure :exclude [defn])
+  (:require [clojure.core.typed :as t :refer [ann cf check-ns defalias defn]]))
 
-(defn add-two
-  [number]
-  (+ number 2))
+(defn takes-a-number-and-string
+  [foo :- Number
+   bar :- String]
+  (str foo " is a number, and " bar " is a string"))
 
-(ann add-two [Number -> Number])
+(takes-a-number-and-string 10 "chicken")
 
-(comment
-  (check-ns)
-  (add-two 1)
-  )
+(defn takes-a-map
+  [foo :- Integer]
+  (- foo 10))
+
+(defn bar
+  [a :- Integer]
+  (takes-a-map 20))
+
+;; always type check on compile
+(check-ns)
