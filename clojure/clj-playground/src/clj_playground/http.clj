@@ -30,26 +30,29 @@
 
 (defn get-user
   [username]
-  (let [request-url (str base-api-url "users/" username "/collection/folders")
-        folder-urls (->> request-url http/get parse-json-resp :folders (map :resource_url))]
-    (->> folder-urls
-         (mapv (fn [folder-url]
-                     (-> folder-url
-                         (str "/releases")
-                         http/get
-                         parse-json-resp
-                         folder-resp->releases)))
-         flatten
-         (sort-by :year)
-         (mapv (fn fix-year [release]
-                 (update-in release [:year] #(if (= % 0)
-                                               "Unknown year"
-                                               %))))
-         (mapv (fn format-release [release]
-                 (format "[%s] %s - %s"
-                         (:year   release)
-                         (:artist release)
-                         (:title  release)))))))
+  (->> "/collection/folders"
+       (str base-api-url "users/" username)
+       http/get
+       parse-json-resp
+       :folders
+       (mapv :resource_url)
+       (mapv (fn [folder-url]
+               (-> folder-url
+                   (str "/releases")
+                   http/get
+                   parse-json-resp
+                   folder-resp->releases)))
+       flatten
+       (sort-by :year)
+       (mapv (fn fix-year [release]
+               (update-in release [:year] #(if (= % 0)
+                                             "Unknown year"
+                                             %))))
+       (mapv (fn format-release [release]
+               (format "[%s] %s - %s"
+                       (:year   release)
+                       (:artist release)
+                       (:title  release))))))
 
 (comment
   (def my-collection (get-user "OatRhombus"))
@@ -57,4 +60,3 @@
     (doseq [line (shuffle my-collection)]
       (.write wrtr (str line "\n"))))
   )
-
