@@ -9,6 +9,14 @@
   [resp]
   (-> resp deref :body (json/read-str :key-fn keyword)))
 
+(defn format-with-keys
+  [format-str m & ks]
+  (let [ks-from-map (reduce (fn [acc k]
+                              (conj acc (k m)))
+                            []
+                            ks)]
+    (apply (partial format format-str) ks-from-map)))
+
 (defn get-all-pages
   [folder-resp]
   (loop [accum        []
@@ -47,15 +55,16 @@
        (mapv (fn fix-year [release]
                (update-in release [:year] #(if (= % 0)
                                              "Unknown year"
-                                             %))))
-       (mapv (fn format-release [release]
-               (format "[%s] %s - %s"
-                       (:year   release)
-                       (:artist release)
-                       (:title  release))))))
+                                             %))))))
+
+(defn friendly-format-collection
+  [collection]
+  (mapv (fn format-release [release]
+          (format-with-keys "[%s] %s - %s" release :year :artist :title))
+        collection))
 
 (comment
-  (def my-collection (get-user "OatRhombus"))
+  (def my-collection (friendly-format-collection (get-user "OatRhombus")))
   (with-open [wrtr (writer "./shuffled_collection.txt")]
     (doseq [line (shuffle my-collection)]
       (.write wrtr (str line "\n"))))
