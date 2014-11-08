@@ -38,7 +38,7 @@
        (mapv :resource_url)
        (mapv (fn [folder-url]
                (-> folder-url
-                   (str "/releases")
+                   (str "/releases?per_page=100")
                    http/get
                    parse-json-resp
                    folder-resp->releases)))
