@@ -1,20 +1,10 @@
 (ns overtone-playground.core
-  (:require [aleph.http        :as http]
-            [lamina.core       :as lamina]
-            [clojure.data.json :as json]))
+  (:require [clj-utils.lang-utils :refer :all]
+            [overtone.live        :refer :all]))
 
-(def ws-url "ws://literature.uncontext.com:80")
 
-(defn ws-client
-  []
-  (http/websocket-client {:url ws-url}))
 
-(defn echo
-  ([message]
-     (let [channel (lamina/wait-for-result (ws-client))]
-       (lamina/enqueue channel message)
-       (let [echo (lamina/wait-for-result (lamina/read-channel channel))]
-         (lamina/close channel)
-         (json/read-json echo))))
-  ([]
-     (echo "not sure that this argument matters")))
+(defn foo
+  "I don't do a whole lot."
+  [x]
+  (println x "Hello, World!"))

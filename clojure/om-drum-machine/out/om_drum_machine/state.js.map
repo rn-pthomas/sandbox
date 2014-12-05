@@ -1,0 +1,8 @@
+{"version":3,
+ "file":
+ "/Users/pat/projects/sandbox/clojure/om-drum-machine/out/om_drum_machine/state.js",
+ "sources":["state.cljs"],
+ "lineCount":6,
+ "mappings":
+ ";AAAA;;AAEA,AAAKA,kCACH,yBAAA,2CAAA,+DAAA,mFAAA,OAAA,MAAA,nOAACC",
+ "names":["om-drum-machine.state/app-state", "cljs.core/atom"]}
