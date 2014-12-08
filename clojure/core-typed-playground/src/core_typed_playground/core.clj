@@ -1,21 +1,29 @@
 (ns core-typed-playground.core
-  (:refer-clojure :exclude [defn])
-  (:require [clojure.core.typed :as t :refer [ann cf check-ns defalias defn]]))
+  (:require [clojure.core.typed :as t :refer [ann cf check-ns defalias]]
+            [core-typed-playground.util :refer :all]))
 
-(defn takes-a-number-and-string
-  [foo :- Number
-   bar :- String]
-  (str foo " is a number, and " bar " is a string"))
+(defalias User
+  (t/HMap :mandatory {:id       t/Int
+                      :username t/Str}
+          :optional {:email t/Str}))
 
-(takes-a-number-and-string 10 "chicken")
+(defn foo
+  [a b]
+  (+ a b))
 
-(defn takes-a-map
-  [foo :- Integer]
-  (- foo 10))
+(t/defn get-username
+  [user :- User] :- t/Str
+  (:username user))
 
-(defn bar
-  [a :- Integer]
-  (takes-a-map 20))
+(t/defn make-random-user
+  [user-id :- t/Int email :- String] :- User
+  {:id       user-id
+   :username "some-username-with-email"
+   :email    email})
 
-;; always type check on compile
-(check-ns)
+(comment
+  ;; always type check on compile
+  (check-ns)
+  )
+
+(type-check)
