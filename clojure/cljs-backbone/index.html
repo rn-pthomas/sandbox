@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<script type="text/javascript" src="public/jquery-1.11.1.js"></script>
+		<script type="text/javascript" src="public/underscore-1.7.0.js"></script>
+		<script type="text/javascript" src="public/backbone-1.1.2.js"></script>
+	</head>
+	<body>
+    <!--<script src="out/goog/base.js" type="text/javascript"></script>-->
+    <!--<script src="cljs_backbone.js" type="text/javascript"></script>-->
+    <!--<script type="text/javascript">goog.require("cljs_backbone.core");</script>-->
+    <script type="text/javascript">
+
+      $(function () {
+        var Router = Backbone.Router.extend({
+          routes: {
+            'foo': 'handleFoo',
+            'bar': function () {
+              console.log("bar route");
+            }
+          },
+
+          handleFoo: function () {
+            debugger;
+            console.log("Well this is neat");
+          }
+        });
+
+        Backbone.history.start({pushState: true});
+      });
+    </script>
+	</body>
+</html>
+		

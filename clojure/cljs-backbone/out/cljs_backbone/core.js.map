@@ -1,0 +1,14 @@
+{"version":3,
+ "file":
+ "/Users/pthomas/projects/personal/sandbox/clojure/cljs-backbone/out/cljs_backbone/core.js",
+ "sources":["core.cljs?rel=1418316297403"],
+ "lineCount":18,
+ "mappings":
+ ";AAAA;;;;;AAIA,AAACA;AAED,0BAAA,1BAAMC;AAAN,AAEE,OAACC;;AAEH,AAAKC,gCACH,uBAAA,2CAAA,lEAASC,2EACU,AAACC,0BAAMC;AAE5B,+BAAA,/BAAMC;AAAN,AAEE,mBAAA,ZAAMC;;AAER,oDAAA,pDAACC,0DAAsBF;AAEvB,AAACN",
+ "names":
+ ["cljs.core/enable-console-print!", "cljs-backbone.core/init",
+  "cljs-backbone.routes/initialize-routers!",
+  "cljs-backbone.core/app-router", "Backbone/Router",
+  "cljs.core/deref", "cljs-backbone.routes/router-dispatch",
+  "cljs-backbone.core/foo-route", "js/console",
+  "cljs-backbone.routes/register-route!"]}

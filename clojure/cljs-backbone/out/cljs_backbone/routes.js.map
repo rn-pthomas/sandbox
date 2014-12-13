@@ -1,0 +1,12 @@
+{"version":3,
+ "file":
+ "/Users/pthomas/projects/personal/sandbox/clojure/cljs-backbone/out/cljs_backbone/routes.js",
+ "sources":["routes.cljs?rel=1418317158078"],
+ "lineCount":14,
+ "mappings":
+ ";AAAA;;AAEA,AAAKA,uCAAgB,yBAAA,zBAACC;AAEtB,4CAAA,5CAAMC,2EACHC,aAAaC;AADhB,AAEE,AAAMC,YAAW,eAAA,qCAA2BF;;AAC5C,OAACG,+BAAMN,qCAAgBO,gBAAMJ,aAAaC;;AAE5C,gDAAA,hDAAMI;AAAN,AAGE,mBAAA,ZAAMH",
+ "names":
+ ["cljs-backbone.routes/router-dispatch", "cljs.core/atom",
+  "cljs-backbone.routes/register-route!", "handler-name",
+  "handler-impl", "js/console", "cljs.core/swap!", "cljs.core/assoc",
+  "cljs-backbone.routes/initialize-routers!"]}
