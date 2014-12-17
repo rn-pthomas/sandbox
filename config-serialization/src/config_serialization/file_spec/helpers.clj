@@ -2,18 +2,20 @@
   (:require [config-serialization.json :as json]))
 
 (defmacro defvalidator
-  [validator-name config-key-or-key-path & [body]]
-  `(defn ~validator-name
-     [~'whole-config]
-     (let [~'whole-config (if (string? ~'whole-config)
-                            (json/deserialize-json ~'whole-config)
-                            ~'whole-config)
-           ~'config       ((if (vector? ~config-key-or-key-path)
-                             get-in
-                             get)
-                           ~'whole-config ~config-key-or-key-path)
-           ret#           ~body]
-       (if (false? ret#)
-         (-> ~'whole-config
-             (update-in [:errors] #(conj % ~(-> validator-name str keyword))))
-         ~'whole-config))))
+  [validator-name & body]
+  (let [[config-key-path body] (split-with keyword? body)
+        config-key-path        (vec config-key-path)
+        body                   (first body)]
+    `(defn ~validator-name
+       [~'whole-config ~'spec]
+       (let [~'whole-config (if (string? ~'whole-config)
+                              (json/deserialize-json ~'whole-config)
+                              ~'whole-config)
+             ~'config       (get-in ~'whole-config ~config-key-path)
+             ret#           ~body]
+         (if (false? ret#)
+           (-> ~'whole-config
+               (update-in [:validation-errors]
+                          (fn [error-accum#]
+                            (assoc error-accum# ~(-> validator-name str keyword) ~config-key-path))))
+           ~'whole-config)))))
