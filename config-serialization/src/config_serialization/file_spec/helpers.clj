@@ -1,6 +1,13 @@
 (ns config-serialization.file-spec.helpers
   (:require [config-serialization.json :as json]))
 
+(defn has-validation-errors?
+  [validation-result]
+  (-> validation-result
+      :validation-errors
+      empty?
+      not))
+
 (defmacro defvalidator
   [validator-name & body]
   (let [[config-key-path body] (split-with keyword? body)
