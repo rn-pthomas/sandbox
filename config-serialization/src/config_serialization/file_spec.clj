@@ -1,8 +1,7 @@
 (ns config-serialization.file-spec
   (:require [config-serialization.file-spec.helpers :refer :all]))
 
-;; A file spec should do the following:
-;; Support serialization to/from the database.
+(def file-spec {:db-schemas []})
 
 (defvalidator validate-db-schemas
   :db-schemas
@@ -12,14 +11,18 @@
   :client :configuration
   (not (nil? config)))
 
-(comment
-  (validate-db-schemas {:db-schemas "this won't work"})
-  (validate-client-config-keys {:client {:configuration {:is :here}}})
-  )
-
 (defn validate
   [config file-spec]
   (reduce (fn [accum validator]
-            (validator accum))
-          {}
-          [validate-db-schemas]))
+            (validator accum file-spec))
+          config
+          [validate-db-schemas validate-client-config-keys]))
+
+(comment
+  (validate-db-schemas {:db-schemas "this won't work"} {:db-schemas []})
+  (validate-client-config-keys {:client {:configuration {:is :here}}})
+  (let [config    {:db-schemas "this won't work"
+                   :client     {:configuration {:is :here}}}
+        file-spec {:db-schemas {:users [:messages :accounts]}}]
+    (validate config file-spec))
+  )
