@@ -1,11 +1,22 @@
 (ns config-serialization.file-spec
   (:require [config-serialization.file-spec.helpers :refer :all]))
 
-(def file-spec {:db-schemas []})
+(def file-spec
+  {})
 
 (defvalidator validate-db-schemas
   :db-schemas
-  (not (string? config)))
+  (def config config)
+  (every (fn [db-schema]
+           (not (string? db-schema)))
+         config))
+
+(comment
+  (let [config    {:db-schemas "this won't work"
+                   :client     {:configuration {:is :here}}}
+        file-spec {:db-schemas {:users [:messages :accounts]}}]
+    (validate-db-schemas config file-spec))
+  )
 
 (defvalidator validate-client-config-keys
   :client :configuration
