@@ -7,3 +7,6 @@ pom.xml.asc
 *.class
 /.lein-*
 /.nrepl-port
+/out
+om_playground.js
+om_playground_prod.js

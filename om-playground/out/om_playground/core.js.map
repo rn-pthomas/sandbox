@@ -1,8 +1,11 @@
 {"version":3,
  "file":
- "/Users/pthomas/projects/personal/sandbox/om-playground/out/om_playground/core.js",
- "sources":["core.cljs?rel=1418913487113"],
- "lineCount":11,
+ "/Users/pat/projects/sandbox/om-playground/out/om_playground/core.js",
+ "sources":["core.cljs?rel=1419118891118"],
+ "lineCount":12,
  "mappings":
- ";AAAA;;AAEA;;;yBAAA,zBAAMA,uCAEHC;AAFH,AAGE,qCAAA,9BAACC,4BAAQD",
- "names":["om-playground.core/foo", "x", "cljs.core/println"]}
+ ";AAAA;;;;;AAOA,0BAAA,1BAAMA;AAAN,AAEE,uGAAA,2CAAA,0FAAA,oDAAA,zRAACC,uBACAC,2CACAC,iIACS,wBAAA,xBAAGC;;AAGf,AAACJ",
+ "names":
+ ["om-playground.core/init", "om.core/root",
+  "om-playground.components.app/app-container",
+  "om-playground.state/app-state", "js/document"]}

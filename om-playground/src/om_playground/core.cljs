@@ -1,7 +1,16 @@
-(ns om-playground.core)
+(ns om-playground.core
+  (:require [om-playground.components.app :as app]
+            [om-playground.state          :as state]
+            [om.core                      :as om]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
 
+
+(defn init
+  []
+  (om/root
+   app/app-container
+   state/app-state
+   {:target (. js/document (getElementById "my-app"))
+    :opts   {}}))
+
+(init)
