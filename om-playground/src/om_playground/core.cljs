@@ -3,8 +3,6 @@
             [om-playground.state          :as state]
             [om.core                      :as om]))
 
-
-
 (defn init
   []
   (om/root
