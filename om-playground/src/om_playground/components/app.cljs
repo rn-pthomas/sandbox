@@ -7,7 +7,8 @@
 
 (defcomponent column
   (render
-   (dom/div #js {:className       (if (= (:highlighted data) [(:data-row-num opts) (:data-column-num opts)])
+   (dom/div #js {:className       (if (= (:highlighted data) [(:data-row-num opts)
+                                                              (:data-column-num opts)])
                                     "column highlighted"
                                     "column")
                  :data-row-num    (:data-row-num opts)
