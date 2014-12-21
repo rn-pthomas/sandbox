@@ -7,7 +7,7 @@
 
 (defcomponent column
   (render
-   (dom/div #js {:className       (if (contains? (:highlighted data) [(:data-row-num opts) (:data-column-num opts)])
+   (dom/div #js {:className       (if (= (:highlighted data) [(:data-row-num opts) (:data-column-num opts)])
                                     "column highlighted"
                                     "column")
                  :data-row-num    (:data-row-num opts)
@@ -24,9 +24,8 @@
   "Just a container for the rows and columns."
   (will-mount
    (set-timeout (fn []
-                  (let [new-data (state/produce-random-highlights 8)]
-                    (om/update! data :highlighted new-data)))
-                300))
+                  (om/transact! data :highlighted state/next-box-position))
+                200))
   (render
    (apply dom/div nil (map (fn [row-number]
                              (om/build row data {:opts {:data-row-num row-number}}))
