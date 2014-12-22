@@ -14,33 +14,28 @@
                [])
        set))
 
+(defn randomly-move-within-bounds
+  [position]
+  (case position
+    0
+    (inc position)
+
+    upper-limit
+    (dec position)
+
+    ((rand-nth [inc dec]) position)))
+
 (defn initial-box-position
   []
   [(rand-int upper-limit) (rand-int upper-limit)])
 
 (defn move-box-vertically
   [[x y]]
-  (let [new-y (case y
-                0
-                (inc y)
-                
-                upper-limit
-                (dec y)
-
-                ((rand-nth [inc dec]) y))]
-    [x new-y]))
+  [x (randomly-move-within-bounds y)])
 
 (defn move-box-horizontally
   [[x y]]
-  (let [new-x (case x
-                0
-                (inc x)
-
-                upper-limit
-                (dec x)
-
-                ((rand-nth [inc dec]) x))]
-    [new-x y]))
+  [(randomly-move-within-bounds x) y])
 
 (defn next-box-position
   [[x y]]
