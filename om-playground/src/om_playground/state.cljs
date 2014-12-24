@@ -2,27 +2,16 @@
 
 (def upper-limit 8) ;; constant
 
-(defn produce-random-highlights
-  []
-  (->> (for [x (range upper-limit)
-             y (range upper-limit)]
-         [x y])
-       (reduce (fn [acc [x y]]
-                 (if (rand-nth [true false])
-                   (conj acc [x y])
-                   acc))
-               [])
-       set))
-
 (defn randomly-move-within-bounds
   [position]
-  (case position
+  (condp = position
     0
     (inc position)
-
-    upper-limit
+    
+    (dec upper-limit)
     (dec position)
 
+    ;;within-bounds
     ((rand-nth [inc dec]) position)))
 
 (defn initial-box-position
@@ -37,10 +26,14 @@
   [[x y]]
   [(randomly-move-within-bounds x) y])
 
+(defn log-new-position
+  [x y [new-x new-y]]
+  (println (str "[" x " " y "] => [" new-x " " new-y "]")))
+
 (defn next-box-position
   [[x y]]
   (let [new-position ((rand-nth [move-box-vertically move-box-horizontally]) [x y])]
-    (println (str "[" x " " y "] => " new-position))
+    (log-new-position x y new-position)
     new-position))
 
 (def app-state
