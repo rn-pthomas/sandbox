@@ -1,8 +1,9 @@
 (ns om-playground.components.app
-  (:require [om.core             :as om  :include-macros true]
-            [om.dom              :as dom :include-macros true]
-            [om-playground.state :as state :refer [app-state]]
-            [om-playground.util            :refer [log set-timeout]])
+  (:require [om.core                  :as om  :include-macros true]
+            [om.dom                   :as dom :include-macros true]
+            [om-playground.state      :as state]
+            [om-playground.models.box :as box]
+            [om-playground.util :refer [log set-timeout]])
   (:require-macros [om-utils.core :refer [defcomponent]]))
 
 (defcomponent column
@@ -25,7 +26,7 @@
   "Just a container for the rows and columns."
   (will-mount
    (set-timeout (fn []
-                  (om/transact! data :highlighted state/next-box-position))
+                  (om/transact! data :highlighted box/next-box-position))
                 200))
   (render
    (apply dom/div nil (map (fn [row-number]
