@@ -54,7 +54,7 @@
        (sort-by :year)
        (mapv (fn fix-year [release]
                (update-in release [:year] #(if (= % 0)
-                                             "Unknown year"
+                                             "...."
                                              %))))))
 
 (defn friendly-format-collection
@@ -64,8 +64,8 @@
         collection))
 
 (comment
-  (def my-collection (friendly-format-collection (get-user "OatRhombus")))
+  (def my-collection (get-user "OatRhombus"))
   (with-open [wrtr (writer "./shuffled_collection.txt")]
-    (doseq [line (shuffle my-collection)]
+    (doseq [line (friendly-format-collection (shuffle my-collection))]
       (.write wrtr (str line "\n"))))
   )
