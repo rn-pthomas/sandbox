@@ -5,17 +5,26 @@
 
 (enable-console-print!)
 
-(def app-state (atom {}))
+(def app-state (atom {:tick 0}))
 
 (defcomponent app
   (render
-   (dom/div nil "hello")))
+   (dom/div nil (:tick data))))
+
+(defn app-loop-tick
+  []
+  (swap! app-state update-in [:tick] inc))
+
+(defn init-app-loop
+  []
+  (.setInterval js/window #(app-loop-tick) 1000))
 
 (defn init!
   []
   (om/root
    app
    app-state
-   {:target (. js/document (getElementById "my-app"))}))
+   {:target (. js/document (getElementById "my-app"))})
+  (init-app-loop))
 
 (init!)
