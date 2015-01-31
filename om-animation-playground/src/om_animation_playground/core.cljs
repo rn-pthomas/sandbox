@@ -7,9 +7,19 @@
 
 (def app-state (atom {:tick 0}))
 
+(defn multiples
+  [upper-limit]
+  (reduce (fn [acc n]
+            (if (= (mod upper-limit n) 0)
+              (conj acc n)
+              acc))
+          []
+          (range 2 (inc upper-limit))))
+
 (defcomponent app
   (render
-   (dom/div nil (:tick data))))
+   (let [{:keys [tick]} data]
+     (dom/div nil (str (multiples tick))))))
 
 (defn app-loop-tick
   []
@@ -25,6 +35,6 @@
    app
    app-state
    {:target (. js/document (getElementById "my-app"))})
-  (init-app-loop 300))
+  (init-app-loop 500))
 
 (init!)
