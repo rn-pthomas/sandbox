@@ -16,8 +16,8 @@
   (swap! app-state update-in [:tick] inc))
 
 (defn init-app-loop
-  []
-  (.setInterval js/window #(app-loop-tick) 1000))
+  [time]
+  (.setInterval js/window #(app-loop-tick) time))
 
 (defn init!
   []
@@ -25,6 +25,6 @@
    app
    app-state
    {:target (. js/document (getElementById "my-app"))})
-  (init-app-loop))
+  (init-app-loop 300))
 
 (init!)
