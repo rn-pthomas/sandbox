@@ -28,8 +28,9 @@ def gen_fixture_sql_single_table schema, table
       local_insert_accum       = "INSERT INTO #{schema_table_name} "
       local_insert_binds_accum = []
       local_insert_vals_accum  = []
+      pairs                    = rec.keys.zip(rec.values)
 
-      rec.keys.zip(rec.values).each do |kv_pair|
+      pairs.each do |kv_pair|
         key = kv_pair[0].to_s
         val = kv_pair[1]
         local_insert_binds_accum.push key
@@ -39,6 +40,26 @@ def gen_fixture_sql_single_table schema, table
           local_insert_vals_accum.push val
         end
       end
+
+      pairs.drop_last.each do |kv_pair|
+        key = kv_pair[0].to_s
+        val = kv_pair[1]
+        if val.class == String
+          local_delete_accum.push "#{key} = '#{val}' AND "
+        else
+          local_delete_accum.push "#{key} = #{val} AND "
+        end
+      end
+
+      last_pair = pairs.last
+      last_key  = last_pair[0].to_s
+      last_val  = last_pair[1]
+      if last_val.class == String
+        local_delete_accum.push "#{last_key} = '#{last_val}';"
+      else
+        local_delete_accum.push "#{last_key} = #{last_val};"
+      end
+
       local_insert_accum.push("(").push(local_insert_binds_accum.join(", ")).push(") VALUES (").push(local_insert_vals_accum.join(", ")).push(");")
       accum.push({
         :delete => local_delete_accum,
@@ -46,6 +67,7 @@ def gen_fixture_sql_single_table schema, table
       })
     end
   end
+  accum
 end
 
 def setup_fixture_data identifier, fixture_data
@@ -53,9 +75,9 @@ def setup_fixture_data identifier, fixture_data
   fixture_data.each do |service, data_map|
     data_map.each do |schema, table_or_tables|
       if table_or_tables.keys.size > 1
-        gen_fixture_sql_multiple_tables schema, table_or_tables
+        puts gen_fixture_sql_multiple_tables schema, table_or_tables
       else
-        gen_fixture_sql_single_table schema, table_or_tables
+        puts gen_fixture_sql_single_table schema, table_or_tables
       end
     end
   end
