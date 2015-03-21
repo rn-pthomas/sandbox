@@ -1,7 +1,6 @@
 (ns typing-playground.schemas
-  (:require [clojure.core                  :as core]
-            [clojure.walk                  :as walk]
-            [typing-playground.typechecker :as typechecker]))
+  (:require [clojure.core :as core]
+            [clojure.walk :as walk]))
 
 (def ^{:private true} type-registry (atom {}))
 (def ^{:dynamic true} *current-type* nil)
@@ -26,21 +25,28 @@
          (compute-namespace-lookup-key type-name)
          (eval type-map)))
 
+(defn check-for-key-in-type-def
+  [lookup-key form]
+  (if (contains? *current-type* lookup-key)
+    form
+    (throw (java.lang.Exception. (format "The key %s does not exist in the type definition %s" lookup-key *current-type*)))))
+
 (defn typecheck-get
   [form]
   (let [[_ lookup-map lookup-key] form]
-    (if (contains? *current-type* lookup-key)
-      form
-      (throw (java.lang.Exception. (format "The key %s does not exist in the type definition %s" lookup-key *current-type*))))))
+    (check-for-key-in-type-def lookup-key form)))
+
+(defn typecheck-kw-lookup
+  [form]
+  (let [[lookup-key & more] form]
+    (check-for-key-in-type-def lookup-key form)))
 
 (comment
   (do
     (make-type my-type {:foo (needs-keys :bar :baz :quux)})
-    (macroexpand-1
-     '(uses-type
-       my-type
-       (get {:foo :barf} :foo)
-       (get {:foo :barf} :alsdfkj))))
+    (uses-type my-type
+      (get {:foo :barf} :foo)
+      (:foo {:foo :barf})))
   )
 
 (defn typecheck-relevant-forms
@@ -60,13 +66,15 @@
          (= (first form) 'get)
          (typecheck-get form)
 
+         (keyword? (first form))
+         (typecheck-kw-lookup form)
+
          :else
          form)))
    body))
 
 (defmacro uses-type
   [^clojure.lang.Symbol type-name & body]
-  (def type-name type-name)
   (let [lookup-key (compute-namespace-lookup-key type-name)]
     (if-let [t (-> type-registry deref (core/get lookup-key))]
       (binding [*current-type* t]
@@ -76,8 +84,6 @@
 
 (defn has-type?
   [lookup-key-or-path]
-  (def lookup-key-or-path lookup-key-or-path)
-  (def ct *current-type*)
   (cond
     (keyword? lookup-key-or-path)
     (contains? *current-type* lookup-key-or-path)
