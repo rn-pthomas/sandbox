@@ -1,6 +1,13 @@
-(ns audio-playground.core)
+(ns audio-playground.core
+  (:require [overtone.live :as o]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(def bd-buf (o/load-sample "/Users/pthomas/Dropbox/sounds/no_love_bd.wav"))
+
+(defmacro with-cache-coordination
+  [cache-name & body]
+  )
+
+(comment
+  (with-cache-coordination :app-cache
+    )
+  )

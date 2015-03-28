@@ -36,26 +36,37 @@
   (let [[_ lookup-map lookup-key] form]
     (check-for-key-in-type-def lookup-key form)))
 
+(defn type->paths
+  []
+  (loop [acc []]
+    ))
+
+(defn typecheck-get-in
+  [form]
+  :implement-me
+  form)
+
+(comment
+  (do
+    (def debugger (atom []))
+    (make-type my-type {:foo (needs-keys :bar :baz :quux)})
+    (uses-type my-type
+      (get-in {:foo {:quux "meow"}} [:foo :quux])))
+  @debugger
+  )
+
 (defn typecheck-kw-lookup
   [form]
   (let [[lookup-key & more] form]
     (check-for-key-in-type-def lookup-key form)))
 
-(comment
-  (do
-    (make-type my-type {:foo (needs-keys :bar :baz :quux)})
-    (uses-type my-type
-      (get {:foo :barf} :foo)
-      (:foo {:foo :barf})))
-  )
-
 (defn typecheck-relevant-forms
   "Relevant forms are:
-  (get some-map ...)
-  (get-in some-map ...)
-  (assoc some-map ...)
-  (dissoc some-map ...)
-  (:foo some-map)"
+    (get some-map ...)
+    (get-in some-map ...)
+    (assoc some-map ...)
+    (dissoc some-map ...)
+    (:foo some-map)"
   [body]
   (println (format "current type is %s" *current-type*))
   (walk/postwalk
@@ -65,6 +76,9 @@
        (cond
          (= (first form) 'get)
          (typecheck-get form)
+
+         (= (first form) 'get-in)
+         (typecheck-get-in form)
 
          (keyword? (first form))
          (typecheck-kw-lookup form)
@@ -90,5 +104,3 @@
 
     :else
     (throw (java.lang.Exception. "invalid"))))
-
-
