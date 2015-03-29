@@ -101,12 +101,10 @@
 
 (defn solve
   [target-grid traversal-length]
-  (let [traversals (find-traversals target-grid traversal-length)
-        traversal-values (->> traversals )]
-    (->> traversals
-         (map vals)
-         (apply concat)
-         (map #(apply * %))
-         (apply max))))
+  (->> (find-traversals target-grid traversal-length)
+       (map vals)
+       (apply concat)
+       (map #(apply * %))
+       (apply max)))
 
 (solve grid 4)
