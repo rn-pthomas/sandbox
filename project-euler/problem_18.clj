@@ -20,11 +20,13 @@
   [triangle row-num]
   (if (= row-num -1)
     (-> triangle first first)
-    (let [new-triangle (update-in triangle [row-num] (fn [curr-row]
-                                                       (let [next-row (get triangle (inc row-num))]
-                                                         (vec (map-indexed (fn [idx el]
-                                                                             (+ el (max (get next-row idx) (get next-row (inc idx)))))
-                                                                           curr-row)))))]
+    (let [new-triangle (update-in triangle
+                                  [row-num]
+                                  (fn [curr-row]
+                                    (let [next-row (get triangle (inc row-num))]
+                                      (vec (map-indexed (fn [idx el]
+                                                          (+ el (max (get next-row idx) (get next-row (inc idx)))))
+                                                        curr-row)))))]
       (recur new-triangle (dec row-num)))))
 
 (rec-sum-at-row problem-triangle (- (count problem-triangle) 2))
