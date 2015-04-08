@@ -12,4 +12,6 @@
                                        ;;:pretty-print  true
                                        }}]}
   :dependencies [[org.clojure/clojure       "1.6.0"]
+                 [org.omcljs/om             "0.8.8"]
+                 [om-utils                  "0.4.0"]
                  [org.clojure/clojurescript "0.0-3126"]])
