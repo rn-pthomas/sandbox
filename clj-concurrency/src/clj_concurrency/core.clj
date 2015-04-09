@@ -1,3 +1,0 @@
-(ns clj-concurrency.core
-  )
-

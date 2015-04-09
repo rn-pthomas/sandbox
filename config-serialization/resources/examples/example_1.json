@@ -1,8 +1,0 @@
-{
-	'client_id': '12345',
-	'client_configuration': [
-		{'name': 'report-delivery-method',
-		 'value': 'sftp'
-		}
-	]
-}
