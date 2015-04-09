@@ -1,8 +1,37 @@
 (ns transition-cljs.util
-  (:import [goog.net XhrIo]
-           goog.net.EventType
-           [goog.events EventType]))
+  (:require [goog.net.XhrIo  :as xhr]
+            [cljs.core.async :as async :refer [chan close! <! >!]]
+            [cljs.reader     :as reader])
+  (:require-macros [cljs.core.async.macros :refer [go alt!]]))
 
-(defn load-script
+(defn GET
   [^String url]
-  (println :implement-load-script))
+  (let [ch (chan 1)]
+    (xhr/send url
+              (fn [event]
+                (let [res (-> event .-target .getResponseText)]
+                  (go (>! ch (reader/read-string res))
+                      (close! ch)))))
+    ch))
+
+(defn load-test
+  [^String test-name]
+  (let [ch (chan 1)]
+    (go (>! ch (<! (GET (str "./examples/tests/" test-name ".cljs"))))
+        (close! ch))
+    ch))
+
+(defn load-tests
+  [ch]
+  (let [res (atom [])]
+    (go
+      (mapv (fn [test-name]
+              (go (swap! res conj (<! (load-test test-name)))))
+            (<! ch)))
+    (do
+      (println @res)
+      @res)))
+
+(defn load-suite
+  []
+  (load-tests (GET "test-suite.cljs")))
