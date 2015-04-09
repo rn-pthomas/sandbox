@@ -23,14 +23,11 @@
 
 (defn load-tests
   [ch]
-  (let [res (atom [])]
-    (go
-      (mapv (fn [test-name]
-              (go (swap! res conj (<! (load-test test-name)))))
-            (<! ch)))
-    (do
-      (println @res)
-      @res)))
+  (go
+    (mapv (fn [test-name]
+            (go
+              (println (<! (load-test test-name)))))
+          (<! ch))))
 
 (defn load-suite
   []
