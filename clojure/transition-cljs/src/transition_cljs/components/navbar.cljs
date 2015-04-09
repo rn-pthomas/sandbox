@@ -12,7 +12,8 @@
     #js {:id "navbar"}
     (dom/ul
      nil
-     (om/build dropdown/dropdown data {:opts {:text "Suite"}})
+     (om/build dropdown/dropdown data {:opts {:text       "Suite"
+                                              :collection (:test-suite data)}})
      (om/build dropdown/dropdown data {:opts {:text "Log"}})
      (dom/li nil "Settings")
      (dom/li nil "Hide")))))

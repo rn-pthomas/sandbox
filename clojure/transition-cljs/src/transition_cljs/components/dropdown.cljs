@@ -3,8 +3,10 @@
             [om.dom  :as dom])
   (:require-macros [om-utils.core :refer [defcomponent]]))
 
-(defn render-collection
-  [collection])
+(defn render-dropdown-list
+  [collection]
+  (println collection)
+  (println "implement render-collection"))
 
 (defcomponent dropdown
   [text collection]
@@ -12,7 +14,7 @@
    (dom/li
     #js {:className   "dropdown"
          :onMouseOver (fn [_]
-                        (println data))}
+                        (render-dropdown-list collection))}
     text)))
 
 

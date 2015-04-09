@@ -1,7 +1,8 @@
 (ns transition-cljs.core
   (:require [transition-cljs.components.navbar :as navbar]
-            [om.core :as om]
-            [om.dom  :as dom])
+            [transition-cljs.test              :as test]
+            [om.core                           :as om]
+            [om.dom                            :as dom])
   (:require-macros [om-utils.core :refer [defcomponent]]))
 
 (enable-console-print!)
@@ -22,6 +23,10 @@
 (defn main
   []
   (swap! app-state assoc :test-suite (fetch-test-suite))
+
+  ;;only for testing purposes
+  (test/basic-functionality-test)
+  
   (om/root
    app
    app-state
