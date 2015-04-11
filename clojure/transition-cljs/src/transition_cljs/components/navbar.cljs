@@ -5,8 +5,6 @@
   (:require-macros [om-utils.core :refer [defcomponent]]))
 
 (defcomponent navbar
-  (will-mount
-   (om/update! data :test-suite ["foo" "bar"]))
   (render
    (dom/div
     #js {:id "navbar"}

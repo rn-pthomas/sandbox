@@ -23,8 +23,8 @@
   (render
    (dom/div
     nil
-    (om/build debugger data)
-    ;;(om/build navbar/navbar data)
+    ;;(om/build debugger data)
+    (om/build navbar/navbar data)
     )))
 
 (defn main
