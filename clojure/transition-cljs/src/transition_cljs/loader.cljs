@@ -10,8 +10,7 @@
 
 (defn load-suite
   [^clojure.lang.Atom state]
-  (let [tests-ch (chan)
-        results  (chan)]
+  (let [results (chan)]
     (go
       (let [tests (<! (xhr/GET "test-suite.cljs"))]
         (doseq [test tests]
