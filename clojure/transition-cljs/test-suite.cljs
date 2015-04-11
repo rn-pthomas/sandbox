@@ -1,3 +1,3 @@
 ["example_one"
- ;;"example_two"
+ "example_two"
  ]
