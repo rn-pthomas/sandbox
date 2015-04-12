@@ -24,5 +24,4 @@
    app-state
    {:target (. js/document (getElementById "app-container"))}))
 
-
 (main)
