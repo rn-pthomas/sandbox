@@ -12,7 +12,7 @@
   [^String test-name]
   (let [ch (chan 1)]
     (go
-      (<! (xhr/GET (str "./examples/tests/" test-name ".cljs")))
+      (>! ch (<! (xhr/GET (str "./examples/tests/" test-name ".cljs"))))
       (close! ch))
     ch))
 
