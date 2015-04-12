@@ -1,5 +1,5 @@
 (ns transition-cljs.loader
-  (:require [cljs.core.async :as async :refer [chan close! <! >!]]
+  (:require [cljs.core.async     :as async :refer [chan close! <! >!]]
             [transition-cljs.xhr :as xhr])
   (:require-macros [cljs.core.async.macros :refer [go alt!]]))
 
