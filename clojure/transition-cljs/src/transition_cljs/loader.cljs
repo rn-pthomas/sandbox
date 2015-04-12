@@ -8,6 +8,14 @@
   {:name    test-name
    :content test-content})
 
+(defn fetch-test
+  [^String test-name]
+  (let [ch (chan 1)]
+    (go
+      (<! (xhr/GET (str "./examples/tests/" test-name ".cljs")))
+      (close! ch))
+    ch))
+
 (defn load-suite
   [^clojure.lang.Atom state]
   (let [results (chan)]
@@ -18,6 +26,6 @@
     (go
       (while true
         (let [test-name (<! results)
-              test-resp (<! (xhr/GET (str "./examples/tests/" test-name ".cljs")))]
+              test-resp (<! (fetch-test test-name))]
           (swap! state update-in [:test-suite] (fn [test-suite]
                                                  (conj test-suite (process-test test-name test-resp)))))))))
