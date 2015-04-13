@@ -3,10 +3,16 @@
             [transition-cljs.xhr :as xhr])
   (:require-macros [cljs.core.async.macros :refer [go alt!]]))
 
+(defn parse-test
+  [test-name test-content]
+  (if-not (= (first test-content) 'deftest)
+    (throw (js/Error. (str "not a valid test: " test-name)))
+    test-content))
+
 (defn process-test
   [^String test-name ^String test-content]
   {:name    test-name
-   :content test-content})
+   :content (parse-test test-name test-content)})
 
 (defn fetch-test
   [^String test-name]
