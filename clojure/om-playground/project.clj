@@ -6,7 +6,8 @@
                  [org.clojure/clojurescript "0.0-2173"]
                  [org.clojure/core.async    "0.1.267.0-0d7780-alpha"]
                  [om                        "0.6.5"]
-                 [om-sync                   "0.1.1"]]
+                 [om-sync                   "0.1.1"]
+                 [om-utils "0.4.0"]]
   :plugins [[lein-cljsbuild "1.0.2"]]
   :source-paths ["src"]
   :cljsbuild {:builds       [{:id "om-playground"
