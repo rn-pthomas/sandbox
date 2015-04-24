@@ -1,52 +1,37 @@
 (ns om-playground.core
   (:require [om-playground.state :as state]
+            [om-playground.components :as cmp]
             [om.core             :as om]
             [om.dom              :as dom]
             [cljs.core.async     :as async :refer [chan timeout <! >!]])
   (:require-macros [om-utils.core :refer [defcomponent]]
-                   [cljs.core.async.macros :refer [go]]))
+                   [cljs.core.async.macros :refer [go]]
+                   [om-playground.macros :refer [timed-async-loop]]))
 
 (enable-console-print!)
 
-(defcomponent btn
-  [event-chan source]
-  (render
-   (let [class-name (if (= (get-in data [:current-event :source]) source)
-                      "btn highlighted"
-                      "btn")]
-     (dom/button
-      #js {:className class-name
-           :onClick   (fn [e]
-                        (go
-                          (>! event-chan {:event  e
-                                          :source source})))}))))
+(defn build-cell
+  [data opts]
+  (om/build cmp/cell data {:opts opts}))
 
-(defn build-button
-  [data event-chan source]
-  (om/build btn data {:opts {:event-chan event-chan
-                             :source     source}}))
+(defn build-cells
+  [num data opts]
+  (apply (partial dom/div nil)
+         (for [_ (range num)]
+           (build-cell data opts))))
 
 (defcomponent app
-  (will-mount
-   (let [event-chan (om/get-state owner :event-chan)
-         rate       1000]
-     (go
-       (while true
-         (om/update! data :current-event (<! event-chan))))))
   (init-state
-   {:event-chan (chan)})
+   {:ch (chan)})
+  (will-mount
+   (timed-async-loop 500 (om/get-state owner :ch)))
   (render
-   (let [event-chan (om/get-state owner :event-chan)]
+   (let [ch        (om/get-state owner :ch)
+         cell-opts {:ch ch}]
      (dom/div
       nil
-      (dom/div
-       nil
-       (build-button data event-chan :btn-1)
-       (build-button data event-chan :btn-2))
-      (dom/div
-       nil
-       (build-button data event-chan :btn-3)
-       (build-button data event-chan :btn-4))))))
+      (build-cells 2 data cell-opts)
+      (build-cells 2 data cell-opts)))))
 
 (om/root
  app
