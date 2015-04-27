@@ -5,12 +5,26 @@
   (:require-macros [om-utils.core          :refer [defcomponent]]
                    [cljs.core.async.macros :refer [go]]))
 
+(defn class-name
+  [{:keys [active-x-row active-y-row]} {:keys [x y]}]
+  (cond
+    (and active-x-row
+         (= x active-x-row))
+    "cell highlighted"
+
+    (and active-y-row
+         (= y active-y-row))
+    "cell highlighted"
+
+    :else
+    "cell"))
+
 (defcomponent cell
-  [ch]
+  [events]
   (render
    (dom/button
-    #js {:className "cell"
+    #js {:className (class-name data opts)
          :onClick   (fn [e]
                       (go 
-                        (>! ch :cell)))})))
+                        (>! events :cell)))})))
 
