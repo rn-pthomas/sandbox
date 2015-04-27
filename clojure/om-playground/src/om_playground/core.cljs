@@ -18,14 +18,14 @@
   [{:keys [width height data cell-opts] :as params}]
   (apply
    (partial dom/div nil)
-   (for [x (range width)]
+   (for [y (range height)]
      (apply
       (partial dom/div nil)
-      (for [y (range height)]
+      (for [x (range width)]
         (build-cell data (assoc cell-opts :x x :y y)))))))
 
 (def grid
-  {:height 9
+  {:height 7
    :width  9})
 
 (defn gen-num-stream
