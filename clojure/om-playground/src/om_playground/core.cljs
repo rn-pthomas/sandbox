@@ -25,8 +25,8 @@
         (build-cell data (assoc cell-opts :x x :y y)))))))
 
 (def grid
-  {:height 7
-   :width  9})
+  {:height 10
+   :width  10})
 
 (defn gen-num-stream
   []
@@ -49,14 +49,20 @@
 
 (defcomponent app
   (init-state
-   {:events          (chan)
-    :num-stream-slow (gen-num-stream)
-    :num-stream-fast (gen-num-stream)})
+   {:events            (chan)
+    :num-stream-slow   (gen-num-stream)
+    :num-stream-fast   (gen-num-stream)
+    :x-cell-num-stream (gen-num-stream)
+    :y-cell-num-stream (gen-num-stream)})
   (will-mount
-   (let [num-stream-slow (om/get-state owner :num-stream-slow)
-         num-stream-fast (om/get-state owner :num-stream-fast)]
+   (let [num-stream-slow   (om/get-state owner :num-stream-slow)
+         num-stream-fast   (om/get-state owner :num-stream-fast)
+         x-cell-num-stream (om/get-state owner :x-cell-num-stream)
+         y-cell-num-stream (om/get-state owner :y-cell-num-stream)]
      (consume-num-stream num-stream-slow :active-x-row data 1800)
-     (consume-num-stream num-stream-fast :active-y-row data 900)))
+     (consume-num-stream x-cell-num-stream :active-x-cell data 600)
+     (consume-num-stream num-stream-fast :active-y-row data 900)
+     (consume-num-stream y-cell-num-stream :active-y-cell data 600)))
   (render
    (let [events    (om/get-state owner :events)
          cell-opts {:events events}]

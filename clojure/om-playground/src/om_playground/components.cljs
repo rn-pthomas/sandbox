@@ -6,14 +6,18 @@
                    [cljs.core.async.macros :refer [go]]))
 
 (defn class-name
-  [{:keys [active-x-row active-y-row]} {:keys [x y]}]
+  [{:keys [active-x-row active-y-row active-x-cell active-y-cell]} {:keys [x y]}]
   (cond
-    (and active-x-row
-         (= x active-x-row))
+    (= active-x-cell x)
+    "cell"
+
+    (= active-y-cell y)
+    "cell"
+    
+    (= x active-x-row)
     "cell highlighted"
 
-    (and active-y-row
-         (= y active-y-row))
+    (= y active-y-row)
     "cell highlighted"
 
     :else
