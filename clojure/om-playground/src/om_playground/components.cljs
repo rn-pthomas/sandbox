@@ -1,9 +1,8 @@
 (ns om-playground.components
-  (:require [om.core         :as om]
-            [om.dom          :as dom]
-            [cljs.core.async :as async :refer [chan timeout <! >!]])
-  (:require-macros [om-utils.core          :refer [defcomponent]]
-                   [cljs.core.async.macros :refer [go]]))
+  (:require [om.core      :as om]
+            [sablono.core :as html :refer-macros [html]]
+            [om-playground.controllers.core :refer [notify]])
+  (:require-macros [om-utils.core :refer [defcomponent]]))
 
 (defn class-name
   [{:keys [active-x-row active-y-row active-x-cell active-y-cell]} {:keys [x y]}]
@@ -26,9 +25,8 @@
 (defcomponent cell
   [events]
   (render
-   (dom/button
-    #js {:className (class-name data opts)
-         :onClick   (fn [e]
-                      (go 
-                        (>! events :cell)))})))
+   (let [class (class-name data opts)]
+     (html/html
+      [(keyword (str "button." class)) {:on-click (fn [_]
+                                                    (notify :cell-clicked))}]))))
 

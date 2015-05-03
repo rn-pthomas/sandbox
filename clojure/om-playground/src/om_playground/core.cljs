@@ -3,12 +3,18 @@
             [om-playground.components :as cmp]
             [om.core                  :as om]
             [om.dom                   :as dom]
+            [sablono.core             :as html :refer-macros [html]]
             [om-playground.streams    :as streams]
+            [om-playground.controllers.core :refer [notify]]
             [cljs.core.async          :as async :refer [chan timeout <! >!]])
   (:require-macros [om-utils.core :refer [defcomponent]]
                    [cljs.core.async.macros :refer [go]]))
 
 (enable-console-print!)
+
+(defn reload-hook
+  [& files]
+  (println files))
 
 (defn build-cell
   [data opts]
@@ -28,50 +34,11 @@
   {:height 10
    :width  10})
 
-(defn gen-num-stream
-  []
-  (streams/make-stream
-   (fn [n]
-     (let [{:keys [height width]} grid]
-       (cond
-         (= n (dec height)) (- height 2)
-         (= n 0)            1
-         :else              ((rand-nth [+ -]) n 1))))
-   1))
-
-(defn consume-num-stream
-  [num-stream ^clojure.lang.Keyword update-key data timeout-val]
-  (go
-    (while true
-      (let [n (<! num-stream)]
-        (om/update! data update-key n)
-        (<! (timeout timeout-val))))))
-
 (defcomponent app
-  (init-state
-   {:events            (chan)
-    :num-stream-slow   (gen-num-stream)
-    :num-stream-fast   (gen-num-stream)
-    :x-cell-num-stream (gen-num-stream)
-    :y-cell-num-stream (gen-num-stream)})
-  (will-mount
-   (let [num-stream-slow   (om/get-state owner :num-stream-slow)
-         num-stream-fast   (om/get-state owner :num-stream-fast)
-         x-cell-num-stream (om/get-state owner :x-cell-num-stream)
-         y-cell-num-stream (om/get-state owner :y-cell-num-stream)]
-     (consume-num-stream num-stream-slow :active-x-row data 1800)
-     (consume-num-stream x-cell-num-stream :active-x-cell data 600)
-     (consume-num-stream num-stream-fast :active-y-row data 900)
-     (consume-num-stream y-cell-num-stream :active-y-cell data 600)))
   (render
-   (let [events    (om/get-state owner :events)
-         cell-opts {:events events}]
-     (dom/div
-      nil
-      (build-cell-grid {:width     (:width grid)
-                        :height    (:height grid)
-                        :data      data
-                        :cell-opts cell-opts})))))
+   (build-cell-grid {:height (:height grid)
+                     :width  (:width grid)
+                     :data   data})))
 
 (om/root
  app
