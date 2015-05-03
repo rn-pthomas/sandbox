@@ -14,8 +14,13 @@
   []
   (println :cell-clicked))
 
+(defn kill-cell
+  [{:keys [x y]}]
+  (println x y))
+
 (def controller-dispatch
-  {:cell-clicked #'cell-clicked})
+  {:cell-clicked #'cell-clicked
+   :kill-cell    #'kill-cell})
 
 (defn listen
   []

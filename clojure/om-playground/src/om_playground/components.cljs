@@ -23,10 +23,10 @@
     "cell"))
 
 (defcomponent cell
-  [events]
+  []
   (render
    (let [class (class-name data opts)]
      (html/html
-      [(keyword (str "button." class)) {:on-click (fn [_]
-                                                    (notify :cell-clicked))}]))))
+      [(keyword (str "button." class)) {:onMouseOver (fn [_]
+                                                       (notify :kill-cell opts))}]))))
 
