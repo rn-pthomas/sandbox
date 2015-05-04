@@ -4,29 +4,16 @@
             [om-playground.controllers.core :refer [notify]])
   (:require-macros [om-utils.core :refer [defcomponent]]))
 
-(defn class-name
-  [{:keys [active-x-row active-y-row active-x-cell active-y-cell]} {:keys [x y]}]
-  (cond
-    (= active-x-cell x)
-    "cell"
-
-    (= active-y-cell y)
-    "cell"
-    
-    (= x active-x-row)
-    "cell highlighted"
-
-    (= y active-y-row)
-    "cell highlighted"
-
-    :else
-    "cell"))
-
 (defcomponent cell
   []
+  (init-state
+   {:dead false})
   (render
-   (let [class (class-name data opts)]
+   (let [class (if (om/get-state owner :dead)
+                 "cell highlighted"
+                 "cell")]
      (html/html
       [(keyword (str "button." class)) {:onMouseOver (fn [_]
-                                                       (notify :kill-cell opts))}]))))
+                                                       (notify :kill-cell {:owner owner
+                                                                           :opts  opts}))}]))))
 

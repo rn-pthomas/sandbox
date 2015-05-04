@@ -1,4 +1,5 @@
-(ns om-playground.state)
+(ns om-playground.state
+  (:require [cljs.core.async :refer [chan]]))
 
 (def app-state
-  (atom {}))
+  (atom {:channels {:rebuild-cell-ch (chan)}}))
