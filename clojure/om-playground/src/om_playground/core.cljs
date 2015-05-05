@@ -32,8 +32,8 @@
         (build-cell data (assoc cell-opts :x x :y y)))))))
 
 (def grid
-  {:height 10
-   :width  10})
+  {:height 28
+   :width  28})
 
 (defcomponent app
   (render

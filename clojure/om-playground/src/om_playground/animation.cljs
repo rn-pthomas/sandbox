@@ -6,8 +6,12 @@
 
 (defn rebuild-cells
   []
-  (let [rebuild-cell-ch (-> state/app-state deref (get-in [:channels :rebuild-cell-ch]))]
+  (let [rebuild-cell-ch (-> state/app-state deref (get-in [:channels :rebuild-cell-ch]))
+        ch              (chan 1)]
     (go
       (while true
-        (<! (timeout 1000))
-        (notify :rebuild-cell (<! rebuild-cell-ch))))))
+        (notify :rebuild-cell (<! ch))))
+    (go
+      (while true
+        (<! (timeout 300))
+        (>! ch (<! rebuild-cell-ch))))))
