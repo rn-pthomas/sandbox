@@ -1,6 +1,3 @@
-(ns quil-playground.core)
-
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(ns quil-playground.core
+  (:require [quil.core  :as q]
+            [spawn.core :as s]))
