@@ -3,12 +3,16 @@
             [spawn.core         :as s]
             [clojure.core.async :as a]))
 
+(def height 600)
+(def width 900)
+
 (defn move-randomly-within-bounds
-  [{:keys [upper interval]}]
-  (let [interval (or interval 1)]
+  [{:keys [upper lower interval]}]
+  (let [interval (or interval 1)
+        lower    (or lower 0)]
     (fn [n]
       (cond
-        (<= n 0)
+        (<= n lower)
         (+ n interval)
 
         (>= n upper)
@@ -18,21 +22,23 @@
         ((rand-nth [+ -]) n interval)))))
 
 (s/defstream color-stream (move-randomly-within-bounds {:upper 255 :interval 3}) 200)
-(s/defstream x-movement (move-randomly-within-bounds {:upper 500 :interval 10}) 10)
-(s/defstream y-movement (move-randomly-within-bounds {:upper 500 :interval 10}) 10)
+(s/defstream bg-color-stream (move-randomly-within-bounds {:upper 255 :interval 1}) 200)
+(s/defstream x-movement (move-randomly-within-bounds {:upper width :interval 15}) 10 100)
+(s/defstream y-movement (move-randomly-within-bounds {:upper height :interval 16}) 10 100)
+(s/defstream diam-stream (move-randomly-within-bounds {:upper 50 :lower 20 :interval 2}) 40 100)
 
 (defn setup
   []
   (q/smooth)
-  (q/frame-rate 30)
+  (q/frame-rate 20)
   (q/background 200))
 
 (defn draw
   []
-  (let [color (a/<!! color-stream)
-        diam  18
-        x     (a/<!! x-movement)
-        y     (a/<!! y-movement)]
+  (let [color    (a/<!! color-stream)
+        diam     (a/<!! diam-stream)
+        x        (a/<!! x-movement)
+        y        (a/<!! y-movement)]
     (q/stroke color)
     (q/fill color)
     (q/ellipse x y diam diam)))
@@ -41,4 +47,4 @@
   :title "grey circles"
   :setup setup
   :draw draw
-  :size [500 500])
+  :size [width height])
