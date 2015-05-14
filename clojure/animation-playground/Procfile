@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/animation-playground.jar clojure.main -m animation-playground.server
