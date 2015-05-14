@@ -21,16 +21,21 @@
         :else
         ((rand-nth [+ -]) n interval)))))
 
-(s/defstream color-stream (move-randomly-within-bounds {:upper 255 :interval 3}) 200)
-(s/defstream bg-color-stream (move-randomly-within-bounds {:upper 255 :interval 1}) 200)
-(s/defstream x-movement (move-randomly-within-bounds {:upper width :interval 15}) 10 100)
-(s/defstream y-movement (move-randomly-within-bounds {:upper height :interval 16}) 10 100)
-(s/defstream diam-stream (move-randomly-within-bounds {:upper 50 :lower 20 :interval 2}) 40 100)
+(s/defstream color-stream
+  (move-randomly-within-bounds {:upper 255 :interval 3}) 200)
+(s/defstream bg-color-stream
+  (move-randomly-within-bounds {:upper 255 :interval 1}) 200)
+(s/defstream x-movement
+  (move-randomly-within-bounds {:upper width :interval 15}) 10 100)
+(s/defstream y-movement
+  (move-randomly-within-bounds {:upper height :interval 16}) 10 100)
+(s/defstream diam-stream
+  (move-randomly-within-bounds {:upper 50 :lower 20 :interval 2}) 40 100)
 
 (defn setup
   []
-  (q/smooth)
-  (q/frame-rate 20)
+  ;;(q/smooth)
+  (q/frame-rate 40)
   (q/background 200))
 
 (defn draw

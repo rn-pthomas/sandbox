@@ -37,13 +37,16 @@
 
 (defcomponent app
   (render
-   (build-cell-grid {:height (:height grid)
-                     :width  (:width grid)
-                     :data   data})))
+   (apply
+    (partial dom/div nil)
+    (for [y (range 16)]
+      (apply
+       (partial dom/div nil)
+       (for [x (range 8)]
+         (om/build cmp/plain-cell data {:opts {:x x
+                                               :y y}})))))))
 
-(do
-  (anim/rebuild-cells)
-  (om/root
-   app
-   state/app-state
-   {:target (. js/document (getElementById "app-container"))}))
+(om/root
+ app
+ state/app-state
+ {:target (. js/document (getElementById "app-container"))})

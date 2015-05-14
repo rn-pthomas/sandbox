@@ -1,0 +1,6 @@
+gcc-4.9: warning: couldn't understand kern.osversion '14.1.0
+gcc-4.9: warning: couldn't understand kern.osversion '14.1.0
+
+/Users/pthomas/projects/personal/sandbox/haskell/hsom/main.hs:11:1:
+    Invalid type signature: Note :: Dur -> a -> Primitive a
+    Should be of form <variable> :: <type>

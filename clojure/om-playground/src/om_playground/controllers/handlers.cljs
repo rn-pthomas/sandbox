@@ -19,5 +19,11 @@
 (defhandler rebuild-cell
   (om/set-state! (:component params) :dead false))
 
+(defn add-dead-cells
+  [existing-dead-cells {:keys [x y]}]
+  ;;(println :ok)
+  )
 
-
+(defhandler splay
+  (om/transact! data [:dead-cells] (fn [existing-dead-cells]
+                                     (add-dead-cells existing-dead-cells opts))))

@@ -11,11 +11,11 @@
   [dispatch-key & [data]]
   (if data
     (do
-      (println (str "k=" dispatch-key ", data=" data))
+      ;;(println (str "k=" dispatch-key ", data=" data))
       (a/put! controller-chan {:dispatch-key dispatch-key
                                :data         data}))
     (do
-      (println (str "k=" dispatch-key))
+      ;;(println (str "k=" dispatch-key))
       (a/put! controller-chan {:dispatch-key dispatch-key}))))
 
 (defn lookup-controller-handler
