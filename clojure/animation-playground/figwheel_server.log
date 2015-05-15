@@ -1,0 +1,148 @@
+Figwheel Config Warning (in project.clj) -- 
+Your build :output-dir is not in a resources directory.
+If you are serving your assets (js, css, etc.) with Figwheel,
+they must be on the resource path for the server.
+Your :output-dir should match this pattern: (dev-resources|resources)/public
+
+Figwheel: focusing on build-ids (animation-playground)
+[0mCompiling "animation_playground.js" from ["src"]...
+[31mCompiling "animation_playground.js" failed.[0m
+clojure.lang.ExceptionInfo: failed compiling file:target/figwheel_temp/animation-playground/figwheel/connect.cljs
+ at clojure.core$ex_info.invoke (core.clj:4403)
+    cljs.compiler$compile_file$fn__3100.invoke (compiler.clj:1142)
+    cljs.compiler$compile_file.invoke (compiler.clj:1105)
+    cljs.compiler$compile_root.invoke (compiler.clj:1177)
+    cljs.closure$compile_dir.invoke (closure.clj:378)
+    cljs.closure$eval3516$fn__3517.invoke (closure.clj:418)
+    cljs.closure$eval3452$fn__3453$G__3443__3460.invoke (closure.clj:325)
+    cljs.closure$eval3503$fn__3504.invoke (closure.clj:432)
+    cljs.closure$eval3452$fn__3453$G__3443__3460.invoke (closure.clj:325)
+    clojurescript_build.core.CompilableSourcePaths/fn (core.clj:19)
+    clojure.core$map$fn__4245.invoke (core.clj:2557)
+    clojure.lang.LazySeq.sval (LazySeq.java:40)
+    clojure.lang.LazySeq.seq (LazySeq.java:49)
+    clojure.lang.RT.seq (RT.java:484)
+    clojure.core$seq.invoke (core.clj:133)
+    clojure.core$apply.invoke (core.clj:624)
+    clojure.core$mapcat.doInvoke (core.clj:2586)
+    clojure.lang.RestFn.invoke (RestFn.java:423)
+    clojurescript_build.core.CompilableSourcePaths._compile (core.clj:19)
+    cljs.closure$build.invoke (closure.clj:1446)
+    clojurescript_build.core$build_source_paths_STAR_.invoke (core.clj:153)
+    figwheel_sidecar.auto_builder$default_build_options$fn__14097.invoke (auto_builder.clj:78)
+    figwheel_sidecar.auto_builder$insert_figwheel_connect_script$fn__14128.invoke (auto_builder.clj:164)
+    figwheel_sidecar.auto_builder$warning$fn__14094.invoke (auto_builder.clj:73)
+    clojurescript_build.auto$time_build$fn__13893.invoke (auto.clj:55)
+    clojurescript_build.auto$after$fn__13899.invoke (auto.clj:64)
+    clojurescript_build.auto$after$fn__13899.invoke (auto.clj:64)
+    clojurescript_build.auto$after$fn__13899.invoke (auto.clj:64)
+    clojurescript_build.auto$error$fn__13902.invoke (auto.clj:71)
+    clojurescript_build.auto$before$fn__13896.invoke (auto.clj:60)
+[0mCompiling "animation_playground.js" from ["src"]...
+[31mCompiling "animation_playground.js" failed.[0m
+clojure.lang.ExceptionInfo: failed compiling file:target/figwheel_temp/animation-playground/figwheel/connect.cljs
+ at clojure.core$ex_info.invoke (core.clj:4403)
+    cljs.compiler$compile_file$fn__3100.invoke (compiler.clj:1142)
+    cljs.compiler$compile_file.invoke (compiler.clj:1105)
+    cljs.compiler$compile_root.invoke (compiler.clj:1177)
+    cljs.closure$compile_dir.invoke (closure.clj:378)
+    cljs.closure$eval3516$fn__3517.invoke (closure.clj:418)
+    cljs.closure$eval3452$fn__3453$G__3443__3460.invoke (closure.clj:325)
+    cljs.closure$eval3503$fn__3504.invoke (closure.clj:432)
+    cljs.closure$eval3452$fn__3453$G__3443__3460.invoke (closure.clj:325)
+    clojurescript_build.core.CompilableSourcePaths/fn (core.clj:19)
+    clojure.core$map$fn__4245.invoke (core.clj:2557)
+    clojure.lang.LazySeq.sval (LazySeq.java:40)
+    clojure.lang.LazySeq.seq (LazySeq.java:49)
+    clojure.lang.RT.seq (RT.java:484)
+    clojure.core$seq.invoke (core.clj:133)
+    clojure.core$apply.invoke (core.clj:624)
+    clojure.core$mapcat.doInvoke (core.clj:2586)
+    clojure.lang.RestFn.invoke (RestFn.java:423)
+    clojurescript_build.core.CompilableSourcePaths._compile (core.clj:19)
+    cljs.closure$build.invoke (closure.clj:1446)
+    clojurescript_build.core$build_source_paths_STAR_.invoke (core.clj:153)
+    figwheel_sidecar.auto_builder$default_build_options$fn__14097.invoke (auto_builder.clj:78)
+    figwheel_sidecar.auto_builder$insert_figwheel_connect_script$fn__14128.invoke (auto_builder.clj:164)
+    figwheel_sidecar.auto_builder$warning$fn__14094.invoke (auto_builder.clj:73)
+    clojurescript_build.auto$time_build$fn__13893.invoke (auto.clj:55)
+    clojurescript_build.auto$after$fn__13899.invoke (auto.clj:64)
+    clojurescript_build.auto$after$fn__13899.invoke (auto.clj:64)
+    clojurescript_build.auto$after$fn__13899.invoke (auto.clj:64)
+    clojurescript_build.auto$error$fn__13902.invoke (auto.clj:71)
+    clojurescript_build.auto$before$fn__13896.invoke (auto.clj:60)
+[0mCompiling "animation_playground.js" from ["src"]...
+WARNING: Use of undeclared Var cljs.core.async/do-alts at line 62 file:/Users/pthomas/.m2/repository/org/clojure/core.async/0.1.267.0-0d7780-alpha/core.async-0.1.267.0-0d7780-alpha.jar!/cljs/core/async/impl/ioc_helpers.cljs
+WARNING: Bad method signature in protocol implementation, impl/Handler does not declare method called lock-id at line 205 file:/Users/pthomas/.m2/repository/org/clojure/core.async/0.1.267.0-0d7780-alpha/core.async-0.1.267.0-0d7780-alpha.jar!/cljs/core/async.cljs
+WARNING: Use of undeclared Var cljs.core.async.impl.protocols/lock-id at line 208 file:/Users/pthomas/.m2/repository/org/clojure/core.async/0.1.267.0-0d7780-alpha/core.async-0.1.267.0-0d7780-alpha.jar!/cljs/core/async.cljs
+WARNING: Use of undeclared Var animation-playground.core/reload-hook at line 2 target/figwheel_temp/animation-playground/figwheel/connect.cljs
+WARNING: Bad method signature in protocol implementation, impl/Handler does not declare method called lock-id at line 205 out/cljs/core/async.cljs
+WARNING: Use of undeclared Var cljs.core.async.impl.protocols/lock-id at line 208 out/cljs/core/async.cljs
+[32mSuccessfully compiled "animation_playground.js" in 6.941 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  out/goog/deps.js
+notifying browser that file changed:  /animation_playground/core.js
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 0.081 seconds.[0m
+notifying browser that file changed:  /animation_playground/core.js
+Figwheel Config Warning (in project.clj) -- 
+Your build :output-dir is not in a resources directory.
+If you are serving your assets (js, css, etc.) with Figwheel,
+they must be on the resource path for the server.
+Your :output-dir should match this pattern: (dev-resources|resources)/public
+
+Figwheel: focusing on build-ids (animation-playground)
+[0mCompiling "animation_playground.js" from ["src"]...
+WARNING: Use of undeclared Var animation-playground.core/reload-hook at line 2 target/figwheel_temp/animation-playground/figwheel/connect.cljs
+[32mSuccessfully compiled "animation_playground.js" in 0.855 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  out/goog/deps.js
+notifying browser that file changed:  /animation_playground/core.js
+Figwheel Config Warning (in project.clj) -- 
+Your build :output-dir is not in a resources directory.
+If you are serving your assets (js, css, etc.) with Figwheel,
+they must be on the resource path for the server.
+Your :output-dir should match this pattern: (dev-resources|resources)/public
+
+Figwheel: focusing on build-ids (animation-playground)
+[0mCompiling "animation_playground.js" from ["src"]...
+WARNING: Use of undeclared Var animation-playground.core/reload-hook at line 2 target/figwheel_temp/animation-playground/figwheel/connect.cljs
+[32mSuccessfully compiled "animation_playground.js" in 1.136 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  out/goog/deps.js
+notifying browser that file changed:  /animation_playground/core.js
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 0.143 seconds.[0m
+notifying browser that file changed:  /animation_playground/core.js
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 0.087 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  /animation_playground/core.js
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 0.082 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  /animation_playground/core.js
+Figwheel Config Warning (in project.clj) -- 
+Your build :output-dir is not in a resources directory.
+If you are serving your assets (js, css, etc.) with Figwheel,
+they must be on the resource path for the server.
+Your :output-dir should match this pattern: (dev-resources|resources)/public
+
+Figwheel: focusing on build-ids (animation-playground)
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 1.355 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  out/goog/deps.js
+notifying browser that file changed:  /animation_playground/core.js
+Figwheel: focusing on build-ids (animation-playground)
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 0.833 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  out/goog/deps.js
+notifying browser that file changed:  /animation_playground/core.js
+Figwheel: focusing on build-ids (animation-playground)
+[0mCompiling "animation_playground.js" from ["src"]...
+[32mSuccessfully compiled "animation_playground.js" in 0.802 seconds.[0m
+notifying browser that file changed:  animation_playground.js
+notifying browser that file changed:  out/goog/deps.js
+notifying browser that file changed:  /animation_playground/core.js
