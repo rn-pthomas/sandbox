@@ -8,3 +8,4 @@ pom.xml
 .lein-repl-history
 .lein-plugins/
 figwheel_server.log
+resources/public/js/out
