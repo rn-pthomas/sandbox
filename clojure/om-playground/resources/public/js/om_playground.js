@@ -25,11 +25,12 @@ goog.addDependency("../figwheel/client/utils.js", ['figwheel.client.utils'], ['c
 goog.addDependency("../cljs/reader.js", ['cljs.reader'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
 goog.addDependency("../figwheel/client/socket.js", ['figwheel.client.socket'], ['cljs.core', 'figwheel.client.utils', 'cljs.reader']);
 goog.addDependency("../figwheel/client/file_reloading.js", ['figwheel.client.file_reloading'], ['goog.string', 'goog.net.jsloader', 'goog.Uri', 'cljs.core', 'cljs.core.async', 'clojure.set', 'figwheel.client.utils', 'clojure.string']);
-goog.addDependency("../om_playground/streams.js", ['om_playground.streams'], ['cljs.core', 'cljs.core.async']);
-goog.addDependency("../om_playground/core.js", ['om_playground.core'], ['om_playground.state', 'cljs.core', 'om.dom', 'cljs.core.async', 'sablono.core', 'om_playground.components', 'om_playground.controllers.core', 'om.core', 'om_playground.streams', 'om_playground.animation']);
+goog.addDependency("../om_playground/components/select.js", ['om_playground.components.select'], ['cljs.core', 'om.dom', 'om.core']);
+goog.addDependency("../om_playground/core.js", ['om_playground.core'], ['om_playground.state', 'om_playground.components.select', 'cljs.core', 'om.dom', 'om.core']);
 goog.addDependency("../figwheel/client/heads_up.js", ['figwheel.client.heads_up'], ['cljs.core', 'cljs.core.async', 'figwheel.client.socket', 'clojure.string']);
 goog.addDependency("../cljs/repl.js", ['cljs.repl'], ['cljs.core']);
 goog.addDependency("../figwheel/client.js", ['figwheel.client'], ['goog.Uri', 'cljs.core', 'cljs.core.async', 'figwheel.client.file_reloading', 'figwheel.client.utils', 'cljs.repl', 'figwheel.client.heads_up', 'figwheel.client.socket', 'clojure.string']);
 goog.addDependency("../figwheel/connect.js", ['figwheel.connect'], ['cljs.core', 'om_playground.core', 'figwheel.client']);
+goog.addDependency("../om_playground/streams.js", ['om_playground.streams'], ['cljs.core', 'cljs.core.async']);
 
 goog.require("figwheel.connect");
