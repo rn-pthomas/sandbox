@@ -1,5 +1,6 @@
 (ns om-playground.state
-  (:require [cljs.core.async :refer [chan]]))
+  (:require [om-playground.streams :as streams]
+            [cljs.core.async :refer [chan]]))
 
 (defonce app-state
-  (atom {:channels {:rebuild-cell-ch (chan)}}))
+  (atom {:channels {:anim (streams/make-stream inc 1)}}))
