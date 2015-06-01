@@ -1,12 +1,14 @@
 (ns fixture-generator.core)
 
+(defn sqlize-value
+  [value]
+  (if (string? value)
+    (format "'%s'" value)
+    value))
+
 (defn gen-delete-where-clause
   [locator]
-  (let [sqlize-value (fn [value]
-                       (if (string? value)
-                         (format "'%s'" value)
-                         value))
-        locator-vec  (vec locator)]
+  (let [locator-vec (vec locator)]
     (if (= (count locator-vec) 1)
       (let [[column value] (last locator-vec)]
         (str (name column) " = " (sqlize-value value)))
@@ -35,9 +37,7 @@
             (clojure.string/join "," (map #(-> % first name)
                                           insert-data-vec))
             (clojure.string/join "," (map (fn [[column value]]
-                                            (if (string? value)
-                                              (format "'%s'" value)
-                                              value))
+                                            (sqlize-value value))
                                           insert-data-vec)))))
 
 (defn process-line
