@@ -12,27 +12,27 @@
   :plugins [[lein-cljsbuild "1.1.0"]
             [lein-figwheel "0.3.9"]]
 
-  :source-paths ["src"]
+  :source-paths ["src/algo_music/server"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {
-    :builds [{:id "dev"
-              :source-paths ["src"]
+              :builds [{:id "dev"
+                        :source-paths ["src/algo_music/app"]
 
-              :figwheel { :on-jsload "algo-music.core/on-js-reload" }
+                        :figwheel { :on-jsload "algo-music.app.core/on-js-reload" }
 
-              :compiler {:main algo-music.core
-                         :asset-path "js/compiled/out"
-                         :output-to "resources/public/js/compiled/algo_music.js"
-                         :output-dir "resources/public/js/compiled/out"
-                         :source-map-timestamp true }}
-             {:id "min"
-              :source-paths ["src"]
-              :compiler {:output-to "resources/public/js/compiled/algo_music.js"
-                         :main algo-music.core
-                         :optimizations :advanced
-                         :pretty-print false}}]}
+                        :compiler {:main algo-music.app.core
+                                   :asset-path "js/compiled/out"
+                                   :output-to "resources/public/js/compiled/algo_music.js"
+                                   :output-dir "resources/public/js/compiled/out"
+                                   :source-map-timestamp true }}
+                       {:id "min"
+                        :source-paths ["src"]
+                        :compiler {:output-to "resources/public/js/compiled/algo_music.js"
+                                   :main algo-music.app.core
+                                   :optimizations :advanced
+                                   :pretty-print false}}]}
 
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources" 

@@ -1,6 +1,6 @@
-(ns ^:figwheel-always algo-music.core
-    (:require
-              [reagent.core :as reagent :refer [atom]]))
+(ns ^:figwheel-always
+  algo-music.app.core
+  (:require [reagent.core :as reagent :refer [atom]]))
 
 (enable-console-print!)
 
