@@ -1,2 +1,17 @@
 /* some style */
+* {
+  margin: 0px;
+  padding: 0px;
+}
 
+.column {
+  float: left;
+}
+
+.box {
+  height: 30px;
+  width: 30px;
+  background-color: #333;
+  margin: 5px;
+  border-radius: 4px;
+}
