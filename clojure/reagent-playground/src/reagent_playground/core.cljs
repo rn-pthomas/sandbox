@@ -1,53 +1,31 @@
-(ns ^:figwheel-always
-  reagent-playground.core
-  (:require [reagent.core    :as reagent :refer [atom]]
-            [cljs.core.async :as async])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+(ns reagent-playground.core
+  (:require [reagent.core                 :as reagent]
+            [reagent-playground.animation :as animation]
+            [reagent-playground.debugger-cmp :as debugger]))
 
 (enable-console-print!)
 
 (defn on-js-reload
   [& files]
+  (println "js-reload...")
   (println files))
 
-(defonce app-state (atom {:text "Hello world!!!"
-                          :size 8
-                          :loop-running false}))
-
-(defn animation-loop
-  []
-  (let [anim-ch (async/timeout 500)]
-    (swap! app-state (assoc :loop-running true))
-    (go-loop []
-      (async/<! anim-ch)
-      (println "hey there...")
-      (let [size (:size @app-state)
-            highlighted [(rand-int size) (rand-int size)]]
-        (swap! app-state assoc-in [:highlighted] highlighted))
-      (recur))))
-
-(defn debugger
-  []
-  [:div
-   [:p (str "highlighted: " (:highlighted @app-state))]])
+(defonce app-state (reagent/atom {:text         "Hello world!!!"
+                                  :size         8
+                                  :highlighted  [0 0]
+                                  :loop-running false}))
 
 (defn app
   []
   [:div
-   (let [size (:size @app-state)
-         rows (for [x (range size)
-                    y (range size)]
-                [:div.column
-                 [:div.box]])])
-   (debugger)])
+   (animation/component app-state)
+   ;;(debugger/component app-state)
+   ])
 
 (defn main
   []
-  (do
-    (when-not (:loop-running @app-state)
-      (animation-loop))
-    (reagent/render-component
-     [app]
-     (. js/document (getElementById "app")))))
+  (reagent/render-component
+   [app]
+   (. js/document (getElementById "app"))))
 
 (main)
