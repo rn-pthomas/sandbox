@@ -15,3 +15,7 @@
   margin: 5px;
   border-radius: 4px;
 }
+
+.box.highlighted {
+  background-color: #999;
+}
