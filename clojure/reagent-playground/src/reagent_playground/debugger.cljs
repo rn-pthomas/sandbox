@@ -1,6 +1,7 @@
-(ns reagent-playground.debugger-cmp)
+(ns reagent-playground.debugger-cmp
+  (:require [reagent-playground.session :as session]))
 
 (defn component
-  [state]
+  []
   [:div
-   [:p (str "highlighted: " (:highlighted @state))]])
+   [:p (str "highlighted: " (session/get :highlighted))]])

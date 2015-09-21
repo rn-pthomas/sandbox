@@ -1,36 +1,56 @@
 (ns reagent-playground.animation
-  (:require [cljs.core.async :as async])
+  (:require [cljs.core.async            :as async]
+            [reagent-playground.session :as session])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
+(defn move
+  [[x y]]
+  (println x)
+  (let [idx     (rand-int (count [x y]))
+        move-fn (fn [i]
+                  (cond
+                    (= i 0)
+                    (inc i)
+
+                    (>= i 7)
+                    (dec i)
+                    
+                    :else
+                    ((rand-nth [inc dec]) i))
+                  (inc i))]
+    (update-in [x y] [idx] move-fn)))
+
+(defn animation-loop-handler
+  []
+  (println "hey there...")
+  (let [size        (session/get :size)
+        highlighted (move (session/get :highlighted))]
+    (session/put! :highlighted highlighted)))
+
 (defn animation-loop
-  [state]
+  []
   (go-loop []
     (async/<! (async/timeout 500))
-    (println "hey there...")
-    (let [size        (:size @state)
-          highlighted [(rand-int size) (rand-int size)]]
-      (swap! state assoc-in [:highlighted] highlighted))
+    (animation-loop-handler)
     (recur)))
 
-(defn row
-  [highlighted-x highlighted-y])
+(defn column
+  [x highlighted-x highlighted-y]
+  [:div.column
+   (for [y (range (session/get :size))]
+     (if (and (= highlighted-y y)
+              (= highlighted-x x))
+       [:div.box.highlighted]
+       [:div.box]))])
 
 (defn component
-  [state]
-  (when-not (:loop-running @state)
+  []
+  (when-not (session/get :loop-running)
     (do
-      (animation-loop state)
-      (swap! state assoc :loop-running true)))
-  (let [size                          (:size @state)
-        [highlighted-x highlighted-y] (:highlighted @state)
-        _ (println highlighted-y)
-        rows                          (for [x (range size)]
-                                        (if (= highlighted-x x)
-                                          [:div.box.highlighted]
-                                          [:div.box]))
-        columns                       (for [y (range size)]
-                                        (if (= highlighted-y y)
-                                          [:div.column.highlighted rows]
-                                          [:div.column rows]))]
-    columns))
+      (animation-loop)
+      (session/put! :loop-running true)))
+  [:div
+   (let [[highlighted-x highlighted-y] (session/get :highlighted)]
+     (for [x (range (session/get :size))]
+       (column x highlighted-x highlighted-y)))])
 
