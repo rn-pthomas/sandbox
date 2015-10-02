@@ -4,27 +4,24 @@
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (defn move
-  [[x y]]
-  (println x)
+  [[x y] upper]
   (let [idx     (rand-int (count [x y]))
         move-fn (fn [i]
                   (cond
                     (= i 0)
                     (inc i)
 
-                    (>= i 7)
+                    (>= i upper)
                     (dec i)
                     
                     :else
-                    ((rand-nth [inc dec]) i))
-                  (inc i))]
+                    ((rand-nth [inc dec]) i)))]
     (update-in [x y] [idx] move-fn)))
 
 (defn animation-loop-handler
   []
   (println "hey there...")
-  (let [size        (session/get :size)
-        highlighted (move (session/get :highlighted))]
+  (let [highlighted (move (session/get :highlighted) (dec (session/get :size)))]
     (session/put! :highlighted highlighted)))
 
 (defn animation-loop
