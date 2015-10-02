@@ -1,4 +1,4 @@
-(ns reagent-playground.debugger-cmp
+(ns reagent-playground.components.debugger-cmp
   (:require [reagent-playground.session :as session]))
 
 (defn make-debugger-line

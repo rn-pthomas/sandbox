@@ -2,10 +2,23 @@
   (:require [reagent.core :as reagent])
   (:refer-clojure :exclude [get swap!]))
 
-(defonce state (reagent/atom {:text         "Hello world!!!"
-                              :size         8
-                              :highlighted  [0 0]
-                              :loop-running false}))
+(defn make-initial-animation-state
+  [size]
+  (reduce (fn [acc [x y]]
+            (assoc-in acc [x y] {:highlighted false}))
+          {}
+          (for [x (range size)
+                y (range size)]
+            [x y])))
+
+(defonce state
+  (let [size 8]
+    (reagent/atom
+     {:text            "Hello world!!!"
+      :size            size
+      :highlighted     [0 0]
+      :animation-state (make-initial-animation-state size)
+      :loop-running    false})))
 
 (defn get
   [k & [default]]
@@ -21,4 +34,4 @@
 
 (defn update-in!
   [ks f & args]
-  (swap! state #(apply (partial update-in % ks f) args)))
+  (swap! state #(apply (partial clojure.core/update-in % ks f) args)))

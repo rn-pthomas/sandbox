@@ -20,8 +20,9 @@
 
 (defn animation-loop-handler
   []
-  (println "hey there...")
-  (let [highlighted (move (session/get :highlighted) (dec (session/get :size)))]
+  (let [highlighted (move (session/get :highlighted) (dec (session/get :size)))
+        [x y]       highlighted]
+    (session/update-in! [:animation-state x y :highlighted] not)
     (session/put! :highlighted highlighted)))
 
 (defn animation-loop
@@ -31,23 +32,10 @@
     (animation-loop-handler)
     (recur)))
 
-(defn column
-  [x highlighted-x highlighted-y]
-  [:div.column
-   (for [y (range (session/get :size))]
-     (if (and (= highlighted-y y)
-              (= highlighted-x x))
-       [:div.box.highlighted]
-       [:div.box]))])
-
-(defn component
+(defn start-animation-loop!
   []
   (when-not (session/get :loop-running)
     (do
       (animation-loop)
-      (session/put! :loop-running true)))
-  [:div
-   (let [[highlighted-x highlighted-y] (session/get :highlighted)]
-     (for [x (range (session/get :size))]
-       (column x highlighted-x highlighted-y)))])
+      (session/put! :loop-running true))))
 
