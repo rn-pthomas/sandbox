@@ -1,7 +1,12 @@
 (ns reagent-playground.debugger-cmp
   (:require [reagent-playground.session :as session]))
 
+(defn make-debugger-line
+  [^Keyword debug-key]
+  [:p (str (name debug-key) ": " (session/get debug-key))])
+
 (defn component
-  []
+  [& debug-keys]
   [:div
-   [:p (str "highlighted: " (session/get :highlighted))]])
+   (make-debugger-line :animation-state)
+   (make-debugger-line :highlighted)])
