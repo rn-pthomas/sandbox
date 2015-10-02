@@ -1,6 +1,7 @@
-(ns sound-viz.core)
+(ns sound-viz.core
+  (:require [quil.core :as q])
+  (:import [javax.sound.sampled AudioSystem AudioInputStream TargetDataLine]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defmacro get-audio-format
+  [& _]
+  )
