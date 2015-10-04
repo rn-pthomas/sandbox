@@ -15,7 +15,7 @@
   []
   [:div
    (animation-viz/component)
-   (debugger/component)
+   ;;(debugger/component)
    ])
 
 (defn main

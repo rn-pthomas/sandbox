@@ -5,8 +5,7 @@
   [x highlighted-x highlighted-y]
   [:div.column
    (for [y (range (session/get :size))]
-     (if (and (= highlighted-y y)
-              (= highlighted-x x))
+     (if (true? (session/get-in [:animation-state x y :highlighted]))
        [:div.box.highlighted]
        [:div.box]))])
 

@@ -14,8 +14,11 @@
   background-color: #252425;
   margin: 5px;
   border-radius: 4px;
+  /*transition: background-color 5s;*/
 }
 
 .box.highlighted {
-  background-color: #999;
+  /*background-color: #999;*/
+  background-color: #fff;
+  /*transition: background-color 10s;*/
 }
