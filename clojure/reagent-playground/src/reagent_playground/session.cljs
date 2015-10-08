@@ -41,3 +41,7 @@
 (defn update-in!
   [ks f & args]
   (swap! state #(apply (partial clojure.core/update-in % ks f) args)))
+
+(defn toggle
+  [ks]
+  (update-in! ks not))
