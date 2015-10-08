@@ -59,7 +59,8 @@
   []
   (go-loop []
     (async/<! (async/timeout 150))
-    (animation-loop-handler)
+    (when (session/get :loop-running)
+      (animation-loop-handler))
     (recur)))
 
 (defn start-animation-loop!

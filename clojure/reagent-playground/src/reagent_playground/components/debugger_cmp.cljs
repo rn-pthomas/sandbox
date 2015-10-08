@@ -21,14 +21,16 @@
   (let [enabled     (session/get-in [:components :debugger :app-state-enabled])
         button-text (if enabled
                       "Hide app state"
-                      "Show app state")]
-    [:div
-     [:input {:type     "button"
-              :value    button-text
-              :on-click #(session/toggle [:components :debugger :app-state-enabled])}]
-     (when enabled
-       (make-debugger-line :animation-state)
-       (make-debugger-line :highlighted))]))
+                      "Show app state")
+        base-cmp [:input {:type     "button"
+                          :value    button-text
+                          :on-click #(session/toggle [:components :debugger :app-state-enabled])}]]
+    (if enabled
+      (-> [:div base-cmp]
+          (conj (make-debugger-line :loop-running))
+          (conj (make-debugger-line :animation-state))
+          (conj (make-debugger-line :highlighted)))
+      [:div base-cmp])))
 
 (defn component
   [& debug-keys]
