@@ -4,15 +4,17 @@
 
 (defn make-initial-animation-state
   [size]
-  (reduce (fn [acc [x y]]
-            (assoc-in acc [x y] {:highlighted false}))
-          {}
-          (for [x (range size)
-                y (range size)]
-            [x y])))
+  (-> 
+   (reduce (fn [acc [x y]]
+             (assoc-in acc [x y] {:highlighted false}))
+           {}
+           (for [x (range size)
+                 y (range size)]
+             [x y]))
+   (assoc-in [0 0] {:highlighted true})))
 
 (defonce state
-  (let [size 18]
+  (let [size 21]
     (reagent/atom
      {:text            "Hello world!!!"
       :size            size
