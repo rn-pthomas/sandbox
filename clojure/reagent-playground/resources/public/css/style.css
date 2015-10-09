@@ -18,8 +18,7 @@
 }
 
 .box.highlighted {
-  /*background-color: #999;*/
-  background-color: #999;
+  background-color: #bbb;
   transition: background-color 1s;
 }
 
