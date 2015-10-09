@@ -15,7 +15,7 @@
        [x (- height y)]
 
        :diag-down
-       [(- width x) (- height y)]
+       [(dec (- width x)) (dec (- height y))]
 
        (println "error..."))))
   ([mirror-type [x y] size]
