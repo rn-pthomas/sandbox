@@ -1,5 +1,7 @@
 (ns reagent-playground.components.debugger-cmp
-  (:require [reagent-playground.session :as session]))
+  (:require [reagent-playground.session :as session]
+            [cljs.core.async            :as async])
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (defn make-debugger-line
   [^Keyword debug-key]
@@ -32,11 +34,19 @@
           (conj (make-debugger-line :highlighted)))
       [:div base-cmp])))
 
+(defn btn
+  [{:keys [text on-click]}]
+  [:div [:input {:type     "button"
+                 :value    text
+                 :on-click on-click}]])
+
 (defn component
   [& debug-keys]
   [:div
-   [:input {:type     "button"
-            :value    "Toggle loop running"
-            :on-click #(session/toggle [:loop-running])}]
-   [:btn {:onClick #(println "foof")}]
+   (btn {:text     "Toggle-loop-running"
+         :on-click #(session/toggle [:loop-running])})
+   (btn {:text     "Step"
+         :on-click #(session/update-in! [:channels :animation] (fn [anim-chan]
+                                                                 (go
+                                                                   (async/>! anim-chan :step))))})
    (app-state)])

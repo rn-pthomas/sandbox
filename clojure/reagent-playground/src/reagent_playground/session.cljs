@@ -1,9 +1,11 @@
 (ns reagent-playground.session
-  (:require [reagent.core :as reagent])
+  (:require [reagent.core    :as reagent]
+            [cljs.core.async :as async])
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
   (:refer-clojure :exclude [get swap! get-in]))
 
 (defn make-initial-animation-state
-  [size]
+  [size initial-highlighted]
   (-> 
    (reduce (fn [acc [x y]]
              (assoc-in acc [x y] {:highlighted false}))
@@ -11,15 +13,18 @@
            (for [x (range size)
                  y (range size)]
              [x y]))
-   (assoc-in [0 0] {:highlighted true})))
+   (assoc-in initial-highlighted {:highlighted true})))
 
 (defonce state
-  (let [size 21]
+  (let [size                10
+        initial-highlighted [(rand-int size) (rand-int size)]]
     (reagent/atom
      {:text            "Hello world!!!"
       :size            size
-      :highlighted     [0 0]
-      :animation-state (make-initial-animation-state size)
+      :highlighted     initial-highlighted
+      :timeout         500
+      :animation-state (make-initial-animation-state size initial-highlighted)
+      :channels        {:animation (async/chan 1)}
       :loop-running    false})))
 
 (defn get

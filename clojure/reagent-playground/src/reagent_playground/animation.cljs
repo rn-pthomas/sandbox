@@ -40,6 +40,17 @@
   [animation-state [x y]]
   (update-in animation-state [x y :highlighted] not))
 
+(defn apply-mirroring
+  [anim-state {:keys [highlighted size]}]
+  (let [{:keys [vertical horizontal diag-down]} (session/get :mirroring-directions)
+        highlighted                             (session/get :highlighted)]
+    (reduce (fn [direction]
+              (if direction
+                (toggle-highlighted anim-state (mirror direction highlighted size))
+                anim-state))
+            anim-state
+            [vertical horizontal diag-down])))
+
 (defn animation-loop-handler
   []
   (let [size        (session/get :size)
@@ -47,21 +58,23 @@
     (session/put! :highlighted highlighted)
     (session/update-in!
      [:animation-state]
-     (fn [anim-state]
-       (-> anim-state
-           (toggle-highlighted highlighted)
-           ;;(toggle-highlighted (mirror :vertical highlighted size))
-           (toggle-highlighted (mirror :diag-down highlighted size))
-           ;;(toggle-highlighted (mirror :horizontal highlighted size))
-           )))))
+     #(apply-mirroring % {:highlighted highlighted
+                          :size        size}))))
 
 (defn animation-loop
   []
-  (go-loop []
-    (async/<! (async/timeout 150))
-    (when (session/get :loop-running)
-      (animation-loop-handler))
-    (recur)))
+  (let [animation-chan (session/get-in [:channels :animation])
+        timeout        (session/get :timeout)]
+    (go-loop []
+      (println "waiting to read from animation-chan...")
+      (async/<! animation-chan)
+      (animation-loop-handler)
+      (recur))
+    (go-loop []
+      (async/<! (async/timeout timeout))
+      (when (session/get :loop-running)
+        (async/>! animation-chan :step))
+      (recur))))
 
 (defn start-animation-loop!
   []
