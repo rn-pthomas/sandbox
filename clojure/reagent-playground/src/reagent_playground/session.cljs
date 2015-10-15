@@ -28,8 +28,10 @@
       :loop-running    false})))
 
 (defn get
-  [k & [default]]
-  (clojure.core/get @state k default))
+  ([]
+   @state)
+  ([k & [default]]
+   (clojure.core/get @state k default)))
 
 (defn get-in
   [ks & [default]]
