@@ -19,8 +19,7 @@
   (let [size                10
         initial-highlighted [(rand-int size) (rand-int size)]]
     (reagent/atom
-     {:text            "Hello world!!!"
-      :size            size
+     {:size            size
       :highlighted     initial-highlighted
       :timeout         500
       :components      {:animation {:visible true}}
