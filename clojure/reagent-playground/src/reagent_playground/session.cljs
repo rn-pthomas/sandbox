@@ -23,6 +23,7 @@
       :size            size
       :highlighted     initial-highlighted
       :timeout         500
+      :components      {:animation {:visible true}}
       :animation-state (make-initial-animation-state size initial-highlighted)
       :channels        {:animation (async/chan 1)}
       :loop-running    false})))

@@ -43,6 +43,8 @@
 (defn component
   [& debug-keys]
   [:div
+   (btn {:text     "Toggle animation visible"
+         :on-click #(session/toggle [:components :animation :visible])})
    (btn {:text     "Toggle-loop-running"
          :on-click #(session/toggle [:loop-running])})
    (btn {:text     "Step"

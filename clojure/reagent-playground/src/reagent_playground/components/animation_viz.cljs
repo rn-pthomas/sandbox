@@ -11,7 +11,8 @@
 
 (defn component
   []
-  [:div
-   (let [[highlighted-x highlighted-y] (session/get :highlighted)]
-     (for [x (range (session/get :size))]
-       (column x highlighted-x highlighted-y)))])
+  (when (session/get-in [:components :animation :visible])
+    [:div
+     (let [[highlighted-x highlighted-y] (session/get :highlighted)]
+       (for [x (range (session/get :size))]
+         (column x highlighted-x highlighted-y)))]))
