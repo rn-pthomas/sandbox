@@ -14,10 +14,6 @@
      (when enabled
        [:p.debugger-line (str (name debug-key) ": " (session/get debug-key))])]))
 
-(defn toggle-animation-loop
-  []
-  (session/update-in! [:loop-running] not))
-
 (defn app-state
   []
   (let [enabled     (session/get-in [:components :debugger :app-state-enabled])

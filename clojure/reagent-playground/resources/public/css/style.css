@@ -11,9 +11,7 @@
   height: 30px;
   width: 30px;
   background-color: #252425;
-  /*margin: 5px;*/
-  /*border-radius: 4px;*/
-  /*transition: background-color 2s;*/
+  transition: background-color 1s;
 }
 
 .box.highlighted {

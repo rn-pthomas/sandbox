@@ -2,7 +2,7 @@
   (:require [reagent-playground.session :as session]))
 
 (defn column
-  [x highlighted-x highlighted-y]
+  [x]
   [:div.column
    (for [y (range (session/get :size))]
      (if (true? (session/get-in [:animation-state x y :highlighted]))
@@ -13,6 +13,5 @@
   []
   (when (session/get-in [:components :animation :visible])
     [:div
-     (let [[highlighted-x highlighted-y] (session/get :highlighted)]
-       (for [x (range (session/get :size))]
-         (column x highlighted-x highlighted-y)))]))
+     (for [x (range (session/get :size))]
+       (column x))]))
