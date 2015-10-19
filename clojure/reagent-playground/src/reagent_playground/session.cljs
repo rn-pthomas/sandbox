@@ -20,8 +20,8 @@
                                 :mirroring-directions mirroring-directions})))
 
 (defonce state
-  (let [size                10
-        initial-highlighted [(rand-int size) (rand-int size)]
+  (let [size                 10
+        initial-highlighted  [(rand-int size) (rand-int size)]
         mirroring-directions [:horizontal :vertical :diag-down]]
     (reagent/atom
      {:size                 size
