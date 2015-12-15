@@ -36,6 +36,11 @@
   )
 
 (comment
+
+  (postal/send-message {:from    "pt.notifications@pat.thomas"
+                        :to      ["patthomassoftware@gmail.com"]
+                        :subject "automatic notification"
+                        :body    "test"})
   (def foo (make-http-reqs))
   (first (:r5 foo))
   (locate-listings :r5)
