@@ -1,4 +1,4 @@
-(ns experiments.core)
+(ns experiments.server.core)
 
 (defn foo
   "I don't do a whole lot."
