@@ -3,13 +3,17 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [;; client-side
+  :dependencies [;; general
+                 [prismatic/schema "1.0.4"]
+
+                 ;; client-side
                  [org.clojure/clojurescript "1.7.170"]
                  [reagent                   "0.5.1"]
 
                  ;; server-side
                  [org.clojure/clojure        "1.7.0"]
                  [http-kit                   "2.1.18"]
+                 [compojure                  "1.4.0"]
                  [org.clojure/core.async     "0.2.374"]
                  [org.clojure/tools.nrepl    "0.2.12"]
                  [org.clojure/java.jdbc      "0.3.5"]
