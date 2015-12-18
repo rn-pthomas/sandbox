@@ -21,7 +21,7 @@
 (defn main
   []
   (server/run-server #'websocket-handler {:port 9091})
-  (server/run-server #'app-routes {:port 9090}))
+  (server/run-server #'app-routes        {:port 9090}))
 
 (comment
   (main)
