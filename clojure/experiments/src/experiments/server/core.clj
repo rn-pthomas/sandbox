@@ -16,6 +16,7 @@
 
 (compojure/defroutes app-routes
   (compojure/GET "/ping" [] "pong")
+  (compojure/GET "/ws" [request] #'websocket-handler)
   (route/not-found "<p>Error, page not found.</p>"))
 
 (defn main

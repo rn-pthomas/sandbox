@@ -65876,15 +65876,60 @@ goog.require("cljs.core");
 goog.require("experiments.app.xhr");
 goog.require("reagent.core");
 cljs.core.enable_console_print_BANG_.call(null);
-experiments.app.core.app_state = reagent.core.atom.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "socket", "socket", 59137063), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "connected", "connected", -169833045), false], null)], null));
+experiments.app.core.app_state = reagent.core.atom.call(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "socket", "socket", 59137063), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "connected", "connected", -169833045), false], null), new cljs.core.Keyword(null, "dom", "dom", -1236537922), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "websocket-test-input", "websocket-test-input", -1131182561), ""], null)], null));
+experiments.app.core.input_evt__GT_text = function experiments$app$core$input_evt__GT_text(evt) {
+  return evt.target.value;
+};
+experiments.app.core.handle_ws_message = function experiments$app$core$handle_ws_message(msg) {
+  return cljs.core.println.call(null, "implement handle-ws-message:", msg);
+};
 experiments.app.core.main_component = function experiments$app$core$main_component() {
-  return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1057191632), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "button", "button", 1456579943), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "on-click", "on-click", 1632826543), function(_) {
+  return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1057191632), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div#websocket-test", "div#websocket-test", -1911139465), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "input", "input", 556931961), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, 
+  "type", "type", 1174270348), "text", new cljs.core.Keyword(null, "value", "value", 305978217), cljs.core.get_in.call(null, cljs.core.deref.call(null, experiments.app.core.app_state), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "dom", "dom", -1236537922), new cljs.core.Keyword(null, "websocket-test-input", "websocket-test-input", -1131182561)], null)), new cljs.core.Keyword(null, "on-change", "on-change", -732046149), function(evt) {
+    return cljs.core.swap_BANG_.call(null, experiments.app.core.app_state, cljs.core.assoc_in, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "dom", "dom", -1236537922), new cljs.core.Keyword(null, "websocket-test-input", "websocket-test-input", -1131182561)], null), experiments.app.core.input_evt__GT_text.call(null, evt));
+  }], null)], null), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "button", "button", 1456579943), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "on-click", "on-click", 1632826543), function(msg) {
+    return experiments.app.core.send_ws_message.call(null, msg);
+  }], null), "test websocket"], null)], null), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "button", "button", 1456579943), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "on-click", "on-click", 1632826543), function(_) {
     return experiments.app.xhr.make_xhr.call(null, new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "method", "method", 55703592), "post", new cljs.core.Keyword(null, "url", "url", 276297046), "ping", new cljs.core.Keyword(null, "on-complete", "on-complete", -1531183971), function(resp) {
       return resp;
     }], null));
   }], null), "ping"], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "h1", "h1", -1896887462), "hey"], null)], null);
 };
+experiments.app.core.send_ws_message = function experiments$app$core$send_ws_message(msg) {
+  var ws = cljs.core.get_in.call(null, cljs.core.deref.call(null, experiments.app.core.app_state), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "socket", "socket", 59137063), new cljs.core.Keyword(null, "val", "val", 128701612)], null));
+  var data = window.JSON.strigify(cljs.core.clj__GT_js.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "msg", "msg", -1386103444), msg], null)));
+  return ws.send(data);
+};
+experiments.app.core.init_websocket = function experiments$app$core$init_websocket(url) {
+  var ws = new WebSocket(url);
+  return cljs.core.map.call(null, function(ws) {
+    return function(action, handler) {
+      return ws[action] = handler;
+    };
+  }(ws), new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onopen", function(ws) {
+    return function() {
+      return cljs.core.println.call(null, "open");
+    };
+  }(ws)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onclose", function(ws) {
+    return function() {
+      return cljs.core.println.call(null, "close");
+    };
+  }(ws)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onerror", function(ws) {
+    return function(err) {
+      return cljs.core.println.call(null, "error:", err);
+    };
+  }(ws)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["onmessage", function(ws) {
+    return function(msg) {
+      var data = msg.data;
+      var d = window.JSON.parse(data);
+      var m = d.m;
+      return experiments.app.core.handle_ws_message.call(null, m);
+    };
+  }(ws)], null)], null));
+};
 experiments.app.core.main = function experiments$app$core$main() {
+  var ws = experiments.app.core.init_websocket.call(null, "ws://localhost:3141/api/ws");
+  cljs.core.swap_BANG_.call(null, experiments.app.core.app_state, cljs.core.assoc_in, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "socket", "socket", 59137063), new cljs.core.Keyword(null, "val", "val", 128701612)], null), ws);
   return reagent.core.render_component.call(null, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [experiments.app.core.main_component], null), document.body);
 };
 experiments.app.core.main.call(null);
