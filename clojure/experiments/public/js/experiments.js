@@ -65811,66 +65811,66 @@ experiments.app.xhr.meths = new cljs.core.PersistentArrayMap(null, 4, [new cljs.
 experiments.app.xhr.base_url = "http://localhost:3141/api/";
 experiments.app.xhr.XhrSchema = cljs.core.PersistentArrayMap.fromArray([schema.core.required_key.call(null, new cljs.core.Keyword(null, "method", "method", 55703592)), schema.core.Str, schema.core.required_key.call(null, new cljs.core.Keyword(null, "url", "url", 276297046)), schema.core.Str, schema.core.required_key.call(null, new cljs.core.Keyword(null, "on-complete", "on-complete", -1531183971)), schema.core.Any, schema.core.optional_key.call(null, new cljs.core.Keyword(null, "data", "data", -232669377)), 
 cljs.core.PersistentArrayMap.fromArray([schema.core.Any, schema.core.Any], true, false)], true, false);
-var ufv___9416 = schema.utils.use_fn_validation;
-var output_schema9407_9417 = schema.core.Any;
-var input_schema9408_9418 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [schema.core.one.call(null, experiments.app.xhr.XhrSchema, cljs.core.with_meta(new cljs.core.Symbol(null, "xhr-schema", "xhr-schema", -1032810506, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "schema", "schema", -1582001791), new cljs.core.Symbol(null, "XhrSchema", "XhrSchema", 180106263, null)], null)))], null);
-var input_checker9409_9419 = new cljs.core.Delay(function(ufv___9416, output_schema9407_9417, input_schema9408_9418) {
+var ufv___9679 = schema.utils.use_fn_validation;
+var output_schema9670_9680 = schema.core.Any;
+var input_schema9671_9681 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [schema.core.one.call(null, experiments.app.xhr.XhrSchema, cljs.core.with_meta(new cljs.core.Symbol(null, "xhr-schema", "xhr-schema", -1032810506, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "schema", "schema", -1582001791), new cljs.core.Symbol(null, "XhrSchema", "XhrSchema", 180106263, null)], null)))], null);
+var input_checker9672_9682 = new cljs.core.Delay(function(ufv___9679, output_schema9670_9680, input_schema9671_9681) {
   return function() {
-    return schema.core.checker.call(null, input_schema9408_9418);
+    return schema.core.checker.call(null, input_schema9671_9681);
   };
-}(ufv___9416, output_schema9407_9417, input_schema9408_9418), null);
-var output_checker9410_9420 = new cljs.core.Delay(function(ufv___9416, output_schema9407_9417, input_schema9408_9418, input_checker9409_9419) {
+}(ufv___9679, output_schema9670_9680, input_schema9671_9681), null);
+var output_checker9673_9683 = new cljs.core.Delay(function(ufv___9679, output_schema9670_9680, input_schema9671_9681, input_checker9672_9682) {
   return function() {
-    return schema.core.checker.call(null, output_schema9407_9417);
+    return schema.core.checker.call(null, output_schema9670_9680);
   };
-}(ufv___9416, output_schema9407_9417, input_schema9408_9418, input_checker9409_9419), null);
-var ret__8558__auto___9421 = experiments.app.xhr.make_xhr = function(ufv___9416, output_schema9407_9417, input_schema9408_9418, input_checker9409_9419, output_checker9410_9420) {
-  return function experiments$app$xhr$make_xhr(G__9411) {
-    var validate__7030__auto__ = ufv___9416.get_cell();
+}(ufv___9679, output_schema9670_9680, input_schema9671_9681, input_checker9672_9682), null);
+var ret__8558__auto___9684 = experiments.app.xhr.make_xhr = function(ufv___9679, output_schema9670_9680, input_schema9671_9681, input_checker9672_9682, output_checker9673_9683) {
+  return function experiments$app$xhr$make_xhr(G__9674) {
+    var validate__7030__auto__ = ufv___9679.get_cell();
     if (cljs.core.truth_(validate__7030__auto__)) {
-      var args__7031__auto___9422 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [G__9411], null);
-      var temp__4425__auto___9423 = cljs.core.deref.call(null, input_checker9409_9419).call(null, args__7031__auto___9422);
-      if (cljs.core.truth_(temp__4425__auto___9423)) {
-        var error__7032__auto___9424 = temp__4425__auto___9423;
-        throw cljs.core.ex_info.call(null, schema.utils.format_STAR_.call(null, "Input to %s does not match schema: %s", cljs.core.with_meta(new cljs.core.Symbol(null, "make-xhr", "make-xhr", 9223386, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "schema", "schema", -1582001791), new cljs.core.Symbol("schema.core", "Any", "schema.core/Any", -1891898271, null)], null)), cljs.core.pr_str.call(null, error__7032__auto___9424)), new cljs.core.PersistentArrayMap(null, 4, 
-        [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword("schema.core", "error", "schema.core/error", 1991454308), new cljs.core.Keyword(null, "schema", "schema", -1582001791), input_schema9408_9418, new cljs.core.Keyword(null, "value", "value", 305978217), args__7031__auto___9422, new cljs.core.Keyword(null, "error", "error", -978969032), error__7032__auto___9424], null));
+      var args__7031__auto___9685 = new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [G__9674], null);
+      var temp__4425__auto___9686 = cljs.core.deref.call(null, input_checker9672_9682).call(null, args__7031__auto___9685);
+      if (cljs.core.truth_(temp__4425__auto___9686)) {
+        var error__7032__auto___9687 = temp__4425__auto___9686;
+        throw cljs.core.ex_info.call(null, schema.utils.format_STAR_.call(null, "Input to %s does not match schema: %s", cljs.core.with_meta(new cljs.core.Symbol(null, "make-xhr", "make-xhr", 9223386, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "schema", "schema", -1582001791), new cljs.core.Symbol("schema.core", "Any", "schema.core/Any", -1891898271, null)], null)), cljs.core.pr_str.call(null, error__7032__auto___9687)), new cljs.core.PersistentArrayMap(null, 4, 
+        [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword("schema.core", "error", "schema.core/error", 1991454308), new cljs.core.Keyword(null, "schema", "schema", -1582001791), input_schema9671_9681, new cljs.core.Keyword(null, "value", "value", 305978217), args__7031__auto___9685, new cljs.core.Keyword(null, "error", "error", -978969032), error__7032__auto___9687], null));
       } else {
       }
     } else {
     }
     var o__7033__auto__ = function() {
-      var xhr_schema = G__9411;
+      var xhr_schema = G__9674;
       while (true) {
-        var map__9414 = xhr_schema;
-        var map__9414__$1 = (!(map__9414 == null) ? map__9414.cljs$lang$protocol_mask$partition0$ & 64 || map__9414.cljs$core$ISeq$ ? true : false : false) ? cljs.core.apply.call(null, cljs.core.hash_map, map__9414) : map__9414;
-        var method = cljs.core.get.call(null, map__9414__$1, new cljs.core.Keyword(null, "method", "method", 55703592));
-        var data = cljs.core.get.call(null, map__9414__$1, new cljs.core.Keyword(null, "data", "data", -232669377));
-        var url = cljs.core.get.call(null, map__9414__$1, new cljs.core.Keyword(null, "url", "url", 276297046));
-        var on_complete = cljs.core.get.call(null, map__9414__$1, new cljs.core.Keyword(null, "on-complete", "on-complete", -1531183971));
+        var map__9677 = xhr_schema;
+        var map__9677__$1 = (!(map__9677 == null) ? map__9677.cljs$lang$protocol_mask$partition0$ & 64 || map__9677.cljs$core$ISeq$ ? true : false : false) ? cljs.core.apply.call(null, cljs.core.hash_map, map__9677) : map__9677;
+        var method = cljs.core.get.call(null, map__9677__$1, new cljs.core.Keyword(null, "method", "method", 55703592));
+        var data = cljs.core.get.call(null, map__9677__$1, new cljs.core.Keyword(null, "data", "data", -232669377));
+        var url = cljs.core.get.call(null, map__9677__$1, new cljs.core.Keyword(null, "url", "url", 276297046));
+        var on_complete = cljs.core.get.call(null, map__9677__$1, new cljs.core.Keyword(null, "on-complete", "on-complete", -1531183971));
         var xhr = new goog.net.XhrIo;
-        goog.events.listen(xhr, goog.net.EventType.COMPLETE, function(map__9414, map__9414__$1, method, data, url, on_complete, xhr, validate__7030__auto__, ufv___9416, output_schema9407_9417, input_schema9408_9418, input_checker9409_9419, output_checker9410_9420) {
+        goog.events.listen(xhr, goog.net.EventType.COMPLETE, function(map__9677, map__9677__$1, method, data, url, on_complete, xhr, validate__7030__auto__, ufv___9679, output_schema9670_9680, input_schema9671_9681, input_checker9672_9682, output_checker9673_9683) {
           return function(e) {
             return on_complete.call(null, xhr.getResponseText());
           };
-        }(map__9414, map__9414__$1, method, data, url, on_complete, xhr, validate__7030__auto__, ufv___9416, output_schema9407_9417, input_schema9408_9418, input_checker9409_9419, output_checker9410_9420));
+        }(map__9677, map__9677__$1, method, data, url, on_complete, xhr, validate__7030__auto__, ufv___9679, output_schema9670_9680, input_schema9671_9681, input_checker9672_9682, output_checker9673_9683));
         return xhr.send([cljs.core.str(experiments.app.xhr.base_url), cljs.core.str(url)].join(""), cljs.core.get.call(null, experiments.app.xhr.meths, method), cljs.core.truth_(data) ? cljs.core.pr_str.call(null, data) : null, {"Content-Type":"application/json"});
         break;
       }
     }();
     if (cljs.core.truth_(validate__7030__auto__)) {
-      var temp__4425__auto___9425 = cljs.core.deref.call(null, output_checker9410_9420).call(null, o__7033__auto__);
-      if (cljs.core.truth_(temp__4425__auto___9425)) {
-        var error__7032__auto___9426 = temp__4425__auto___9425;
-        throw cljs.core.ex_info.call(null, schema.utils.format_STAR_.call(null, "Output of %s does not match schema: %s", cljs.core.with_meta(new cljs.core.Symbol(null, "make-xhr", "make-xhr", 9223386, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "schema", "schema", -1582001791), new cljs.core.Symbol("schema.core", "Any", "schema.core/Any", -1891898271, null)], null)), cljs.core.pr_str.call(null, error__7032__auto___9426)), new cljs.core.PersistentArrayMap(null, 4, 
-        [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword("schema.core", "error", "schema.core/error", 1991454308), new cljs.core.Keyword(null, "schema", "schema", -1582001791), output_schema9407_9417, new cljs.core.Keyword(null, "value", "value", 305978217), o__7033__auto__, new cljs.core.Keyword(null, "error", "error", -978969032), error__7032__auto___9426], null));
+      var temp__4425__auto___9688 = cljs.core.deref.call(null, output_checker9673_9683).call(null, o__7033__auto__);
+      if (cljs.core.truth_(temp__4425__auto___9688)) {
+        var error__7032__auto___9689 = temp__4425__auto___9688;
+        throw cljs.core.ex_info.call(null, schema.utils.format_STAR_.call(null, "Output of %s does not match schema: %s", cljs.core.with_meta(new cljs.core.Symbol(null, "make-xhr", "make-xhr", 9223386, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "schema", "schema", -1582001791), new cljs.core.Symbol("schema.core", "Any", "schema.core/Any", -1891898271, null)], null)), cljs.core.pr_str.call(null, error__7032__auto___9689)), new cljs.core.PersistentArrayMap(null, 4, 
+        [new cljs.core.Keyword(null, "type", "type", 1174270348), new cljs.core.Keyword("schema.core", "error", "schema.core/error", 1991454308), new cljs.core.Keyword(null, "schema", "schema", -1582001791), output_schema9670_9680, new cljs.core.Keyword(null, "value", "value", 305978217), o__7033__auto__, new cljs.core.Keyword(null, "error", "error", -978969032), error__7032__auto___9689], null));
       } else {
       }
     } else {
     }
     return o__7033__auto__;
   };
-}(ufv___9416, output_schema9407_9417, input_schema9408_9418, input_checker9409_9419, output_checker9410_9420);
-schema.utils.declare_class_schema_BANG_.call(null, schema.utils.fn_schema_bearer.call(null, experiments.app.xhr.make_xhr), schema.core.__GT_FnSchema.call(null, output_schema9407_9417, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [input_schema9408_9418], null)));
+}(ufv___9679, output_schema9670_9680, input_schema9671_9681, input_checker9672_9682, output_checker9673_9683);
+schema.utils.declare_class_schema_BANG_.call(null, schema.utils.fn_schema_bearer.call(null, experiments.app.xhr.make_xhr), schema.core.__GT_FnSchema.call(null, output_schema9670_9680, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [input_schema9671_9681], null)));
 goog.provide("experiments.app.core");
 goog.require("cljs.core");
 goog.require("experiments.app.xhr");
