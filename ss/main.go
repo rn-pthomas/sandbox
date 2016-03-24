@@ -8,6 +8,8 @@ import (
 	//"io/ioutil"
 	"log"
 	"os"
+	"net/http"
+	"strconv"
 	//"strings"
 )
 
@@ -39,6 +41,21 @@ func readStates() []StateData {
 	return states
 }
 
+func handleRequest(r *http.Request) string {
+	r.ParseForm()
+	latitude, _ := strconv.ParseFloat(r.FormValue("latitude"), 64)
+	longitude, _ := strconv.ParseFloat(r.FormValue("longitude"), 64)
+	fmt.Printf("latitude => %q\n", latitude)
+	fmt.Printf("longitude => %q\n", longitude)
+	return "pong!"
+}
+
 func main() {
-	states := readStates()
+	//states := readStates()
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "%q", handleRequest(r))
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
