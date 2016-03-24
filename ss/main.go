@@ -16,7 +16,9 @@ type StateData struct {
 	Border [][2]float32
 }
 
-func readStates() {
+func readStates() []StateData {
+	states := []StateData{}
+
 	file, err := os.Open("./states.json")
 	if err != nil {
 		log.Fatal(err)
@@ -31,11 +33,12 @@ func readStates() {
 		if err := json.Unmarshal(scanner.Bytes(), &stateData); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(stateData.State)
-		fmt.Println(stateData.Border)
+		states = append(states, stateData)
 	}
+
+	return states
 }
 
 func main() {
-	readStates()
+	states := readStates()
 }
