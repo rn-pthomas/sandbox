@@ -46,12 +46,12 @@ func insideBoundaries(x float64, y float64, poly Polygon) bool {
 	inside := false
 	var xints float64
 
-	p1x := poly[0][0]
-	p1y := poly[0][1]
+	p1x := poly[0][1]
+	p1y := poly[0][0]
 
 	for i := 0; i <= n; i++ {
-		p2x := poly[i%n][0]
-		p2y := poly[i%n][1]
+		p2x := poly[i%n][1]
+		p2y := poly[i%n][0]
 		if y > math.Min(p1y, p2y) {
 			if y <= math.Max(p1y, p2y) {
 				if x <= math.Max(p1x, p2x) {
