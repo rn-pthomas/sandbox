@@ -6,15 +6,15 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 	"net/http"
+	"os"
 	"strconv"
 )
 
-type Coordinate [2] float64
+type Coordinate [2]float64
 type Polygon []Coordinate
 type StateData struct {
-	State string
+	State  string
 	Border Polygon
 }
 
@@ -45,18 +45,18 @@ func insideBoundaries(x float64, y float64, poly Polygon) bool {
 	n := len(poly)
 	inside := false
 	var xints float64
-	
+
 	p1x := poly[0][0]
 	p1y := poly[0][1]
 
 	for i := 0; i <= n; i++ {
-		p2x := poly[i % n][0]
-		p2y := poly[i % n][1]
+		p2x := poly[i%n][0]
+		p2y := poly[i%n][1]
 		if y > math.Min(p1y, p2y) {
 			if y <= math.Max(p1y, p2y) {
 				if x <= math.Max(p1x, p2x) {
 					if p1y != p2y {
-						xints = (y-p1y)*(p2x-p1x)/(p2y-p1y)+p1x
+						xints = (y-p1y)*(p2x-p1x)/(p2y-p1y) + p1x
 					}
 					if p1x == p2x || x <= xints {
 						inside = !inside
@@ -67,7 +67,7 @@ func insideBoundaries(x float64, y float64, poly Polygon) bool {
 		p1x = p2x
 		p1y = p2y
 	}
-	
+
 	return inside
 }
 
