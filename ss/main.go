@@ -97,6 +97,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%q", handleRequest(r, states))
 	})
+	
 	fmt.Println("server running on port 8080...\n")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
