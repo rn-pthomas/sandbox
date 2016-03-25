@@ -75,7 +75,6 @@ func findMatchingState(latitude float64, longitude float64, states []StateData) 
 	var match string
 	for i := 0; i < len(states); i++ {
 		state := states[i]
-		fmt.Printf("testing state %s\n", state.State)
 		if insideBoundaries(latitude, longitude, state.Border) {
 			match = state.State
 			break
@@ -84,12 +83,12 @@ func findMatchingState(latitude float64, longitude float64, states []StateData) 
 	return match
 }
 
-func handleRequest(r *http.Request, states []StateData) string {
+func handleRequest(r *http.Request, states []StateData) []string {
 	r.ParseForm()
 	latitude, _ := strconv.ParseFloat(r.FormValue("latitude"), 64)
 	longitude, _ := strconv.ParseFloat(r.FormValue("longitude"), 64)
 
-	return findMatchingState(latitude, longitude, states)
+	return []string{findMatchingState(latitude, longitude, states)}
 }
 
 func main() {
