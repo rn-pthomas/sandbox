@@ -85,8 +85,14 @@ func findMatchingState(latitude float64, longitude float64, states []StateData) 
 
 func handleRequest(r *http.Request, states []StateData) []string {
 	r.ParseForm()
-	latitude, _ := strconv.ParseFloat(r.FormValue("latitude"), 64)
-	longitude, _ := strconv.ParseFloat(r.FormValue("longitude"), 64)
+	latitude, err := strconv.ParseFloat(r.FormValue("latitude"), 64)
+	if err != nil {
+		return []string{"Error, latitude must be provided"}
+	}
+	longitude, err := strconv.ParseFloat(r.FormValue("longitude"), 64)
+	if err != nil {
+		return []string{"Error, longitude must be provided"}
+	}
 
 	return []string{findMatchingState(latitude, longitude, states)}
 }
