@@ -1,3 +1,5 @@
+// author: Pat Thomas
+
 package main
 
 import (
