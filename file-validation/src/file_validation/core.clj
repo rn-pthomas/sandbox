@@ -19,13 +19,28 @@
       (update-in state [target] conj columns)
       (assoc state target [columns]))))
 
-(defn count-dup-phone-numbers
-  [lines]
-  (let [phone-number-idx 1]
+(defn make-track-dup-reducer
+  [target-idx]
+  (fn [lines]
     (reducers/reduce (fn [acc line]
-                       (track-dup acc phone-number-idx line))
+                       (track-dup acc target-idx line))
                      {}
                      lines)))
+
+(def indices
+  {:account-number 0
+   :phone-number   1})
+
+(defmacro def-dup-reducer
+  [fn-name index-key]
+  `(def ~fn-name
+     (make-track-dup-reducer ~(index-key indices))))
+
+(def-dup-reducer count-dup-account-numbers :account-number)
+(def-dup-reducer count-dup-phone-numbers :phone-number)
+
+(def count-dups (comp count-dup-account-numbers
+                      count-dup-phone-numbers))
 
 (comment
   (let [lines (iota/seq "fixtures/001.tab")]
