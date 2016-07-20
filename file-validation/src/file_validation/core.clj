@@ -1,7 +1,8 @@
 (ns file-validation.core
   (:require [iota                  :as iota]
             [clojure.string        :as string]
-            [clojure.core.reducers :as reducers]
+            [clojure.core.reducers :as r]
+            [clojure.core.async    :as async]
             [schema.core           :as s]))
 
 (defn split-line
@@ -12,15 +13,29 @@
   [lines]
   (drop 1 lines))
 
-(def ValidAccountNumber (s/pred (fn [st]
-                                  (and (string? st)
-                                       (= (count st) 8)))
-                                :valid-account-number?))
+(comment
+  (let [validator-name :valid-account-number?
+        parts          ]
+    )
+)
 
-(def ValidPhoneNumber (s/pred (fn [n] 
-                                (and (string? n)
-                                     (= (count n) 11)))
-                              :valid-phone-number?))
+(defmacro defvalidator
+  [^clojure.lang.Keyword validator-name & body]
+  (let [symbol-name (symbol (string/join "" (map #(string/capitalize %) (-> validator-name
+                                                                            name
+                                                                            (string/replace #"\?" "")
+                                                                            (string/split #"-")))))]
+    `(def ~symbol-name (s/pred (fn [~'it]
+                                 ~@body)
+                               ~validator-name))))
+
+(defvalidator :valid-account-number?
+  (and (string? it)
+       (= (count it) 8)))
+
+(defvalidator :valid-phone-number?
+  (and (string? it)
+       (= (count it) 11)))
 
 (def indices
   {:account-number 0
@@ -52,18 +67,37 @@
 
 (defn process-file
   [lines]
-  (let [main-reducer (fn [split-lines] (reducers/reduce (fn [acc l]
-                                                          (conj acc (accumulate-errors l)))
-                                                        []
-                                                        split-lines))]
-    (->> lines
-         remove-header
-         (reducers/map #(split-line %))
-         main-reducer)))
+  (let [validation-reducer      (fn [split-lines]
+                                  (r/fold
+                                   (fn [acc l]
+                                     (conj acc (accumulate-errors l)))
+                                   []
+                                   split-lines))
+        chunks                  (->> lines
+                                     remove-header
+                                     (partition 1000))
+        num-chunks              (count chunks)
+        num-completed           (atom 0)
+        num-lines               (count lines)
+        validation-results-chan (async/chan)
+        validation-results-atom (atom [])]
+    (doseq [chunk chunks]
+      (async/go
+        (let [chunk-id           (str (java.util.UUID/randomUUID))
+              num-lines-in-chunk (count chunk)]
+          (async/>! validation-results-chan (validation-reducer (r/map #(split-line %)
+                                                                       chunk)))
+          (swap! num-completed + num-lines-in-chunk)
+          (println (format "[%s] %s lines completed out of %s." chunk-id @num-completed num-lines))))
+      (async/go
+        (swap! validation-results-atom conj (async/<! validation-results-chan))))
+    (loop []
+      (if (>= @num-completed num-lines)
+        @validation-results-atom
+        (recur)))))
 
 (comment
-  (let [lines (iota/seq "fixtures/003.tab")
+  (let [lines   (iota/vec "fixtures/003.tab")
         results (process-file lines)]
-    (not (empty? results)))
-
+    (count results))
   )
