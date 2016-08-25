@@ -1,6 +1,14 @@
-(ns streaming-data-playground.core)
+(ns streaming-data-playground.core
+  ;;(:require [kafka-clj.client :as kafka])
+  (:require []))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(comment
+  (def c (kafka/create-connector [{:host "localhost"
+                                   :port 9092}]
+                                 {:flush-on-write true}))
+
+  (let [msg1kb (.getBytes (clojure.string/join "," (range 278)))]
+    (doseq [i (range 100)]
+      (kafka/send-msg c "data" msg1kb)))
+  
+  )
