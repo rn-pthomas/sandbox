@@ -3,20 +3,46 @@
 
 (enable-console-print!)
 
-(println "This text is printed from src/sudoku-solver/core.cljs. Go ahead and edit it and see reloading in action.")
+(defonce app-state
+  (atom {:grid    (for [x (range 9)
+                        y (range 9)]
+                    {:x   x
+                     :y   y
+                     :num nil})
+         :history []}))
 
-;; define your app data so that it doesn't get over-written on reload
+(defn make-style
+  [x y]
+  (let [factor 55]
+    {:top  (* x factor)
+     :left (* y factor)}))
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defn cell
+  [x y]
+  [:input.cell {:type      "text"
+                :maxLength 1
+                :data-x    x
+                :data-y    y
+                
+                :style     (make-style x y)}])
 
-
-(defn hello-world []
+(defn app-grid
+  []
   [:div
-   [:h1 (:text @app-state)]
-   [:h3 "Edit this and watch it change!"]])
+   (for [x (range 9)
+         y (range 9)]
+     (cell x y))])
 
-(reagent/render-component [hello-world]
-                          (. js/document (getElementById "app")))
+(defn app-container
+  []
+  (app-grid))
+
+(defn main
+  []
+  (reagent/render-component [app-container]
+                            (. js/document (getElementById "app"))))
+
+(main)
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
