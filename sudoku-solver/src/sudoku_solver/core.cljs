@@ -5,15 +5,24 @@
 
 (defonce height-and-width 9)
 
+(defn mk-initial-state
+  []
+  {:grid    (reduce (fn [acc [x y]]
+                      (assoc acc [x y] nil))
+                    {}
+                    (for [x (range height-and-width)
+                          y (range height-and-width)]
+                      [x y]))
+   :history []
+   :counter 0
+   :position {:x 0 :y 0}})
+
 (defonce app-state
-  (r/atom {:grid (reduce (fn [acc [x y]]
-                         (assoc acc [x y] nil))
-                       {}
-                       (for [x (range height-and-width)
-                             y (range height-and-width)]
-                         [x y]))
-           :history []
-           :counter 0}))
+  (r/atom (mk-initial-state)))
+
+(defn reset-app-state!
+  []
+  (reset! app-state (mk-initial-state)))
 
 (defonce coord-list
   (for [x (range height-and-width)
@@ -33,13 +42,26 @@
        :y   y
        :num (get grid [x y])})))
 
+(defn find-first-empty
+  []
+  (let [grid            (:grid @app-state)
+        first-empty (->> coord-list
+                         (filter (fn [[x y]]
+                                   (nil? (get grid [x y]))))
+                         first)
+        [x y]           first-empty]
+    (when first-empty
+      {:x   x
+       :y   y
+       :num (get grid [x y])})))
+
 (defn gather-column
   [{:keys [x]}]
   (let [grid (:grid @app-state)]
     (map (fn [n]
            {:x   x
             :y   n
-            :val (get grid [x n])})
+            :num (get grid [x n])})
          (range height-and-width))))
 
 (defn gather-row
@@ -48,7 +70,7 @@
     (map (fn [n]
            {:x   n
             :y   y
-            :val (get grid [n y])})
+            :num (get grid [n y])})
          (range height-and-width))))
 
 (defn gather-box
@@ -63,38 +85,50 @@
     (map (fn [[x y]]
            {:x x
             :y y
-            :val (get grid [x y])})
+            :num (get grid [x y])})
          coords)))
 
-(defn number-not-valid?
+(defn number-valid?
   [{:keys [x y num] :as params}]
   (let [column   (gather-column params)
         row      (gather-row params)
         box      (gather-box params)
-        all-vals (->> [(map :val column) (map :val row) (map :val box)]
+        all-vals (->> [column row box]
                       flatten
-                      distinct
+                      set
+                      (remove #{nil params})
+                      (map :num)
                       (filter #(not (nil? %)))
                       set)]
-    (contains? all-vals num)))
+    (not (contains? all-vals num))))
+
+(defn track-update
+  [{:keys [x y num]}]
+  (swap! app-state update-in [:grid [x y]] (fn [_]
+                                             num)))
 
 (defn step
   []
-  (when-let [first-non-empty (find-first-non-empty)]
-    (if (number-not-valid? first-non-empty)
-      :increment-number-in-x-by-y
-      :find-next-empty-cell-and-add-number)))
+  (when-let [first-empty (find-first-empty)]
+    (let [{:keys [x y]}   first-empty
+          candidates      (map (fn [i]
+                                 {:x   x
+                                  :y   y
+                                  :num i})
+                               (range 1 (inc height-and-width)))
+          valid-candidate (->> candidates
+                               (filter number-valid?)
+                               first
+                               :num)]
+      (if valid-candidate
+        (track-update (assoc first-empty :num valid-candidate))
+        (println "implement backtracking")))))
 
 (defn make-style
   [x y]
   (let [factor 55]
     {:top  (* x factor)
      :left (* y factor)}))
-
-(defn track-update
-  [{:keys [x y val]}]
-  (swap! app-state update-in [:grid [x y]] (fn [_]
-                                             val)))
 
 (defn cell
   [x y]
@@ -105,10 +139,11 @@
                 :value     (get-in @app-state [:grid [x y]])
                 :style     (make-style x y)
                 :on-change (fn [evt]
-                             (let [val (-> evt .-target .-value)]
-                               (if (number-not-valid? {:x x :y y :num val})
-                                 (println "number not valid" {:x x :y y :num val})
-                                 (track-update {:x x :y y :val val}))))}])
+                             (let [val    (-> evt .-target .-value js/parseInt)
+                                   params {:x x :y y :num val}]
+                               (if (not (number-valid? params))
+                                 (println "number not valid" params)
+                                 (track-update params))))}])
 
 (defn app-grid
   []
