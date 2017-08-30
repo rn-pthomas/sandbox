@@ -7,7 +7,7 @@
 }
 
 .cell {
-  background-color: #444;
+  background-color: #555;
   width: 40px;
   height: 40px;
   margin: 6px;
@@ -16,3 +16,13 @@
   text-align: center;
 }
 
+.cell.locked {
+  background-color: #444;
+  border-color: #000;
+}
+
+#step-btn {
+  position: absolute;
+  font-size: 1.2em;
+  padding: 10px;
+}

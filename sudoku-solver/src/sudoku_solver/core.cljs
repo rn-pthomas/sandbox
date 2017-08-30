@@ -1,21 +1,50 @@
 (ns sudoku-solver.core
-    (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [sudoku-solver.ui :as ui]
+            [sudoku-solver.logic :as logic]))
 
 (enable-console-print!)
 
-(defonce height-and-width 9)
+(defn mk-grid
+  []
+  (vec
+   (for [y (range logic/dimension)]
+     (mapv (fn [x]
+             ;; x and y are included only for debugging
+             {:x       x
+              :y       y
+              :num     nil
+              :locked? false})
+           (range logic/dimension)))))
+
+(defn mk-test-puzzle
+  []
+  (let [grid (mk-grid)]
+    (-> grid
+        (logic/track-update-locked {:x 5 :y 1 :num 3})
+        (logic/track-update-locked {:x 7 :y 1 :num 8})
+        (logic/track-update-locked {:x 8 :y 1 :num 5})
+        (logic/track-update-locked {:x 2 :y 2 :num 1})
+        (logic/track-update-locked {:x 4 :y 2 :num 2})
+        
+        (logic/track-update-locked {:x 3 :y 3 :num 5})
+        (logic/track-update-locked {:x 5 :y 3 :num 7})
+        (logic/track-update-locked {:x 2 :y 4 :num 4})
+        (logic/track-update-locked {:x 6 :y 4 :num 1})
+        (logic/track-update-locked {:x 1 :y 5 :num 9})
+        
+        (logic/track-update-locked {:x 0 :y 6 :num 5})
+        (logic/track-update-locked {:x 7 :y 6 :num 7})
+        (logic/track-update-locked {:x 8 :y 6 :num 3})
+        (logic/track-update-locked {:x 2 :y 7 :num 2})
+        (logic/track-update-locked {:x 4 :y 7 :num 1})
+        (logic/track-update-locked {:x 4 :y 8 :num 4})
+        (logic/track-update-locked {:x 8 :y 8 :num 1}))))
 
 (defn mk-initial-state
   []
-  {:grid    (reduce (fn [acc [x y]]
-                      (assoc acc [x y] nil))
-                    {}
-                    (for [x (range height-and-width)
-                          y (range height-and-width)]
-                      [x y]))
-   :history []
-   :counter 0
-   :position {:x 0 :y 0}})
+  {:grid    (mk-grid)
+   :history []})
 
 (defonce app-state
   (r/atom (mk-initial-state)))
@@ -24,148 +53,14 @@
   []
   (reset! app-state (mk-initial-state)))
 
-(defonce coord-list
-  (for [x (range height-and-width)
-        y (range height-and-width)]
-    [x y]))
-
-(defn find-first-non-empty
-  []
-  (let [grid            (:grid @app-state)
-        first-non-empty (->> coord-list
-                             (filter (fn [[x y]]
-                                       (not (nil? (get grid [x y])))))
-                             first)
-        [x y]           first-non-empty]
-    (when first-non-empty
-      {:x   x
-       :y   y
-       :num (get grid [x y])})))
-
-(defn find-first-empty
-  []
-  (let [grid            (:grid @app-state)
-        first-empty (->> coord-list
-                         (filter (fn [[x y]]
-                                   (nil? (get grid [x y]))))
-                         first)
-        [x y]           first-empty]
-    (when first-empty
-      {:x   x
-       :y   y
-       :num (get grid [x y])})))
-
-(defn gather-column
-  [{:keys [x]}]
-  (let [grid (:grid @app-state)]
-    (map (fn [n]
-           {:x   x
-            :y   n
-            :num (get grid [x n])})
-         (range height-and-width))))
-
-(defn gather-row
-  [{:keys [y]}]
-  (let [grid (:grid @app-state)]
-    (map (fn [n]
-           {:x   n
-            :y   y
-            :num (get grid [n y])})
-         (range height-and-width))))
-
-(defn gather-box
-  [{:keys [x y num]}]
-  (let [grid          (:grid @app-state)
-        sqrt          (Math/sqrt height-and-width)
-        lower-bound-x (- x (mod x sqrt))
-        lower-bound-y (- y (mod y sqrt))
-        coords        (for [x (range lower-bound-x (+ lower-bound-x sqrt))
-                            y (range lower-bound-y (+ lower-bound-y sqrt))]
-                        [x y])]
-    (map (fn [[x y]]
-           {:x x
-            :y y
-            :num (get grid [x y])})
-         coords)))
-
-(defn number-valid?
-  [{:keys [x y num] :as params}]
-  (let [column   (gather-column params)
-        row      (gather-row params)
-        box      (gather-box params)
-        all-vals (->> [column row box]
-                      flatten
-                      set
-                      (remove #{nil params})
-                      (map :num)
-                      (filter #(not (nil? %)))
-                      set)]
-    (not (contains? all-vals num))))
-
-(defn track-update
-  [{:keys [x y num]}]
-  (swap! app-state update-in [:grid [x y]] (fn [_]
-                                             num)))
-
-(defn step
-  []
-  (when-let [first-empty (find-first-empty)]
-    (let [{:keys [x y]}   first-empty
-          candidates      (map (fn [i]
-                                 {:x   x
-                                  :y   y
-                                  :num i})
-                               (range 1 (inc height-and-width)))
-          valid-candidate (->> candidates
-                               (filter number-valid?)
-                               first
-                               :num)]
-      (if valid-candidate
-        (track-update (assoc first-empty :num valid-candidate))
-        (println "implement backtracking")))))
-
-(defn make-style
-  [x y]
-  (let [factor 55]
-    {:top  (* x factor)
-     :left (* y factor)}))
-
-(defn cell
-  [x y]
-  [:input.cell {:type      "text"
-                :maxLength 1
-                :data-x    x
-                :data-y    y
-                :value     (get-in @app-state [:grid [x y]])
-                :style     (make-style x y)
-                :on-change (fn [evt]
-                             (let [val    (-> evt .-target .-value js/parseInt)
-                                   params {:x x :y y :num val}]
-                               (if (not (number-valid? params))
-                                 (println "number not valid" params)
-                                 (track-update params))))}])
-
-(defn app-grid
-  []
-  [:div
-   (for [x (range height-and-width)
-         y (range height-and-width)]
-     (cell x y))])
-
-(defn app-container
-  []
-  @app-state ;; just to trigger rerendering
-  (app-grid))
-
 (defn main
   []
-  (r/render-component [app-container]
+  (r/render-component [(partial ui/app-container app-state)]
                       (. js/document (getElementById "app"))))
 
-(main)
+(defn load-test-puzzle
+  "https://en.wikipedia.org/wiki/File:Sudoku_puzzle_hard_for_brute_force.svg"
+  []
+  (swap! app-state assoc :grid (mk-test-puzzle)))
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;;(swap! app-state update-in [:__figwheel_counter] inc)
-)
+(main)
