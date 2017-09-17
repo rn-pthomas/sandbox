@@ -13,11 +13,12 @@
   :plugins [[lein-figwheel "0.5.13"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]
 
-  :source-paths ["src"]
+  :source-paths ["src/gin/server"]
+  :resource-paths ["resources/TarsosDSP-2.4.jar"]
 
   :cljsbuild {:builds
               [{:id "dev"
-                :source-paths ["src"]
+                :source-paths ["src/gin/app"]
 
                 ;; The presence of a :figwheel configuration here
                 ;; will cause figwheel to inject the figwheel client
@@ -29,7 +30,7 @@
                            ;; Comment this out once it no longer serves you.
                            :open-urls ["http://localhost:3449/index.html"]}
 
-                :compiler {:main gin.core
+                :compiler {:main gin.app.core
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/gin.js"
                            :output-dir "resources/public/js/compiled/out"
@@ -41,7 +42,7 @@
                ;; production. You can build this with:
                ;; lein cljsbuild once min
                {:id "min"
-                :source-paths ["src"]
+                :source-paths ["src/gin/app"]
                 :compiler {:output-to "resources/public/js/compiled/gin.js"
                            :main gin.core
                            :optimizations :advanced
