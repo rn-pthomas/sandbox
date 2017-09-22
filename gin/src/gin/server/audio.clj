@@ -93,7 +93,7 @@
   (while true
     (buffer-n-messages audio-chan
                        ;;(rand-nth [10 5])
-                       5
+                       3
                        (fn [messages]
                          (swap! sample-store conj messages)
                          (let [sample-to-play        (rand-nth @sample-store)
@@ -143,11 +143,13 @@
     (println (format "Done. Captured %s samples" (count @sample-store)))
     :done))
 
+(defn seconds->ms
+  [seconds]
+  (* 1000 seconds))
+
 (comment
   ;; this is how you start playback...
   (stream! {:filename "foo.wav"
-            :ms       30000
+            :ms       (seconds->ms 60)
             :init-ms  5000})
-  (count data-bytes)
-  (distinct data-bytes)
 )
