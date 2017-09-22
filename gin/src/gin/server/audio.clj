@@ -22,7 +22,7 @@
 (defn reverse-target-data-bytes
   [target-data-bytes-array-size target-data-bytes & [{:keys [bytes-per-sample]
                                                       :or {bytes-per-sample 2}}]]
-  (spit "log.out" (vec target-data-bytes) :append true)
+  ;;(spit "log.out" (vec target-data-bytes) :append true)
   (->> target-data-bytes
        (partition bytes-per-sample)
        reverse
@@ -33,8 +33,8 @@
 (defn apply-weirdness
   [the-byte-array-size the-byte-array]
   (->> the-byte-array
-       ;;(partition (+ 3 (rand-int 10)))
-       (partition (+ 2 (rand-int 7)))
+       (partition 12)
+       ;;(partition (+ 2 (rand-int 7)))
        (map (fn [[fst & rst]]
               (conj (repeat (count rst) 0) fst)))
        flatten
@@ -93,10 +93,12 @@
   (while true
     (buffer-n-messages audio-chan
                        ;;(rand-nth [10 5])
-                       3
+                       ;;(rand-nth [1 2 3 4])
+                       ;;2
+                       2
                        (fn [messages]
                          (swap! sample-store conj messages)
-                         (let [sample-to-play        (rand-nth @sample-store)
+                         (let [sample-to-play        (rand-nth (take-last 10 @sample-store))
                                all-bytes             (mapcat (fn [[num-bytes-read audio-bytes-vec frame-size]]
                                                                audio-bytes-vec)
                                                              sample-to-play)
@@ -104,11 +106,10 @@
                                                                      num-bytes-read)
                                                                    sample-to-play))
                                num-bytes-to-allocate (* byte-array-size (count sample-to-play))
-                               processed-bytes (rand-nth [(byte-array num-bytes-to-allocate all-bytes)
-                                                          (reverse-target-data-bytes num-bytes-to-allocate all-bytes)])]
-                           ;;(.write source-line (reverse-target-data-bytes (* byte-array-size (count sample-to-play)) all-bytes) 0 all-bytes-read)
-                           ;;(.write source-line (byte-array num-bytes-to-allocate all-bytes) 0 all-bytes-read)
-                           (.write source-line processed-bytes 0 all-bytes-read))))))
+                               processed-bytes       (rand-nth [(byte-array num-bytes-to-allocate all-bytes)
+                                                                (reverse-target-data-bytes num-bytes-to-allocate all-bytes)])]
+                           (dotimes [_ (rand-nth [ 1 2 4])]
+                             (.write source-line processed-bytes 0 all-bytes-read)))))))
 
 (defn stream!
   [{:keys [filename ms init-ms]}]
@@ -151,5 +152,5 @@
   ;; this is how you start playback...
   (stream! {:filename "foo.wav"
             :ms       (seconds->ms 60)
-            :init-ms  5000})
+            :init-ms  500})
 )
