@@ -30,42 +30,6 @@
        vec
        (byte-array target-data-bytes-array-size)))
 
-(defn apply-weirdness
-  [the-byte-array-size the-byte-array]
-  (->> the-byte-array
-       (partition 12)
-       ;;(partition (+ 2 (rand-int 7)))
-       (map (fn [[fst & rst]]
-              (conj (repeat (count rst) 0) fst)))
-       flatten
-       vec
-       (byte-array the-byte-array-size)))
-
-(comment
-  (let [[byte-array-size data-bytes frame-size] here]
-    (take 10 data-bytes))
-)
-
-(defn analyze-and-store-bytes
-  [byte-array-size data-bytes frame-size & [{:keys [bytes-per-sample]
-                                             :or {bytes-per-sample 2}}]]
-  (reverse-target-data-bytes byte-array-size data-bytes))
-
-(comment
-  (->> data-bytes
-       (partition 8)
-       count
-       )
-  (take 10 data-bytes)
-  :foof
-)
-
-(defn process-audio-stream
-  [byte-array-size data-bytes frame-size]
-  (if-let [analysis-result (analyze-and-store-bytes byte-array-size data-bytes frame-size)]
-    analysis-result
-    data-bytes))
-
 (defn buffer-n-messages
   "Use blocking take to take n messages off of channel c, and once done, applies function f to that vec of messages."
   [ch n f]
@@ -75,6 +39,7 @@
     (if (>= counter n)
       (f acc)
       (let [new-message (a/<!! ch)]
+        (println "buffer-n-messages: read message.")
         (recur (conj acc new-message) (inc counter))))))
 
 (defn recording-thread-handler
@@ -94,11 +59,11 @@
     (buffer-n-messages audio-chan
                        ;;(rand-nth [10 5])
                        ;;(rand-nth [1 2 3 4])
-                       ;;2
                        2
                        (fn [messages]
                          (swap! sample-store conj messages)
-                         (let [sample-to-play        (rand-nth (take-last 10 @sample-store))
+                         (let [sample-to-play        (rand-nth (take-last 2 @sample-store))
+                               ;;(rand-nth @sample-store)
                                all-bytes             (mapcat (fn [[num-bytes-read audio-bytes-vec frame-size]]
                                                                audio-bytes-vec)
                                                              sample-to-play)
@@ -106,22 +71,92 @@
                                                                      num-bytes-read)
                                                                    sample-to-play))
                                num-bytes-to-allocate (* byte-array-size (count sample-to-play))
-                               processed-bytes       (rand-nth [(byte-array num-bytes-to-allocate all-bytes)
-                                                                (reverse-target-data-bytes num-bytes-to-allocate all-bytes)])]
-                           (dotimes [_ (rand-nth [ 1 2 4])]
-                             (.write source-line processed-bytes 0 all-bytes-read)))))))
+                               processed-bytes       #_(rand-nth [(byte-array num-bytes-to-allocate all-bytes)
+                                                                  (reverse-target-data-bytes num-bytes-to-allocate all-bytes)])
+                               (byte-array num-bytes-to-allocate all-bytes)
+                               reversed-bytes (reverse-target-data-bytes num-bytes-to-allocate all-bytes)]
+                           (dotimes [_ 2]
+                             (.write source-line processed-bytes 0 all-bytes-read)
+                             (.write source-line reversed-bytes  0 all-bytes-read)
+                             (.write source-line reversed-bytes  0 all-bytes-read)))))))
 
-(defn stream!
-  [{:keys [filename ms init-ms]}]
+(defn get-mixers
+  []
+  (let [mixer-objs (AudioSystem/getMixerInfo)]
+    (map (fn [mixer-obj]
+           {:name        (.getName mixer-obj)
+            :description (.getDescription mixer-obj)
+            :version     (.getVersion mixer-obj)
+            :vendor      (.getVendor mixer-obj)
+            :obj         mixer-obj})
+         mixer-objs)))
+
+(defn get-mobile-pre-device
+  []
+  (->> (get-mixers)
+       (filter #(= (:name %) "MobilePre"))
+       first))
+
+(comment
   (let [audio-format     (create-audio-format {:sample-rate 44100})
         target-info      (->info audio-format TargetDataLine)
-        source-info      (->info audio-format SourceDataLine)
-        target-line      (AudioSystem/getLine target-info)
-        _                (.open target-line)
-        _                (.start target-line)
-        source-line      (AudioSystem/getLine source-info)
-        _                (.open source-line audio-format)
-        _                (.start source-line)
+        mobile-pre-mixer (:obj (get-mobile-pre-device))
+        target-line (AudioSystem/getTargetDataLine audio-format mobile-pre-mixer)
+        ;;target-line (.getLine mobile-pre-mixer target-info)
+        ]
+    ;;(.getMixerInfo mobile-pre-mixer)
+    ;;target-line
+    target-line)
+  (let [audio-format     (create-audio-format {:sample-rate 44100})
+        target-info      (->info audio-format TargetDataLine)]
+    (map (fn [{:keys [obj]}]
+           (try
+             (let [target-line (AudioSystem/getTargetDataLine audio-format obj)]
+               target-line)
+             (catch Exception ex
+               :didnt-work)))
+         (get-mixers)))
+  )
+
+(defn input-type->target-line
+  [^clojure.lang.Keyword input-type audio-format]
+  (let [target-info (->info audio-format TargetDataLine)]
+    (condp = input-type
+      :mic       (AudioSystem/getLine target-info)
+      :interface (AudioSystem/getTargetDataLine audio-format (:obj (get-mobile-pre-device)))
+      ;; else
+      (throw (Exception. (format "Couldn't look up TargetDataLine for input type %s" (name input-type)))))))
+
+(defn input-type->source-line
+  [^clojure.lang.Keyword input-type audio-format target-info]
+  (let [target-info (->info audio-format SourceDataLine)]
+    (condp = input-type
+      :mic       (AudioSystem/getLine target-info)
+      :interface (AudioSystem/getSourceDataLine audio-format (:obj (get-mobile-pre-device)))
+      ;; else
+      (throw (Exception. (format "Couldn't look up SourceDataLine for input type %s" (name input-type)))))))
+
+(defn open-and-start
+  [line]
+  (.open line)
+  (.start line)
+  line)
+
+(defn cleanup
+  [{:keys [threads lines]}]
+  (doseq [thread threads]
+    (.stop thread))
+  (doseq [line lines]
+    (.stop line)
+    (.close line)))
+
+(defn stream!
+  [{:keys [ms init-ms input-type]}]
+  (let [audio-format     (create-audio-format {:sample-rate 44100 :channels 2})
+        target-line      (input-type->target-line input-type audio-format)
+        source-line      (input-type->source-line input-type audio-format)
+        _                (open-and-start target-line)
+        _                (open-and-start source-line)
         byte-array-size  (/ (.getBufferSize target-line) 5)
         data-bytes       (byte-array byte-array-size)
         audio-chan       (a/chan 2000)
@@ -131,16 +166,13 @@
     (.start recording-thread)
     (println "Capturing initial audio data...")
     (Thread/sleep init-ms) ;; capture audio data before starting playback for less playback latency
+    
     (println "Starting playback...")
     (.start playback-thread)
     (Thread/sleep (+ init-ms ms))
-    (.stop recording-thread)
-    (.stop target-line)
-    (.close target-line)
-    (.stop playback-thread)
-    (.stop source-line)
-    (.close source-line)
-    (def ss sample-store)
+    
+    (cleanup {:threads [recording-thread playback-thread]
+              :lines   [target-line source-line]})
     (println (format "Done. Captured %s samples" (count @sample-store)))
     :done))
 
@@ -150,7 +182,8 @@
 
 (comment
   ;; this is how you start playback...
-  (stream! {:filename "foo.wav"
-            :ms       (seconds->ms 60)
-            :init-ms  500})
+  (stream! {:filename   "foo.wav"
+            :ms         (seconds->ms 30)
+            :init-ms    5000
+            :input-type "microphone"})
 )
