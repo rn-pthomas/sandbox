@@ -42,44 +42,6 @@
         (println "buffer-n-messages: read message.")
         (recur (conj acc new-message) (inc counter))))))
 
-(defn recording-thread-handler
-  [audio-chan data-bytes target-line]
-  (let [audio-stream (AudioInputStream. target-line)
-        frame-size   (.getFrameLength audio-stream)]
-    (loop [num-bytes-read (.read audio-stream data-bytes)]
-      (let [data-bytes-vec (vec data-bytes)]
-        (do
-          (a/>!! audio-chan [num-bytes-read data-bytes-vec frame-size])
-          (recur (.read audio-stream data-bytes)))))))
-
-(defn playback-thread-handler
-  [audio-chan sample-store source-line byte-array-size]
-  (println "In playback thread...")
-  (while true
-    (buffer-n-messages audio-chan
-                       ;;(rand-nth [10 5])
-                       ;;(rand-nth [1 2 3 4])
-                       2
-                       (fn [messages]
-                         (swap! sample-store conj messages)
-                         (let [sample-to-play        (rand-nth (take-last 2 @sample-store))
-                               ;;(rand-nth @sample-store)
-                               all-bytes             (mapcat (fn [[num-bytes-read audio-bytes-vec frame-size]]
-                                                               audio-bytes-vec)
-                                                             sample-to-play)
-                               all-bytes-read        (apply + (map (fn [[num-bytes-read audio-bytes-vec frame-size]]
-                                                                     num-bytes-read)
-                                                                   sample-to-play))
-                               num-bytes-to-allocate (* byte-array-size (count sample-to-play))
-                               processed-bytes       #_(rand-nth [(byte-array num-bytes-to-allocate all-bytes)
-                                                                  (reverse-target-data-bytes num-bytes-to-allocate all-bytes)])
-                               (byte-array num-bytes-to-allocate all-bytes)
-                               reversed-bytes (reverse-target-data-bytes num-bytes-to-allocate all-bytes)]
-                           (dotimes [_ 2]
-                             (.write source-line processed-bytes 0 all-bytes-read)
-                             (.write source-line reversed-bytes  0 all-bytes-read)
-                             (.write source-line reversed-bytes  0 all-bytes-read)))))))
-
 (defn get-mixers
   []
   (let [mixer-objs (AudioSystem/getMixerInfo)]
@@ -97,27 +59,6 @@
        (filter #(= (:name %) "MobilePre"))
        first))
 
-(comment
-  (let [audio-format     (create-audio-format {:sample-rate 44100})
-        target-info      (->info audio-format TargetDataLine)
-        mobile-pre-mixer (:obj (get-mobile-pre-device))
-        target-line (AudioSystem/getTargetDataLine audio-format mobile-pre-mixer)
-        ;;target-line (.getLine mobile-pre-mixer target-info)
-        ]
-    ;;(.getMixerInfo mobile-pre-mixer)
-    ;;target-line
-    target-line)
-  (let [audio-format     (create-audio-format {:sample-rate 44100})
-        target-info      (->info audio-format TargetDataLine)]
-    (map (fn [{:keys [obj]}]
-           (try
-             (let [target-line (AudioSystem/getTargetDataLine audio-format obj)]
-               target-line)
-             (catch Exception ex
-               :didnt-work)))
-         (get-mixers)))
-  )
-
 (defn input-type->target-line
   [^clojure.lang.Keyword input-type audio-format]
   (let [target-info (->info audio-format TargetDataLine)]
@@ -128,7 +69,7 @@
       (throw (Exception. (format "Couldn't look up TargetDataLine for input type %s" (name input-type)))))))
 
 (defn input-type->source-line
-  [^clojure.lang.Keyword input-type audio-format target-info]
+  [^clojure.lang.Keyword input-type audio-format]
   (let [target-info (->info audio-format SourceDataLine)]
     (condp = input-type
       :mic       (AudioSystem/getLine target-info)
@@ -150,30 +91,92 @@
     (.stop line)
     (.close line)))
 
+(defn recording-thread-handler
+  [{:keys [sample-chan data-bytes target-line source-line byte-array-size sample-store]}]
+  (println "recording-thread-handler started")
+  (let [audio-stream (AudioInputStream. target-line)
+        frame-size   (.getFrameLength audio-stream)]
+    (loop [num-bytes-read (.read audio-stream data-bytes)]
+      (let [data-bytes-vec (vec data-bytes)]
+        (do
+          (a/>!! sample-chan {:num-bytes-read num-bytes-read
+                              :data-bytes-vec data-bytes-vec
+                              :frame-size     frame-size})
+          (recur (.read audio-stream data-bytes)))))))
+
+(defn sample-thread-handler
+  "Reads from sample-chan, buffers samples, applies processing, stores in clip store."
+  [{:keys [sample-chan data-bytes target-line source-line byte-array-size sample-store sample-buffer-size clip-chan clip-store]
+    :or   {sample-buffer-size 1}}]
+  (println "sample-thread-handler started")
+  (while true
+    (buffer-n-messages
+     sample-chan
+     sample-buffer-size
+     (fn [messages]
+       (let [{:keys [all-bytes all-bytes-read]} (reduce (fn [acc {:keys [num-bytes-read audio-bytes-vec frame-size]}]
+                                                          (-> acc
+                                                              (update-in [:all-bytes] #(concat % audio-bytes-vec))
+                                                              (update-in [:all-bytes-read] (partial + num-bytes-read))))
+                                                        {:all-bytes      []
+                                                         :all-bytes-read 0}
+                                                        messages)
+             num-bytes-to-allocate              byte-array-size
+             non-processed-bytes                (byte-array num-bytes-to-allocate all-bytes)
+             reversed-bytes                     (reverse-target-data-bytes num-bytes-to-allocate all-bytes)]
+         (swap! clip-store conj {:forward        non-processed-bytes
+                                 :reversed       reversed-bytes
+                                 :all-bytes-read all-bytes-read})
+         ;; TODO: figure out what clip to play and put on clip-chan. For now just randomly sample from last two elements of clip-store
+         (a/>!! clip-chan (rand-nth (take-last 2 @clip-store))))))))
+
+(defn playback-thread-handler
+  [{:keys [sample-chan data-bytes target-line source-line byte-array-size sample-store sample-buffer-size clip-chan clip-store]
+    :or   {sample-buffer-size 1}}]
+  (println "playback-thread-handler started")
+  (while true
+    (let [{:keys [forward reversed all-bytes-read]} (a/<!! clip-chan)]
+      ;;(println "forward:" forward)
+      ;;(println "reversed:" reversed)
+      ;;(println "all-bytes-read:" all-bytes-read)
+      (.write source-line forward  0 all-bytes-read)
+      (.write source-line reversed 0 all-bytes-read))))
+
 (defn stream!
   [{:keys [ms init-ms input-type]}]
-  (let [audio-format     (create-audio-format {:sample-rate 44100 :channels 2})
-        target-line      (input-type->target-line input-type audio-format)
-        source-line      (input-type->source-line input-type audio-format)
-        _                (open-and-start target-line)
-        _                (open-and-start source-line)
-        byte-array-size  (/ (.getBufferSize target-line) 5)
-        data-bytes       (byte-array byte-array-size)
-        audio-chan       (a/chan 2000)
-        sample-store     (atom [])
-        recording-thread (Thread. #(recording-thread-handler audio-chan data-bytes target-line))
-        playback-thread  (Thread. #(playback-thread-handler  audio-chan sample-store source-line byte-array-size))]
+  (let [audio-format        (create-audio-format {:sample-rate 44100 :channels 2})
+        target-line         (input-type->target-line input-type audio-format)
+        source-line         (input-type->source-line input-type audio-format)
+        _                   (open-and-start target-line)
+        _                   (open-and-start source-line)
+        byte-array-size     (/ (.getBufferSize target-line) 5)
+        data-bytes          (byte-array byte-array-size)
+        audio-chan          (a/chan 2000)
+        sample-chan         (a/chan 2000)
+        clip-chan           (a/chan 2000)
+        sample-store        (atom [])
+        clip-store          (atom [])
+        thread-params       {:target-line     target-line
+                             :source-line     source-line
+                             :data-bytes      data-bytes
+                             :byte-array-size byte-array-size
+                             :clip-chan       clip-chan
+                             :sample-chan     sample-chan
+                             :clip-store      clip-store
+                             :sample-store    sample-store}
+        recording-thread    (Thread. #(recording-thread-handler thread-params))
+        sample->clip-thread (Thread. #(sample-thread-handler    thread-params))
+        playback-thread     (Thread. #(playback-thread-handler  thread-params))]
     (.start recording-thread)
-    (println "Capturing initial audio data...")
-    (Thread/sleep init-ms) ;; capture audio data before starting playback for less playback latency
+    (.start sample->clip-thread)
+    (Thread/sleep init-ms) ;; capture/process audio data before starting playback for less playback latency
     
-    (println "Starting playback...")
     (.start playback-thread)
     (Thread/sleep (+ init-ms ms))
     
-    (cleanup {:threads [recording-thread playback-thread]
+    (cleanup {:threads [recording-thread sample->clip-thread playback-thread]
               :lines   [target-line source-line]})
-    (println (format "Done. Captured %s samples" (count @sample-store)))
+    (println (format "Done. Captured %s clips" (count @clip-store)))
     :done))
 
 (defn seconds->ms
