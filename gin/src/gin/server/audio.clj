@@ -1,7 +1,8 @@
 (ns gin.server.audio
-  (:require [clojure.java.io    :as io]
-            [clojure.core.async :as a]
-            [gin.server.framework :as f])
+  (:require [clojure.java.io       :as io]
+            [clojure.core.async    :as a]
+            [gin.server.framework  :as f]
+            [gin.server.processing :as process])
   (:import [javax.sound.sampled AudioFormat AudioFormat$Encoding AudioInputStream AudioFileFormat AudioFileFormat$Type AudioSystem DataLine DataLine$Info Mixer SourceDataLine TargetDataLine]
            [java.io ByteArrayOutputStream]))
 
@@ -19,40 +20,6 @@
 (defn ->info
   [^AudioFormat audio-format ^Class clazz]
   (DataLine$Info. clazz audio-format))
-
-(defn halve-frame-rate
-  [target-data-bytes-array-size target-data-bytes & [{:keys [bytes-per-sample]
-                                                      :or   {bytes-per-sample 2}}]]
-  (->> target-data-bytes
-       (partition bytes-per-sample)
-       (take-nth 8)
-       (repeat 8)
-       flatten
-       vec
-       (byte-array target-data-bytes-array-size)))
-
-(defn chop-frame-rate
-  [target-data-bytes-array-size target-data-bytes & [{:keys [bytes-per-sample chop-factor]
-                                                      :or   {bytes-per-sample 2
-                                                             chop-factor      2}}]]
-  (->> target-data-bytes
-       (partition bytes-per-sample)
-       (take-nth chop-factor)
-       (repeat chop-factor)
-       flatten
-       vec
-       (byte-array target-data-bytes-array-size)))
-
-(defn reverse-target-data-bytes
-  [target-data-bytes-array-size target-data-bytes & [{:keys [bytes-per-sample]
-                                                      :or   {bytes-per-sample 2}}]]
-  ;;(spit "log.out" (vec target-data-bytes) :append true)
-  (->> target-data-bytes
-       (partition bytes-per-sample)
-       reverse
-       flatten
-       vec
-       (byte-array target-data-bytes-array-size)))
 
 (defn get-mixers
   []
@@ -151,28 +118,45 @@
      buffer-size
      (fn [messages]
        (let [clip (samples->clip messages)]
-         (a/>!! clip-chan :ok)
-         (swap! clip-store conj clip))))))
+         (swap! clip-store conj clip)
+         (a/>!! clip-chan :ok))))))
 
 (defn clip-thread-handler
-  [{:keys [sample-chan data-bytes target-line source-line byte-array-size sample-store sample-buffer-size clip-chan clip-store playback-chan]
+  [{:keys [sample-chan data-bytes target-line source-line byte-array-size sample-store sample-buffer-size clip-chan clip-store playback-chan done-chan composition]
     :or   {sample-buffer-size 1}}]
-  (loop [step 0]
-    (let [got-a-new-clip (a/<!! clip-chan)
-          last-four-clips (take-last 4 @clip-store)]
-      (if (empty? last-four-clips)
-        (recur step)
-        (let [process-fn    (case step
-                              0 identity
-                              1 reverse
-                              2 shuffle)
-              xformed-clips (concat-bytes (process-fn last-four-clips))
-              new-step      (if (>= step 2)
+  (if composition
+    (do
+      (doseq [[idx clip-idx] (map-indexed (fn [idx item] [idx item]) composition)]
+        (let [got-a-new-clip (a/<!! clip-chan) ;; block until clip is available
+              ]
+          (when-let [clip (get @clip-store clip-idx)]
+            (let [process-fn (cond
+                               (= (/ idx 4) 0)
+                               process/halve-frame-rate
+
+                               (= (/ idx 2) 0)
+                               process/quarter-frame-rate
+
+                               :else
+                               process/reverse)]
+              (println (format "clip available. idx = %s, clip-idx = %s" idx clip-idx))
+              ;;(a/>!! playback-chan (process-fn clip))
+              (a/>!! playback-chan clip))))))
+    (loop [step 0]
+      (let [got-a-new-clip  (a/<!! clip-chan)
+            last-four-clips (take-last 1 @clip-store)
+            process-fn      (case step
+                              0 process/halve-frame-rate
+                              1 process/reverse
+                              2 process/quarter-frame-rate)
+            clips           (concat-bytes last-four-clips)
+            clips           (process-fn clips)
+            new-step        (if (>= step 2)
                               0
                               (inc step))]
-          (do
-            (a/>!! playback-chan xformed-clips)
-            (recur new-step)))))))
+        (do
+          (a/>!! playback-chan clips)
+          (recur new-step))))))
 
 (defn playback-thread-handler
   [{:keys [sample-chan data-bytes target-line source-line byte-array-size sample-store sample-buffer-size clip-chan clip-store playback-chan]
@@ -184,14 +168,26 @@
       (when (and data size)
         (.write source-line (byte-array size data) 0 size)))))
 
+(defn seconds->ms
+  [seconds]
+  (* 1000 seconds))
+
 (comment
-  (keys (:bytes (concat-bytes (shuffle (take-last 4 @clip-store)))))
   (stream! {:ms 30000 :init-ms 0, :input-type :mic :buffer-size 1})
   (stream! {:ms 3000 :init-ms 0, :input-type :mic :buffer-size 1})
+  (let [composition (->> (partition 3 2 (range))
+                         (map (fn [[a b c]]
+                                [[a b c] [a]]))
+                         flatten)]
+    (stream! {:ms          (seconds->ms (* 60 5))
+              :input-type  :mic
+              :composition composition
+              :buffer-size 3}))
   )
 
 (defn stream!
-  [{:keys [ms init-ms input-type buffer-size] :as params}]
+  [{:keys [ms init-ms input-type buffer-size composition] :as params
+    :or   {init-ms 0}}]
   (let [audio-format        (create-audio-format {:sample-rate 44100 :channels 2})
         target-line         (input-type->target-line input-type audio-format)
         source-line         (input-type->source-line input-type audio-format)
@@ -203,6 +199,7 @@
         sample-chan         (a/chan 2000)
         clip-chan           (a/chan 2000)
         playback-chan       (a/chan 2000)
+        done-chan           (a/chan 1)
         sample-store        (atom [])
         clip-store          (atom [])
         thread-params       {:target-line     target-line
@@ -212,9 +209,11 @@
                              :clip-chan       clip-chan
                              :sample-chan     sample-chan
                              :playback-chan   playback-chan
+                             :done-chan       done-chan
                              :clip-store      clip-store
                              :sample-store    sample-store
-                             :buffer-size     buffer-size}
+                             :buffer-size     buffer-size
+                             :composition     composition}
         recording-thread    (Thread. #(recording-thread-handler thread-params))
         sample->clip-thread (Thread. #(sample-thread-handler    thread-params))
         clip-thread         (Thread. #(clip-thread-handler      thread-params))
@@ -225,15 +224,10 @@
     (Thread/sleep init-ms) ;; capture initial audio data before starting playback
     
     (.start playback-thread)
-    (Thread/sleep (+ init-ms ms))
-    
+    (a/alts!! [done-chan (a/timeout (+ init-ms ms))])
     (cleanup {:threads [recording-thread sample->clip-thread clip-thread playback-thread]
               :lines   [target-line source-line]})
-    (def clip-store clip-store)
     (println (format "Done. Captured %s clips" (count @clip-store)))
     (println (format "Done. params = %s" params))
+    
     :done))
-
-(defn seconds->ms
-  [seconds]
-  (* 1000 seconds))
