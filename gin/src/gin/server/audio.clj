@@ -172,19 +172,6 @@
   [seconds]
   (* 1000 seconds))
 
-(comment
-  (stream! {:ms 30000 :init-ms 0, :input-type :mic :buffer-size 1})
-  (stream! {:ms 3000 :init-ms 0, :input-type :mic :buffer-size 1})
-  (let [composition (->> (partition 3 1 (range))
-                         (map (fn [[a b c]]
-                                [[a b c] [a]]))
-                         flatten)]
-    (stream! {:ms          (seconds->ms (* 60 3))
-              :input-type  :mic
-              :composition composition
-              :buffer-size 2}))
-  )
-
 (defn stream!
   [{:keys [ms init-ms input-type buffer-size composition] :as params
     :or   {init-ms 0}}]
