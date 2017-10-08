@@ -175,14 +175,14 @@
 (comment
   (stream! {:ms 30000 :init-ms 0, :input-type :mic :buffer-size 1})
   (stream! {:ms 3000 :init-ms 0, :input-type :mic :buffer-size 1})
-  (let [composition (->> (partition 3 2 (range))
+  (let [composition (->> (partition 3 1 (range))
                          (map (fn [[a b c]]
                                 [[a b c] [a]]))
                          flatten)]
-    (stream! {:ms          (seconds->ms (* 60 5))
+    (stream! {:ms          (seconds->ms (* 60 3))
               :input-type  :mic
               :composition composition
-              :buffer-size 3}))
+              :buffer-size 2}))
   )
 
 (defn stream!
@@ -224,7 +224,7 @@
     (Thread/sleep init-ms) ;; capture initial audio data before starting playback
     
     (.start playback-thread)
-    (a/alts!! [done-chan (a/timeout (+ init-ms ms))])
+    (Thread/sleep (+ init-ms ms))
     (cleanup {:threads [recording-thread sample->clip-thread clip-thread playback-thread]
               :lines   [target-line source-line]})
     (println (format "Done. Captured %s clips" (count @clip-store)))
