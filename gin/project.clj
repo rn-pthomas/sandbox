@@ -11,7 +11,10 @@
                  [org.clojure/core.async    "0.3.443"]
                  [org.craigandera/dynne     "0.4.1"]
                  [org.clojure/tools.cli     "0.3.5"]
-                 [prismatic/schema          "1.1.7"]]
+                 [prismatic/schema          "1.1.7"]
+                 [reagent                   "0.8.0-alpha1"]
+                 [http-kit                  "2.1.18"]
+                 [cheshire                  "5.8.0"]]
 
   :plugins [[lein-figwheel "0.5.13"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]
@@ -26,12 +29,13 @@
                 ;; The presence of a :figwheel configuration here
                 ;; will cause figwheel to inject the figwheel client
                 ;; into your build
-                :figwheel {:on-jsload "gin.core/on-js-reload"
+                :figwheel {:on-jsload "gin.app.core/on-js-reload"
                            ;; :open-urls will pop open your application
                            ;; in the default browser once Figwheel has
                            ;; started and compiled your application.
                            ;; Comment this out once it no longer serves you.
-                           :open-urls ["http://localhost:3449/index.html"]}
+                           ;;:open-urls ["http://localhost:3449/index.html"]
+                           :open-urls ["resources/public/index.html"]}
 
                 :compiler {:main                 gin.app.core
                            :asset-path           "js/compiled/out"
@@ -47,7 +51,7 @@
                {:id           "min"
                 :source-paths ["src/gin/app"]
                 :compiler     {:output-to     "resources/public/js/compiled/gin.js"
-                               :main          gin.core
+                               :main          gin.app.core
                                :optimizations :advanced
                                :pretty-print  false}}]}
 
