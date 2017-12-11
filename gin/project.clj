@@ -17,8 +17,10 @@
                  [cheshire                  "5.8.0"]]
 
   :plugins [[lein-figwheel "0.5.13"]
-            [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]
+            [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
+            [cider/cider-nrepl "0.16.0-SNAPSHOT"]]
 
+  :main gin.server.core/main
   :source-paths ["src/gin/server"]
   :resource-paths ["resources/TarsosDSP-2.4.jar"]
 

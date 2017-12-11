@@ -218,3 +218,6 @@
     (println (format "Done. params = %s" params))
     
     :done))
+
+(defn continuously-stream!
+  [{:keys [input-type]}])

@@ -4,11 +4,16 @@
 (enable-console-print!)
 
 (defonce app-state (r/atom {:socket {:connected false}
-                            :state  {:messages []}}))
+                            :state  {:messages []
+                                     :running  false}}))
 
 (defn update-state!
-  [update-fn]
-  (swap! app-state update-in [:state] update-fn))
+  [key-path update-fn]
+  (swap! app-state update-in (concat [:state] key-path) update-fn))
+
+(defn get-state
+  [key-path]
+  (get-in @app-state (concat [:state] key-path)))
 
 (defn input-evt->text
   [evt]
@@ -16,12 +21,13 @@
 
 (defn handle-ws-message
   [msg]
-  (update-state! #(update-in % [:messages] conj msg)))
+  (update-state! [:messages] #(conj % msg)))
 
 (defn send-ws-message
-  [msg]
+  [msg-type & [msg-data]]
   (let [ws   (get-in @app-state [:socket :val])
-        data (.stringify (.-JSON js/window) (clj->js {:msg msg}))]
+        data (.stringify (.-JSON js/window) (clj->js {:type msg-type
+                                                      :data msg-data}))]
     (.send ws data)))
 
 (def websocket-handler-dispatch
@@ -40,12 +46,46 @@
         (aset ws action handler))
       ws)))
 
+(def dimension 4)
+(def style-factor 60)
+
+(defn make-style
+  [x y]
+  {:top  (* y style-factor)
+   :left (* x style-factor)})
+
+(defn cell
+  [x y]
+  (let [highlighted (r/atom false)]
+    (fn [x y]
+      (println "rendering... x =" x " y =" y)
+      (let [css-class   (if @highlighted
+                          :div.cell.highlighted
+                          :div.cell)]
+        [css-class {:style    (make-style x y)
+                    :key      (str "x." x ".y." y)
+                    :data-x   x
+                    :data-y   y
+                    :on-click (fn [_]
+                                (swap! highlighted not))}]))))
+
 (defn main-component
   []
-  [:button
-   {:on-click (fn [_]
-                (send-ws-message {:its-a "thing"}))}
-   "click me"])
+  [:div
+   [:div#grid
+    (doall
+     (for [y (range dimension)
+           x (range dimension)]
+       [cell x y]))]
+   [:button#start-playback
+    {:style {:left 0
+             :top (* dimension style-factor)}
+     :on-click (fn [_]
+                 (send-ws-message :toggle-playback)
+                 (update-state! [:running] not))}
+    (if (true? (get-state [:running]))
+      "Stop"
+      "Start")]])
 
 (defn main
   []

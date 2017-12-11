@@ -13,3 +13,8 @@
                               :buffer-size 2}
                              params)]
     (a/stream! stream-params)))
+
+(comment
+  (example-1 {:buffer-size 1
+              :ms (a/seconds->ms 60)})
+)
