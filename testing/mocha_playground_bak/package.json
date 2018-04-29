@@ -1,0 +1,11 @@
+{
+  "name": "integration_tests",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pat-thomas/sandbox.git"
+  },
+  "dependencies": {
+    "kafka-node": "2.6.1"
+  }
+}
