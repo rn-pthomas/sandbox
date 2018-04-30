@@ -19,6 +19,8 @@
   "dependencies": {
     "kafka-node": "2.6.1",
     "mocha": "5.1.1",
-    "lodash": "4.17.10"
+    "lodash": "4.17.10",
+    "request": "2.85.0",
+    "sync-request": "6.0.0"
   }
 }
