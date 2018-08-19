@@ -1,0 +1,59 @@
+{
+  "instruments": {
+    "kick": {
+      "pattern": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0],
+      "repetitions": 2,
+      "variance": 1
+    },
+    "snare": {
+      "pattern": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "repetitions": 4,
+      "variance": 1
+    },
+    "hat": {
+      "pattern": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "repetitions": 3,
+      "variance": 3
+    },
+    "ride": {
+      "pattern": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "repetitions": 6,
+      "variance": 1
+    }
+  }
+}
