@@ -14,9 +14,9 @@
   ;; setup function returns initial state. It contains
   ;; circle color and position.
   (let [initial-circle-state {:color 0 :angle 0}
-        num-circles 5
-        smallest-size 30
-        step-size 20]
+        num-circles          15
+        smallest-size        20
+        step-size            12]
     {:circles (for [size (range smallest-size (inc (+ smallest-size (* num-circles step-size))) step-size)]
                 (assoc initial-circle-state :size size))}))
 
@@ -55,11 +55,13 @@
   ;; Set circle color.
   (doseq [{:keys [color angle size] :as circle} (:circles state)]
     ;;(println circle)
-    (q/fill color 255 255 (rand-nth [2
+    #_(q/fill color 255 255 (rand-nth [2
                                      ;;3
                                      4
                                      20
-                                     50]))
+                                       50]))
+    (q/fill color 255 255)
+    ;;(q/fill color 255 255 100)
     ;;(q/fill color 250 250 100)
     ;; Calculate x and y coordinates of the circle.
     (let [x (* 120 (q/cos angle))
@@ -69,8 +71,10 @@
                            (/ (q/height) 2)]
                                         ; Draw the circle.
         (println circle)
-        (let [new-size (+ size 60)]
-          (q/ellipse x y new-size new-size))
+        (let [new-size (+ size 0)]
+          (q/ellipse x y new-size new-size)
+          ;;(q/rect x y new-size new-size)
+          )
         ;;(q/rect x y size size)
         ))))
 
