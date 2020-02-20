@@ -13,10 +13,12 @@
   (q/no-stroke)
   ;; setup function returns initial state. It contains
   ;; circle color and position.
-  (let [initial-circle-state {:color 0 :angle 0}]
-    {:circles {:s (assoc initial-circle-state :size 50)
-               :m (assoc initial-circle-state :size 70)
-               :l (assoc initial-circle-state :size 90)}}))
+  (let [initial-circle-state {:color 0 :angle 0}
+        num-circles 5
+        smallest-size 30
+        step-size 20]
+    {:circles (for [size (range smallest-size (inc (+ smallest-size (* num-circles step-size))) step-size)]
+                (assoc initial-circle-state :size size))}))
 
 (defn modify-angle-with-randomness
   [state randomness-int]
@@ -41,33 +43,36 @@
 
 (defn update-state [state]
   (-> state
-      (update-in [:circles :s] update-circle 1 )
-      (update-in [:circles :m] update-circle 2)
-      (update-in [:circles :l] update-circle 3 )))
+      (update-in [:circles] (fn [circles]
+                              (map-indexed (fn [idx circle]
+                                             (update-circle circle (inc idx)))
+                                           circles)))))
 
 
 (defn draw-state [state]
   ;; Clear the sketch by filling it with light-grey color.
   ;;(q/background 0)
   ;; Set circle color.
-  (let [circles (:circles state)
-        ordered-circles [
-                         (:l circles)
-                         (:m circles)
-                         (:s circles)]]
-    (doseq [{:keys [color angle size] :as circle} ordered-circles]
-      (println circle)
-      (q/fill color 255 255)
-      ;; Calculate x and y coordinates of the circle.
-      (let [x (* 150 (q/cos angle))
-            y (* 150 (q/sin angle))]
-        ;; Move origin point to the center of the sketch.
-        (q/with-translation [(/ (q/width) 2)
-                             (/ (q/height) 2)]
+  (doseq [{:keys [color angle size] :as circle} (:circles state)]
+    ;;(println circle)
+    (q/fill color 255 255 (rand-nth [2
+                                     ;;3
+                                     4
+                                     20
+                                     50]))
+    ;;(q/fill color 250 250 100)
+    ;; Calculate x and y coordinates of the circle.
+    (let [x (* 120 (q/cos angle))
+          y (* 120 (q/sin angle))]
+      ;; Move origin point to the center of the sketch.
+      (q/with-translation [(/ (q/width) 2)
+                           (/ (q/height) 2)]
                                         ; Draw the circle.
-          (println circle)
-          ;;(q/ellipse x y size size)
-          (q/rect x y size size))))))
+        (println circle)
+        (let [new-size (+ size 60)]
+          (q/ellipse x y new-size new-size))
+        ;;(q/rect x y size size)
+        ))))
 
 ; this function is called in index.html
 (defn ^:export run-sketch []
